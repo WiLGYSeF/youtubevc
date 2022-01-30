@@ -1,12 +1,26 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import './css/style.min.css';
+import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
+
 import App from './App';
+import Home from './routes/Home';
+import YouTubePlayer from './routes/YouTubePlayer';
+
 import reportWebVitals from './reportWebVitals';
+
+import './css/style.min.css';
 
 ReactDOM.render(
   <React.StrictMode>
-    <App />
+    <BrowserRouter>
+      <Routes>
+        <Route path='/' element={<App />}>
+          <Route path='watch' element={<YouTubePlayer />} />
+          <Route index element={<Home />} />
+        </Route>
+        <Route path='*' element={<Navigate to='/' />} />
+      </Routes>
+    </BrowserRouter>
   </React.StrictMode>,
   document.getElementById('root')
 );
