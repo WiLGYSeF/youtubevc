@@ -1,7 +1,9 @@
 import React from 'react';
 import { useSearchParams } from 'react-router-dom';
 
-import YouTube from 'react-youtube';
+import YouTube, { Options } from 'react-youtube';
+
+import YouTubePlayerController from '../components/YouTubePlayer/YouTubePlayerController';
 
 import '../css/style.min.css';
 
@@ -13,7 +15,18 @@ function YouTubePlayer() {
     videoId = '_BSSJi-sHh8';
   }
 
-  return <YouTube videoId={videoId} />;
+  const opts: Options = {
+    playerVars: {
+      modestbranding: 1
+    }
+  };
+
+  return (
+    <div>
+      <YouTube opts={opts} videoId={videoId} />
+      <YouTubePlayerController />
+    </div>
+  );
 }
 
 export default YouTubePlayer;

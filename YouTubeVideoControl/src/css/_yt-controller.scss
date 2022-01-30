@@ -1,0 +1,33 @@
+.yt-controller {
+  padding: 10px;
+  width: 400px;
+
+  .entry-list {
+    background-color: grey;
+    border-radius: 8px;
+    min-height: 200px;
+
+    .entry {
+    }
+  }
+
+  .add {
+    background-color: #fff;
+    border-radius: 50%;
+    height: 20px;
+    width: 20px;
+
+    &:hover {
+      background-color: #ddd;
+    }
+  }
+
+  .input {
+    border: 1px solid #aaa;
+    border-radius: 8px;
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 5px;
+    padding: 4px;
+  }
+}
