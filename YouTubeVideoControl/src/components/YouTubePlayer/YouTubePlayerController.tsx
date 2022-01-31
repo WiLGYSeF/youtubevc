@@ -1,20 +1,26 @@
-import React, { useState } from 'react';
+import React, { ReactElement, useState } from 'react';
 
-import YouTubePlayerControllerEntry from './YouTubePlayerControllerEntry';
-import YtpcAdd from './YtpcAdd';
+import YtpcEntry from './YtpcEntry';
 import YtpcInput from './YtpcInput';
 
 import '../../css/style.min.css';
 
-function YouTubePlayerController() {
-  const [entries, setEntries] = useState([]);
+interface YouTubePlayerControllerProps {
+  entries: any[];
+  setEntries(entries: any[]): void;
+}
 
+function YouTubePlayerController(props: YouTubePlayerControllerProps) {
   return (
     <div className='yt-controller'>
-      <YtpcInput />
+      <div className='left'>
+        <YtpcInput />
 
-      <div className='entry-list'>
-        {entries.map(e => <YouTubePlayerControllerEntry />)}
+        <div className='entry-list'>
+          {props.entries.map(e => <YtpcEntry key={e.getKey()} entry={e} />)}
+        </div>
+      </div>
+      <div className='right'>
       </div>
     </div>
   );

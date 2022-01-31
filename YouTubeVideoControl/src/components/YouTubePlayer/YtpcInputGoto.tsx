@@ -1,11 +1,20 @@
 import React, { useState } from 'react';
 
 import '../../css/style.min.css';
+import { YtpcControlInput } from './YtpcInput';
 import YtpcInputTime from './YtpcInputTime';
 
-function YtpcInputGoto() {
+interface YtpcInputGotoProps extends YtpcControlInput {
+
+}
+
+function YtpcInputGoto(props: YtpcInputGotoProps) {
   return (
-    <YtpcInputTime />
+    <YtpcInputTime
+      setTime={(seconds: number) => props.setControlInputState({
+        goto: seconds
+      })}
+    />
   );
 }
 

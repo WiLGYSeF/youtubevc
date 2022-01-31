@@ -2,37 +2,42 @@ import React, { ChangeEvent, ReactElement, useState } from 'react';
 
 import YtpcInputGoto from './YtpcInputGoto';
 import YtpcInputLoop from './YtpcInputLoop';
+import YtpcInputVolume from './YtpcInputVolume';
 
 import '../../css/style.min.css';
 
 interface ControlSelectProps {
-  setControlInput(element?: ReactElement): void;
+  setControlInput(component?: any): void;
 }
 
 type Control = {
   text: string;
-  element: ReactElement;
+  component: (props: any) => JSX.Element;
 }
 
 function YtpcControlSelect(props: ControlSelectProps) {
-  const controls = new Map([
+  const controls = new Map<string, Control>([
     ['goto', {
       text: 'go to',
-      element: <YtpcInputGoto />,
+      component: YtpcInputGoto,
     }],
     ['loop', {
-      text: 'loop at',
-      element: <YtpcInputLoop />,
+      text: 'loop back to',
+      component: YtpcInputLoop,
+    }],
+    ['volume', {
+      text: 'set volume to',
+      component: YtpcInputVolume,
     }],
   ]);
 
   const onChange = (e: ChangeEvent<HTMLSelectElement>) => {
-    props.setControlInput(controls.get(e.target.value)?.element);
+    props.setControlInput(controls.get(e.target.value)?.component);
   };
 
   return (
     <select onChange={onChange}>
-      {Array.from(controls.entries()).map(c => <option value={c[0]}>{c[1].text}</option>)}
+      {Array.from(controls.entries()).map(c => <option key={c[0]} value={c[0]}>{c[1].text}</option>)}
     </select>
   );
 }

@@ -1,13 +1,36 @@
+.yt-player {
+  text-align: center;
+  user-select: none;
+}
+
 .yt-controller {
+  display: flex;
   padding: 10px;
-  width: 400px;
+  user-select: none;
+
+  .left {
+    min-width: 450px;
+  }
+
+  .right {
+    flex: 1;
+  }
+
+  $border-radius: 8px;
 
   .entry-list {
     background-color: grey;
-    border-radius: 8px;
-    min-height: 200px;
+    border-radius: $border-radius;
+    height: 200px;
+    overflow: auto;
 
     .entry {
+      border: 1px solid #aaa;
+      height: 25px;
+
+      &:first-child {
+        border-radius: $border-radius $border-radius 0 0;
+      }
     }
   }
 
@@ -28,6 +51,40 @@
     display: flex;
     justify-content: space-between;
     margin-bottom: 5px;
-    padding: 4px;
+    min-height: 30px;
+    padding: 5px;
+
+    div {
+      display: inline;
+    }
+
+    input[type="range"] {
+      position: relative;
+      top: 3px;
+    }
+
+    select {
+      margin-right: 4px;
+    }
+
+    .entry-creation {
+    }
+
+    .loop {
+      .loop-count {
+        width: 40px;
+      }
+    }
+
+    .volume {
+      input[type="range"] {
+        margin-right: 4px;
+        width: 75px;
+      }
+
+      input[type="number"] {
+        width: 50px;
+      }
+    }
   }
 }
