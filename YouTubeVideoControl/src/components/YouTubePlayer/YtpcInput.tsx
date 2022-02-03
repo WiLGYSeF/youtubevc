@@ -22,12 +22,12 @@ function YtpcInput() {
   };
 
   return (
-    <div className='input'>
-      <div className='entry-creation'>
+    <div className="input">
+      <div className="entry-creation">
         <span>At </span>
         <YtpcInputTime setTime={setAtTime} />
         <span>, </span>
-        <YtpcControlSelect setControlInput={() => {}/*setControlInput*/} />
+        <YtpcControlSelect setControlInput={() => {}/* setControlInput */} />
         <YtpcInputVolume setControlInputState={setControlInputState} />
       </div>
       <YtpcAdd onCreateEntry={onCreateEntry} />

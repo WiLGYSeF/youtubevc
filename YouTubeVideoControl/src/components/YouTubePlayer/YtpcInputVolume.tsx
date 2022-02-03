@@ -13,22 +13,22 @@ function YtpcInputVolume(props: YtpcInputVolumeProps) {
   const [lerpSet, setLerp] = useState(false);
   const [lerpTime, setLerpTime] = useState(0);
 
-  const lerpIdInternal = 'ytpci-volume-lerp-' + Math.random().toString(36).substring(2);
+  const lerpIdInternal = `ytpci-volume-lerp-${Math.random().toString(36).substring(2)}`;
 
   const setControlInputState = () => {
     props.setControlInputState({
       volume,
-      lerpTime: lerpSet ? lerpTime : -1
+      lerpTime: lerpSet ? lerpTime : -1,
     });
   };
 
   return (
-    <div className='volume'>
+    <div className="volume">
       <input
-        type='range'
-        min='0'
-        max='100'
-        defaultValue='100'
+        type="range"
+        min="0"
+        max="100"
+        defaultValue="100"
         onChange={(e: ChangeEvent<HTMLInputElement>) => {
           setVolume(Number(e.target.value));
           setControlInputState();
@@ -37,7 +37,7 @@ function YtpcInputVolume(props: YtpcInputVolumeProps) {
       <span>{volume}</span>
       <input
         id={lerpIdInternal}
-        type='checkbox'
+        type="checkbox"
         onChange={(e: ChangeEvent<HTMLInputElement>) => {
           setLerp(e.target.checked);
           setControlInputState();
@@ -48,9 +48,9 @@ function YtpcInputVolume(props: YtpcInputVolumeProps) {
         <span>
           <span> for </span>
           <input
-            type='number'
-            min='0'
-            step='any'
+            type="number"
+            min="0"
+            step="any"
             onChange={(e: ChangeEvent<HTMLInputElement>) => {
               setLerpTime(Number(e.target.value));
               setControlInputState();

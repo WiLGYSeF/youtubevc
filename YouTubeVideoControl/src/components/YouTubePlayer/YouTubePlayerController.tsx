@@ -12,16 +12,15 @@ interface YouTubePlayerControllerProps {
 
 function YouTubePlayerController(props: YouTubePlayerControllerProps) {
   return (
-    <div className='yt-controller'>
-      <div className='left'>
+    <div className="yt-controller">
+      <div className="left">
         <YtpcInput />
 
-        <div className='entry-list'>
-          {props.entries.map(e => <YtpcEntry key={e.getKey()} entry={e} />)}
+        <div className="entry-list">
+          {props.entries.map((e) => <YtpcEntry key={e.getKey()} entry={e} />)}
         </div>
       </div>
-      <div className='right'>
-      </div>
+      <div className="right" />
     </div>
   );
 }

@@ -7,7 +7,7 @@ interface YtpcAddProps {
 
 function YtpcAdd(props: YtpcAddProps) {
   return (
-    <div className='add' onClick={() => props.onCreateEntry()}>
+    <div className="add" onClick={() => props.onCreateEntry()}>
       +
     </div>
   );

@@ -12,7 +12,7 @@ function YtpcInputGoto(props: YtpcInputGotoProps) {
   return (
     <YtpcInputTime
       setTime={(seconds: number) => props.setControlInputState({
-        goto: seconds
+        goto: seconds,
       })}
     />
   );
