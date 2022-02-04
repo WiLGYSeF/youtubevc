@@ -37,3 +37,7 @@ input[type="checkbox"] {
     height: 40px;
   }
 }
+
+iframe[id="webpack-dev-server-client-overlay"] {
+  display: none;
+}
