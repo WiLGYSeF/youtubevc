@@ -22,7 +22,7 @@ interface ControlSelectProps {
 type Control = {
   text: string;
   component: (props: any) => JSX.Element;
-}
+};
 
 function YtpcControlSelect(props: ControlSelectProps) {
   const controls = new Map<string, Control>([

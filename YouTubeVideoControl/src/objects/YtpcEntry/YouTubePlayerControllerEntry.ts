@@ -6,7 +6,7 @@ export enum ControlType {
   Loop = 'loop',
   Pause = 'pause',
   PlaybackRate = 'playback-rate',
-  Volume = 'volume'
+  Volume = 'volume',
 }
 
 interface TimeParts {
@@ -17,7 +17,6 @@ interface TimeParts {
 
 abstract class YouTubePlayerControllerEntry {
   public controlType: ControlType;
-
   public atTime: number;
 
   constructor(controlType: ControlType, atTime: number) {
@@ -47,13 +46,14 @@ abstract class YouTubePlayerControllerEntry {
   }
 
   public secondsToTimeParts(seconds: number): TimeParts {
-    const hours = Math.floor(seconds / 3600);
-    seconds %= 3600;
-    const minutes = Math.floor(seconds / 60);
-    seconds %= 60;
+    let sec = seconds;
+    const hours = Math.floor(sec / 3600);
+    sec %= 3600;
+    const minutes = Math.floor(sec / 60);
+    sec %= 60;
 
     return {
-      seconds,
+      seconds: sec,
       minutes,
       hours,
     };

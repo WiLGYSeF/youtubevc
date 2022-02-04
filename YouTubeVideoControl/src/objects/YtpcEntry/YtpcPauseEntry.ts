@@ -41,7 +41,7 @@ class YtpcPauseEntry extends YouTubePlayerControllerEntry {
 
     const arr = [];
 
-    for (let i = 0; i < times.length; i++) {
+    for (let i = 0; i < times.length; i += 1) {
       if (times[i]) {
         arr.push(
           (arr.length ? nlzstr(times[i] ?? 0) : times[i])

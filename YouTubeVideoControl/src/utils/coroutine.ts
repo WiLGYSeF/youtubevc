@@ -4,15 +4,12 @@ class Coroutine {
   public callback: (timestamp: number) => void;
 
   public timeout?: number;
-
   public frequency?: number;
 
   private requestId?: number;
-
   private stopped: boolean;
 
   private _startTime: number;
-
   private _lastCallbackTime: number;
 
   constructor(callback: (timestamp: number) => void, timeout?: number, frequency?: number) {

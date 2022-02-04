@@ -64,7 +64,10 @@ function YouTubePlayerContainer() {
       <div className="yt-player">
         <YouTube opts={opts} videoId={videoId} onReady={onReady} />
       </div>
-      <YouTubePlayerController entries={entries} setEntries={(entries: YouTubePlayerControllerEntry[]) => setEntries(entries)} />
+      <YouTubePlayerController
+        entries={entries}
+        setEntries={(entries: YouTubePlayerControllerEntry[]) => setEntries(entries)}
+      />
     </div>
   );
 }

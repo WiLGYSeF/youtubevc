@@ -6,7 +6,6 @@ class YtpcLoopEntry extends YouTubePlayerControllerEntry {
   public static ACTION_STR: string = 'loop back to';
 
   public loopBackTo: number;
-
   public loopCount: number;
 
   private loopNum: number;
@@ -30,7 +29,7 @@ class YtpcLoopEntry extends YouTubePlayerControllerEntry {
     }
 
     ytPlayer.seekTo(this.loopBackTo, true);
-    this.loopNum++;
+    this.loopNum += 1;
   }
 
   public getActionStr(): string {
@@ -40,7 +39,7 @@ class YtpcLoopEntry extends YouTubePlayerControllerEntry {
   public getControlStr(): string {
     return `${this.secondsToTime(this.loopBackTo)} ${
       this.loopCount >= 0
-        ? `${this.loopCount} time${this.loopCount != 1 ? 's' : ''}`
+        ? `${this.loopCount} time${this.loopCount !== 1 ? 's' : ''}`
         : 'forever'
     }`;
   }

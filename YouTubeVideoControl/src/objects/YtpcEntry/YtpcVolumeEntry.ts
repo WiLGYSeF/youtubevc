@@ -8,7 +8,6 @@ class YtpcVolumeEntry extends YouTubePlayerControllerEntry {
   public static ACTION_STR: string = 'set volume to';
 
   public volume: number;
-
   public lerpSeconds: number;
 
   constructor(atTime: number, volume: number, lerpSeconds?: number) {

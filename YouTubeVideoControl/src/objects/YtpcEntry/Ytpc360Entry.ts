@@ -11,6 +11,7 @@ interface SphericalProperties {
   fov: number;
 }
 
+// the YouTubePlayer type declaration is outdated and does not contain properties for 360 videos
 interface YouTubePlayer360 extends YouTubePlayer {
   getSphericalProperties: () => SphericalProperties;
   setSphericalProperties: (props: SphericalProperties) => void;
@@ -20,11 +21,8 @@ class Ytpc360Entry extends YouTubePlayerControllerEntry {
   public static ACTION_STR: string = 'set 360° view to';
 
   public yaw: number;
-
   public pitch: number;
-
   public roll: number;
-
   public fov: number;
 
   public lerpSeconds: number;
