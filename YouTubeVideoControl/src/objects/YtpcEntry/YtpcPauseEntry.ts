@@ -1,4 +1,4 @@
-import { YouTubePlayer } from 'youtube-player/dist/types';
+﻿import { YouTubePlayer } from 'youtube-player/dist/types';
 import Coroutine, { MSEC_PER_SEC } from '../../utils/coroutine';
 
 import YouTubePlayerControllerEntry, { ControlType } from './YouTubePlayerControllerEntry';

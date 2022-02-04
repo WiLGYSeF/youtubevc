@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 
+import { YtpcControlInput } from './YtpcControlInput';
+
 import '../../css/style.min.css';
-import { YtpcControlInput } from './YtpcInput';
 
 interface YtpcInput360Props extends YtpcControlInput {
 

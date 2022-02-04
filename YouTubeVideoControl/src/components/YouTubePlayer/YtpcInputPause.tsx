@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 
 import '../../css/style.min.css';
-import { YtpcControlInput } from './YtpcInput';
+import { YtpcControlInput } from './YtpcControlInput';
 
 interface YtpcInputPauseProps extends YtpcControlInput {
 

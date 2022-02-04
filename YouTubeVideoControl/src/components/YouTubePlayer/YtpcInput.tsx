@@ -8,10 +8,6 @@ import YtpcControlSelect from './YtpcControlSelect';
 import YtpcInputGoto from './YtpcInputGoto';
 import YtpcInputVolume from './YtpcInputVolume';
 
-export interface YtpcControlInput {
-  setControlInputState(state: object): void;
-}
-
 function YtpcInput() {
   const [atTime, setAtTime] = useState(0);
   const [controlInput, setControlInput] = useState<(props: any) => JSX.Element>(YtpcInputGoto);

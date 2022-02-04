@@ -1,6 +1,6 @@
 import React, { ChangeEvent, useState } from 'react';
 
-import { YtpcControlInput } from './YtpcInput';
+import { YtpcControlInput } from './YtpcControlInput';
 
 import '../../css/style.min.css';
 

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 
 import '../../css/style.min.css';
-import { YtpcControlInput } from './YtpcInput';
+import { YtpcControlInput } from './YtpcControlInput';
 import YtpcInputTime from './YtpcInputTime';
 
 interface YtpcInputGotoProps extends YtpcControlInput {
