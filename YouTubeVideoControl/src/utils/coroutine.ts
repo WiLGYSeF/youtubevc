@@ -6,7 +6,6 @@ class Coroutine {
   public timeout?: number;
   public frequency?: number;
 
-  private requestId?: number;
   private stopped: boolean;
 
   private _startTime: number;
@@ -18,7 +17,6 @@ class Coroutine {
     this.timeout = timeout;
     this.frequency = frequency;
 
-    this.requestId = undefined;
     this.stopped = false;
 
     this._startTime = 0;
@@ -34,7 +32,7 @@ class Coroutine {
   }
 
   start() {
-    this.requestId = requestAnimationFrame(this.doCallback.bind(this));
+    requestAnimationFrame(this.doCallback.bind(this));
     this._startTime = 0;
   }
 
@@ -53,11 +51,9 @@ class Coroutine {
         this._lastCallbackTime = timestamp;
 
         if (!this.stopped) {
-          this.requestId = requestAnimationFrame(this.doCallback.bind(this));
+          requestAnimationFrame(this.doCallback.bind(this));
         }
       }
-    } else {
-      this.requestId = undefined;
     }
   }
 }
