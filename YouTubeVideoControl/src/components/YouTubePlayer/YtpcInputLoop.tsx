@@ -26,16 +26,18 @@ function YtpcInputLoop(props: YtpcInputLoopProps) {
   return (
     <div className="loop">
       <YtpcInputTime setTime={setLoopBackTo} />
-      <input
-        id={foreverIdInternal}
-        type="checkbox"
-        onChange={(e: ChangeEvent<HTMLInputElement>) => {
-          setForever(e.target.checked);
-          setControlInputState();
-        }}
-        defaultChecked
-      />
-      <label htmlFor={foreverIdInternal}>{forever ? 'forever' : 'times'}</label>
+      <label htmlFor={foreverIdInternal}>
+        <input
+          id={foreverIdInternal}
+          type="checkbox"
+          onChange={(e: ChangeEvent<HTMLInputElement>) => {
+            setForever(e.target.checked);
+            setControlInputState();
+          }}
+          defaultChecked
+        />
+        {forever ? 'forever' : 'times'}
+      </label>
       {!forever && (
         <input
           className="loop-count"
