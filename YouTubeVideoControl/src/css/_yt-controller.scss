@@ -46,6 +46,8 @@
   }
 
   .input {
+    @import 'ytpc/_.scss';
+
     border: 1px solid #aaa;
     border-radius: 8px;
     display: flex;
