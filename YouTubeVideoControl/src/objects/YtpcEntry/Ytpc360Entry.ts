@@ -17,30 +17,21 @@ interface YouTubePlayer360 extends YouTubePlayer {
   setSphericalProperties: (props: SphericalProperties) => void;
 }
 
+export interface Ytpc360State {
+  sphereProps: SphericalProperties;
+  lerpSeconds?: number;
+}
+
 class Ytpc360Entry extends YouTubePlayerControllerEntry {
   public static ACTION_STR: string = 'set 360° view to';
 
-  public yaw: number;
-  public pitch: number;
-  public roll: number;
-  public fov: number;
-
+  public sphereProps: SphericalProperties;
   public lerpSeconds: number;
 
-  constructor(
-    atTime: number,
-    yaw: number,
-    pitch: number,
-    roll: number,
-    fov: number,
-    lerpSeconds?: number,
-  ) {
+  constructor(atTime: number, sphereProps: SphericalProperties, lerpSeconds?: number,) {
     super(ControlType.Volume, atTime);
 
-    this.yaw = yaw;
-    this.pitch = pitch;
-    this.roll = roll;
-    this.fov = fov;
+    this.sphereProps = sphereProps;
     this.lerpSeconds = lerpSeconds ?? -1;
   }
 
@@ -52,20 +43,15 @@ class Ytpc360Entry extends YouTubePlayerControllerEntry {
       const routine = new Coroutine((timestamp: number) => {
         const t = (timestamp - routine.startTime) / lerpMs;
         ytPlayer.setSphericalProperties({
-          yaw: lerp(props.yaw, this.yaw, t),
-          pitch: lerp(props.pitch, this.pitch, t),
-          roll: lerp(props.roll, this.roll, t),
-          fov: lerp(props.fov, this.fov, t),
+          yaw: lerp(props.yaw, this.sphereProps.yaw, t),
+          pitch: lerp(props.pitch, this.sphereProps.pitch, t),
+          roll: lerp(props.roll, this.sphereProps.roll, t),
+          fov: lerp(props.fov, this.sphereProps.fov, t),
         });
       }, lerpMs);
       routine.start();
     } else {
-      ytPlayer.setSphericalProperties({
-        yaw: this.yaw,
-        pitch: this.pitch,
-        roll: this.roll,
-        fov: this.fov,
-      });
+      ytPlayer.setSphericalProperties(this.sphereProps);
     }
   }
 
@@ -74,7 +60,7 @@ class Ytpc360Entry extends YouTubePlayerControllerEntry {
   }
 
   public getControlStr(): string {
-    let result = `yaw ${this.yaw}, pitch ${this.pitch}, roll ${this.roll}, fov ${this.fov}`;
+    let result = `yaw ${this.sphereProps.yaw}, pitch ${this.sphereProps.pitch}, roll ${this.sphereProps.roll}, fov ${this.sphereProps.fov}`;
 
     if (this.lerpSeconds > 0) {
       result += ` during the next ${this.lerpSeconds} seconds`;

@@ -5,7 +5,7 @@ import YouTube, { Options } from 'react-youtube';
 import { YouTubePlayer } from 'youtube-player/dist/types';
 
 import YouTubePlayerController from '../components/YouTubePlayer/YouTubePlayerController';
-import YouTubePlayerControllerEntry, { ControlType } from '../objects/YtpcEntry/YouTubePlayerControllerEntry';
+import YouTubePlayerControllerEntry from '../objects/YtpcEntry/YouTubePlayerControllerEntry';
 import Ytpc360Entry from '../objects/YtpcEntry/Ytpc360Entry';
 import YtpcGotoEntry from '../objects/YtpcEntry/YtpcGotoEntry';
 import YtpcLoopEntry from '../objects/YtpcEntry/YtpcLoopEntry';
@@ -18,14 +18,7 @@ import '../css/style.min.css';
 function YouTubePlayerContainer() {
   const [searchParams, setSearchParams] = useSearchParams();
   const [entries, setEntries] = useState<YouTubePlayerControllerEntry[]>([
-    new YtpcVolumeEntry(2, 45),
-    new Ytpc360Entry(4, 120, 24, 12, 20, 10),
-    // new YtpcPlaybackRateEntry(4, 0.5),
-    // new YtpcPauseEntry(5, 3),
-    // new YtpcGotoEntry(4, 80),
-    // new YtpcVolumeEntry(81, 100, 5),
-    // new YtpcGotoEntry(83, 7),
-    // new YtpcLoopEntry(8, 5, 3)
+    new YtpcLoopEntry(7 * 60 + 51, 3 * 60 + 25),
   ]);
 
   let videoId = searchParams.get('v');
@@ -66,7 +59,7 @@ function YouTubePlayerContainer() {
       </div>
       <YouTubePlayerController
         entries={entries}
-        setEntries={(entries: YouTubePlayerControllerEntry[]) => setEntries(entries)}
+        setEntries={setEntries}
       />
     </div>
   );

@@ -8,7 +8,7 @@ interface CheckboxProps {
 
   defaultChecked?: boolean;
 
-  onChange: (e: ChangeEvent<HTMLInputElement>) => void;
+  onChange(e: ChangeEvent<HTMLInputElement>): void;
 }
 
 function Checkbox(props: CheckboxProps) {
