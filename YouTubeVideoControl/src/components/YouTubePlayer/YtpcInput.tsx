@@ -23,7 +23,10 @@ function YtpcInput() {
         <YtpcInputTime setTime={setAtTime} />
         <span>, </span>
         <YtpcControlSelect setControlInput={setControlInput} />
-        {React.createElement(controlInput, { setControlInputState })}
+        {React.createElement(controlInput, {
+          setControlInputState,
+          playbackRates: undefined
+        })}
       </div>
       <YtpcAdd onCreateEntry={onCreateEntry} />
     </div>
