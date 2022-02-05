@@ -1,7 +1,6 @@
-import Decimal from 'decimal.js-light';
 import React, { ChangeEvent, KeyboardEvent, useState } from 'react';
 
-import { clamp } from '../../utils/clamp';
+import coerceNumber from '../../utils/coerceNumber';
 
 interface NumberInputProps {
   label?: string;
@@ -16,38 +15,6 @@ interface NumberInputProps {
   forceValue?: boolean;
 
   setValue: (value: number) => void;
-}
-
-function coerceNumber(
-  value: number,
-  minValue?: number,
-  maxValue?: number,
-  step?: number,
-  doClamp?: boolean,
-): number {
-  let num = value;
-
-  if (doClamp) {
-    if (minValue !== undefined && maxValue === undefined) {
-      num = Math.max(num, minValue);
-    } else if (minValue === undefined && maxValue !== undefined) {
-      num = Math.min(num, maxValue);
-    } else if (minValue !== undefined && maxValue !== undefined) {
-      num = clamp(num, minValue, maxValue);
-    }
-  } else if (minValue !== undefined && maxValue !== undefined) {
-    const diff = maxValue - minValue;
-
-    for (; num < minValue; num += diff);
-    for (; num > maxValue; num -= diff);
-  }
-
-  if (step) {
-    num = new Decimal(num).div(step).toInteger().mul(step)
-      .toNumber();
-  }
-
-  return num;
 }
 
 function NumberInput(props: NumberInputProps) {
@@ -77,10 +44,7 @@ function NumberInput(props: NumberInputProps) {
     }
   };
 
-  if (doClamp
-    && props.minValue === undefined
-    && props.maxValue === undefined
-  ) {
+  if (doClamp && props.minValue === undefined && props.maxValue === undefined) {
     throw new Error('cannot have undefined min and max values when clamping');
   }
 
