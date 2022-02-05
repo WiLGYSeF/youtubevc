@@ -22,13 +22,23 @@ function YouTubePlayerController(props: YouTubePlayerControllerProps) {
     ));
   };
 
+  const onDeleteEntry = (entry: YouTubePlayerControllerEntry): void => {
+    props.setEntries([...props.entries.filter(e => e !== entry)]);
+  };
+
   return (
     <div className="yt-controller">
       <div className="left">
         <YtpcInput onCreateEntry={onCreateEntry} />
 
         <div className="entry-list">
-          {props.entries.map((e, i) => <YtpcEntry key={`${i}-${e.getKey()}`} entry={e} />)}
+          {props.entries.map((e, i) => (
+            <YtpcEntry
+              key={`${i}-${e.getKey()}`}
+              entry={e}
+              onDeleteEntry={onDeleteEntry}
+            />
+          ))}
         </div>
       </div>
       <div className="right" />
