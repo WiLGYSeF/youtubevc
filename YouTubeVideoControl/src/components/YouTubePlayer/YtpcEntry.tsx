@@ -18,7 +18,9 @@ function YtpcEntry(props: YtpcEntryProps) {
         onClick={() => {
           props.onDeleteEntry(props.entry);
         }}
-      >x</div>
+      >
+        x
+      </div>
     </div>
   );
 }

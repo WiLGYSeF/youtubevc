@@ -1,29 +1,60 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 
 import YouTubePlayerControllerEntry, { ControlType } from '../../objects/YtpcEntry/YouTubePlayerControllerEntry';
 import YtpcEntry from './YtpcEntry';
 import YtpcInput from './YtpcInput';
+import EntryBuilder from '../../objects/YtpcEntry/EntryBuilder';
+import Coroutine from '../../utils/coroutine';
+
+import YtpcLoopEntry from '../../objects/YtpcEntry/YtpcLoopEntry';
 
 import '../../css/style.min.css';
-import EntryBuilder from '../../objects/YtpcEntry/EntryBuilder';
+import { YouTubePlayer } from 'youtube-player/dist/types';
 
 interface YouTubePlayerControllerProps {
-  entries: any[];
-  setEntries(entries: any[]): void;
+  ytPlayer?: YouTubePlayer;
 }
 
 function YouTubePlayerController(props: YouTubePlayerControllerProps) {
+  const [entries, setEntries] = useState<YouTubePlayerControllerEntry[]>([
+    new YtpcLoopEntry(7 * 60 + 51, 3 * 60 + 25),
+  ]);
+
+  useEffect(() => {
+    let lastTime = 0;
+
+    const routine = new Coroutine(() => {
+      if (!props.ytPlayer) {
+        return;
+      }
+
+      const curTime = props.ytPlayer.getCurrentTime();
+
+      for (const entry of entries) {
+        if (entry.atTime >= lastTime && entry.atTime < curTime) {
+          entry.performAction(props.ytPlayer, curTime);
+        }
+      }
+
+      lastTime = curTime;
+    });
+    routine.start();
+
+    return () => {
+      routine.stop();
+    };
+  });
+
   const onCreateEntry = (type: ControlType, atTime: number, state: object): void => {
     const entry = EntryBuilder.buildEntry(type, atTime, state);
 
-    // TODO: binary insert
-    props.setEntries([...props.entries, entry].sort(
+    setEntries([...entries, entry].sort(
       (a: YouTubePlayerControllerEntry, b: YouTubePlayerControllerEntry): number => a.atTime - b.atTime,
     ));
   };
 
   const onDeleteEntry = (entry: YouTubePlayerControllerEntry): void => {
-    props.setEntries([...props.entries.filter(e => e !== entry)]);
+    setEntries([...entries.filter((e) => e !== entry)]);
   };
 
   return (
@@ -32,7 +63,7 @@ function YouTubePlayerController(props: YouTubePlayerControllerProps) {
         <YtpcInput onCreateEntry={onCreateEntry} />
 
         <div className="entry-list">
-          {props.entries.map((e, i) => (
+          {entries.map((e, i) => (
             <YtpcEntry
               key={`${i}-${e.getKey()}`}
               entry={e}
