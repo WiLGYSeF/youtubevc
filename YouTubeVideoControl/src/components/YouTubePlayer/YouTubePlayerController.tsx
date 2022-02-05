@@ -60,7 +60,7 @@ function YouTubePlayerController(props: YouTubePlayerControllerProps) {
   return (
     <div className="yt-controller">
       <div className="left">
-        <YtpcInput onCreateEntry={onCreateEntry} />
+        <YtpcInput ytPlayer={props.ytPlayer} onCreateEntry={onCreateEntry} />
 
         <div className="entry-list">
           {entries.map((e, i) => (

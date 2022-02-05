@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { YouTubePlayer } from 'youtube-player/dist/types';
 
 import { ControlType } from '../../objects/YtpcEntry/YouTubePlayerControllerEntry';
 import YtpcControlSelect from './YtpcControlSelect';
@@ -9,6 +10,7 @@ import TimestampInput from '../common/TimestampInput';
 import '../../css/style.min.css';
 
 interface YtpcInputProps {
+  ytPlayer?: YouTubePlayer;
   onCreateEntry(type: ControlType, atTime: number, state: object): void;
 }
 
@@ -31,7 +33,7 @@ function YtpcInput(props: YtpcInputProps) {
         />
         {React.createElement(controlInput, {
           setControlInputState,
-          playbackRates: undefined,
+          playbackRates: props.ytPlayer?.getAvailablePlaybackRates(),
         })}
       </div>
       <YtpcAdd onCreateEntry={() => props.onCreateEntry(controlInputType, atTime, controlInputState)} />
