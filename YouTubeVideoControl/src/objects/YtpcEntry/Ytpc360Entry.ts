@@ -4,7 +4,7 @@ import { lerp } from '../../utils/lerp';
 
 import YouTubePlayerControllerEntry, { ControlType } from './YouTubePlayerControllerEntry';
 
-interface SphericalProperties {
+export interface SphericalProperties {
   yaw: number;
   pitch: number;
   roll: number;

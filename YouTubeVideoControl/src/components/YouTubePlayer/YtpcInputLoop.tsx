@@ -34,9 +34,8 @@ function YtpcInputLoop(props: YtpcControlInput) {
         defaultChecked={FOREVER_DEFAULT}
       />
       {!forever && (
-        <input
+        <input type="number"
           className="loop-count"
-          type="number"
           min="0"
           defaultValue={LOOP_COUNT_DEFAULT}
           onChange={(e: ChangeEvent<HTMLInputElement>) => {

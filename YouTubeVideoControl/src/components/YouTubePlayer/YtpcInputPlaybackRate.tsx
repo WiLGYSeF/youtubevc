@@ -29,10 +29,10 @@ function YtpcInputPlaybackRate(props: YtpcInputPlaybackRateProps) {
   return (
     <div className="playback-rate">
       <select
+        defaultValue={PLAYBACK_RATE_DEFAULT}
         onChange={(e: ChangeEvent<HTMLSelectElement>) => {
           setPlaybackRate(Number(e.target.value));
         }}
-        defaultValue={PLAYBACK_RATE_DEFAULT}
       >
         {playbackRates.map((r) => <option key={r} value={r}>{r}</option>)}
       </select>

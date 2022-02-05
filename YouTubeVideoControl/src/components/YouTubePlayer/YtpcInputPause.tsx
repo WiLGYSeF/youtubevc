@@ -19,8 +19,7 @@ function YtpcInputPause(props: YtpcControlInput) {
 
   return (
     <div className="pause">
-      <input
-        type="number"
+      <input type="number"
         min="0"
         defaultValue={PAUSE_FOR_DEFAULT}
         onChange={(e: ChangeEvent<HTMLInputElement>) => {

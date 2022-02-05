@@ -21,10 +21,8 @@ function YtpcInputVolume(props: YtpcControlInput) {
 
   return (
     <div className="volume">
-      <input
-        type="range"
-        min="0"
-        max="100"
+      <input type="range"
+        min="0" max="100"
         defaultValue="100"
         onChange={(e: ChangeEvent<HTMLInputElement>) => {
           setVolume(Number(e.target.value));
@@ -40,10 +38,8 @@ function YtpcInputVolume(props: YtpcControlInput) {
       {lerpSet && (
         <span>
           <span> for </span>
-          <input
-            type="number"
-            min="0"
-            step="any"
+          <input type="number"
+            min="0" step="any"
             onChange={(e: ChangeEvent<HTMLInputElement>) => {
               setLerpTime(Number(e.target.value));
             }}
