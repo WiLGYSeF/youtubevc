@@ -4,13 +4,12 @@ import { YtpcControlInput } from './YtpcControlInput';
 import { YtpcVolumeState } from '../../objects/YtpcEntry/YtpcVolumeEntry';
 
 import '../../css/style.min.css';
+import Checkbox from '../common/Checkbox';
 
 function YtpcInputVolume(props: YtpcControlInput) {
   const [volume, setVolume] = useState(100);
   const [lerpSet, setLerp] = useState(false);
   const [lerpTime, setLerpTime] = useState(0);
-
-  const lerpIdInternal = `ytpci-volume-lerp-${Math.random().toString(36).substring(2)}`;
 
   useEffect(() => {
     const state: YtpcVolumeState = {
@@ -32,16 +31,12 @@ function YtpcInputVolume(props: YtpcControlInput) {
         }}
       />
       <span>{volume}</span>
-      <label htmlFor={lerpIdInternal}>
-        <input
-          id={lerpIdInternal}
-          type="checkbox"
-          onChange={(e: ChangeEvent<HTMLInputElement>) => {
-            setLerp(e.target.checked);
-          }}
-        />
-        <span>lerp</span>
-      </label>
+      <Checkbox
+        onChange={(e: ChangeEvent<HTMLInputElement>) => {
+          setLerp(e.target.checked);
+        }}
+        label="lerp"
+      />
       {lerpSet && (
         <span>
           <span> for </span>
