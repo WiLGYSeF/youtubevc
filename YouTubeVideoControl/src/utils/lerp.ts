@@ -1,5 +1,5 @@
 import { clamp01 } from './clamp';
 
-export function lerp(a: number, b: number, t: number): number {
+export default function lerp(a: number, b: number, t: number): number {
   return a + (b - a) * clamp01(t);
 }

@@ -25,7 +25,7 @@ function YtpcInput() {
         <YtpcControlSelect setControlInput={setControlInput} />
         {React.createElement(controlInput, {
           setControlInputState,
-          playbackRates: undefined
+          playbackRates: undefined,
         })}
       </div>
       <YtpcAdd onCreateEntry={onCreateEntry} />

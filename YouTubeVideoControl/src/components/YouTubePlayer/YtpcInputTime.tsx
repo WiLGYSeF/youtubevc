@@ -1,4 +1,4 @@
-import React, { ChangeEvent, useState } from 'react';
+import React, { ChangeEvent, FocusEvent, useState } from 'react';
 
 import timestampToSeconds from '../../utils/timestampToSeconds';
 import trimstr from '../../utils/trimstr';

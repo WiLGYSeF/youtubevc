@@ -1,21 +1,19 @@
-import React, { ChangeEvent, useEffect, useState } from 'react';
-
-import { YtpcControlInput } from './YtpcControlInput';
-import { YtpcLoopState } from '../../objects/YtpcEntry/YtpcLoopEntry';
-import YtpcInputTime from './YtpcInputTime';
+import React, { ChangeEvent } from 'react';
 
 import '../../css/style.min.css';
 
 interface CheckboxProps {
-  onChange: (e: ChangeEvent<HTMLInputElement>) => void;
   label: string;
-  defaultChecked?: boolean;
   labelRight?: boolean;
+
+  defaultChecked?: boolean;
+
+  onChange: (e: ChangeEvent<HTMLInputElement>) => void;
 }
 
 function Checkbox(props: CheckboxProps) {
-  const defaultChecked = props.defaultChecked ?? false;
   const labelRight = props.labelRight ?? true;
+  const defaultChecked = props.defaultChecked ?? false;
 
   const inputIdInternal = `checkbox-${Math.random().toString(36).substring(2)}`;
 
@@ -24,9 +22,8 @@ function Checkbox(props: CheckboxProps) {
   return (
     <label htmlFor={inputIdInternal} className="cpt-checkbox" data-label-right={labelRight}>
       {!labelRight && eLabel}
-      <input
+      <input type="checkbox"
         id={inputIdInternal}
-        type="checkbox"
         onChange={props.onChange}
         defaultChecked={defaultChecked}
       />

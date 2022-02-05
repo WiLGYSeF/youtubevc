@@ -5,11 +5,18 @@ import { YtpcVolumeState } from '../../objects/YtpcEntry/YtpcVolumeEntry';
 
 import '../../css/style.min.css';
 import Checkbox from '../common/Checkbox';
+import NumberInput from '../common/NumberInput';
+
+const VOLUME_MIN = 0;
+const VOLUME_MAX = 100;
+const VOLUME_DEFAULT = 100;
+
+const LERP_TIME_DEFAULT = 0;
 
 function YtpcInputVolume(props: YtpcControlInput) {
-  const [volume, setVolume] = useState(100);
+  const [volume, setVolume] = useState(VOLUME_DEFAULT);
   const [lerpSet, setLerp] = useState(false);
-  const [lerpTime, setLerpTime] = useState(0);
+  const [lerpTime, setLerpTime] = useState(LERP_TIME_DEFAULT);
 
   useEffect(() => {
     const state: YtpcVolumeState = {
@@ -22,29 +29,29 @@ function YtpcInputVolume(props: YtpcControlInput) {
   return (
     <div className="volume">
       <input type="range"
-        min="0" max="100"
-        defaultValue="100"
+        min={VOLUME_MIN} max={VOLUME_MAX}
+        defaultValue={VOLUME_DEFAULT}
         onChange={(e: ChangeEvent<HTMLInputElement>) => {
           setVolume(Number(e.target.value));
         }}
       />
       <span>{volume}</span>
       <Checkbox
+        label="lerp"
         onChange={(e: ChangeEvent<HTMLInputElement>) => {
           setLerp(e.target.checked);
         }}
-        label="lerp"
       />
       {lerpSet && (
         <span>
           <span> for </span>
-          <input type="number"
-            min="0" step="any"
-            onChange={(e: ChangeEvent<HTMLInputElement>) => {
-              setLerpTime(Number(e.target.value));
-            }}
+          <NumberInput
+            label=" seconds"
+            labelLeft={false}
+            minValue={0} step={null}
+            defaultValue={LERP_TIME_DEFAULT}
+            setValue={setLerpTime}
           />
-          <span> seconds</span>
         </span>
       )}
     </div>

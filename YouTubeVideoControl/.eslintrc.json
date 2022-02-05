@@ -31,11 +31,15 @@
   },
   "rules": {
     "react/destructuring-assignment": [
-      0
+      "off"
     ],
     "react/jsx-filename-extension": [
-      1,
+      "error",
       { "extensions": [ ".tsx", ".ts" ] }
+    ],
+    "react/jsx-max-props-per-line": [
+      "error",
+      { "maximum": 3, "when": "multiline" }
     ],
     "@typescript-eslint/lines-between-class-members": [
       "error",

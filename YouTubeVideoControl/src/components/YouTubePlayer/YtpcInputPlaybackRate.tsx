@@ -17,7 +17,7 @@ function YtpcInputPlaybackRate(props: YtpcInputPlaybackRateProps) {
 
   const setControlInputState = () => {
     const state: YtpcPlaybackRateState = {
-      playbackRate
+      playbackRate,
     };
     props.setControlInputState(state);
   };

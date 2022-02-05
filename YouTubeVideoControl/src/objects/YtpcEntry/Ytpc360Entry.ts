@@ -1,6 +1,6 @@
 import { YouTubePlayer } from 'youtube-player/dist/types';
 import Coroutine, { MSEC_PER_SEC } from '../../utils/coroutine';
-import { lerp } from '../../utils/lerp';
+import lerp from '../../utils/lerp';
 
 import YouTubePlayerControllerEntry, { ControlType } from './YouTubePlayerControllerEntry';
 

@@ -1,7 +1,8 @@
-import React, { ChangeEvent, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import { YtpcControlInput } from './YtpcControlInput';
 import { YtpcPauseState } from '../../objects/YtpcEntry/YtpcPauseEntry';
+import NumberInput from '../common/NumberInput';
 
 import '../../css/style.min.css';
 
@@ -19,12 +20,12 @@ function YtpcInputPause(props: YtpcControlInput) {
 
   return (
     <div className="pause">
-      <input type="number"
-        min="0"
+      <NumberInput
+        label=" seconds"
+        labelLeft={false}
+        minValue={0} step={null}
         defaultValue={PAUSE_FOR_DEFAULT}
-        onChange={(e: ChangeEvent<HTMLInputElement>) => {
-          setPauseFor(Number(e.target.value));
-        }}
+        setValue={setPauseFor}
       />
     </div>
   );

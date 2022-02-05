@@ -6,6 +6,7 @@ import YtpcInputTime from './YtpcInputTime';
 
 import '../../css/style.min.css';
 import Checkbox from '../common/Checkbox';
+import NumberInput from '../common/NumberInput';
 
 const LOOP_COUNT_DEFAULT = 3;
 const FOREVER_DEFAULT = true;
@@ -27,21 +28,21 @@ function YtpcInputLoop(props: YtpcControlInput) {
     <div className="loop">
       <YtpcInputTime setTime={setLoopBackTo} />
       <Checkbox
+        label={forever ? 'forever' : 'times'}
         onChange={(e: ChangeEvent<HTMLInputElement>) => {
           setForever(e.target.checked);
         }}
-        label={forever ? 'forever' : 'times'}
         defaultChecked={FOREVER_DEFAULT}
       />
       {!forever && (
-        <input type="number"
-          className="loop-count"
-          min="0"
-          defaultValue={LOOP_COUNT_DEFAULT}
-          onChange={(e: ChangeEvent<HTMLInputElement>) => {
-            setLoopCount(Number(e.target.value));
-          }}
-        />
+        <span className="loop-count">
+          <NumberInput
+            minValue={0}
+            defaultValue={LOOP_COUNT_DEFAULT}
+            clamp forceValue
+            setValue={setLoopCount}
+          />
+        </span>
       )}
     </div>
   );

@@ -1,8 +1,8 @@
-import React, { ChangeEvent, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import { YtpcControlInput } from './YtpcControlInput';
 import { SphericalProperties } from '../../objects/YtpcEntry/Ytpc360Entry';
-import { clamp } from '../../utils/clamp';
+import NumberInput from '../common/NumberInput';
 
 import '../../css/style.min.css';
 
@@ -22,41 +22,6 @@ const FOV_MIN = 30;
 const FOV_MAX = 120;
 const FOV_DEFAULT = 100;
 
-interface NumComponentProps {
-  label: string;
-  minVal: number;
-  maxVal: number;
-  defaultVal: number;
-  clamp?: boolean;
-  setValue: (value: number) => void;
-}
-
-function NumComponent(props: NumComponentProps): JSX.Element {
-  return (
-    <label>
-      <span>{props.label}: </span>
-      <input type="number"
-        min={props.minVal} max={props.maxVal} step="any"
-        defaultValue={props.defaultVal}
-        onChange={(e: ChangeEvent<HTMLInputElement>) => {
-          let num = Number(e.target.value);
-
-          if (props.clamp) {
-            num = clamp(num, props.minVal, props.maxVal);
-          } else {
-            const diff = props.maxVal - props.minVal;
-
-            for (; num < props.minVal; num += diff);
-            for (; num > props.maxVal; num -= diff);
-          }
-
-          props.setValue(num);
-        }}
-      />
-    </label>
-  );
-};
-
 function YtpcInput360(props: YtpcControlInput) {
   const [yaw, setYaw] = useState(YAW_DEFAULT);
   const [pitch, setPitch] = useState(PITCH_DEFAULT);
@@ -66,32 +31,41 @@ function YtpcInput360(props: YtpcControlInput) {
   useEffect(() => {
     const state: SphericalProperties = {
       yaw: yaw === 360 ? 0 : yaw,
-      pitch, roll, fov
+      pitch,
+      roll,
+      fov,
     };
     props.setControlInputState(state);
   }, [yaw, pitch, roll, fov]);
 
   return (
     <div className="three-sixty">
-      <NumComponent
-        label="yaw"
-        minVal={YAW_MIN} maxVal={YAW_MAX} defaultVal={YAW_DEFAULT}
+      <NumberInput
+        label="yaw: "
+        minValue={YAW_MIN} maxValue={YAW_MAX} step={null}
+        defaultValue={YAW_DEFAULT}
+        clamp={false}
         setValue={setYaw}
       />
-      <NumComponent
-        label="pitch"
-        minVal={PITCH_MIN} maxVal={PITCH_MAX} defaultVal={PITCH_DEFAULT}
+      <NumberInput
+        label="pitch: "
+        minValue={PITCH_MIN} maxValue={PITCH_MAX} step={null}
+        defaultValue={PITCH_DEFAULT}
+        clamp={false}
         setValue={setPitch}
       />
-      <NumComponent
-        label="roll"
-        minVal={ROLL_MIN} maxVal={ROLL_MAX} defaultVal={ROLL_DEFAULT}
+      <NumberInput
+        label="roll: "
+        minValue={ROLL_MIN} maxValue={ROLL_MAX} step={null}
+        defaultValue={ROLL_DEFAULT}
+        clamp={false}
         setValue={setRoll}
       />
-      <NumComponent
-        label="fov"
-        minVal={FOV_MIN} maxVal={FOV_MAX} defaultVal={FOV_DEFAULT}
-        clamp={true}
+      <NumberInput
+        label="fov: "
+        minValue={FOV_MIN} maxValue={FOV_MAX} step={null}
+        defaultValue={FOV_DEFAULT}
+        forceValue
         setValue={setFov}
       />
     </div>

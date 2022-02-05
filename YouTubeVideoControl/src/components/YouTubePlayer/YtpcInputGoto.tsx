@@ -19,9 +19,7 @@ function YtpcInputGoto(props: YtpcControlInput) {
   }, []);
 
   return (
-    <YtpcInputTime
-      setTime={setControlInputState}
-    />
+    <YtpcInputTime setTime={setControlInputState} />
   );
 }
 
