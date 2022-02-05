@@ -10,7 +10,7 @@ import YtpcInputVolume from './YtpcInputVolume';
 
 function YtpcInput() {
   const [atTime, setAtTime] = useState(0);
-  const [controlInput, setControlInput] = useState<(props: any) => JSX.Element>(YtpcInputGoto);
+  const [controlInput, setControlInput] = useState(() => YtpcInputGoto);
   const [controlInputState, setControlInputState] = useState<object>({});
 
   const onCreateEntry = () => {
@@ -23,8 +23,8 @@ function YtpcInput() {
         <span>At </span>
         <YtpcInputTime setTime={setAtTime} />
         <span>, </span>
-        <YtpcControlSelect setControlInput={() => {}/* setControlInput */} />
-        <YtpcInputVolume setControlInputState={setControlInputState} />
+        <YtpcControlSelect setControlInput={setControlInput} />
+        {React.createElement(controlInput, {setControlInputState})}
       </div>
       <YtpcAdd onCreateEntry={onCreateEntry} />
     </div>
