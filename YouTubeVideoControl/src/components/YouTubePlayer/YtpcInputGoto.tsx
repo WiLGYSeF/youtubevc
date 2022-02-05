@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 
 import { YtpcControlInput } from './YtpcControlInput';
 import { YtpcGotoState } from '../../objects/YtpcEntry/YtpcGotoEntry';
-import YtpcInputTime from './YtpcInputTime';
+import TimestampInput from '../common/TimestampInput';
 
 import '../../css/style.min.css';
 
@@ -19,7 +19,7 @@ function YtpcInputGoto(props: YtpcControlInput) {
   }, []);
 
   return (
-    <YtpcInputTime setTime={setControlInputState} />
+    <TimestampInput setTime={setControlInputState} />
   );
 }
 

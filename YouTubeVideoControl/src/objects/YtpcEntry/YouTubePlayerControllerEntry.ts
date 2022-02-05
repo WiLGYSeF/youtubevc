@@ -1,4 +1,5 @@
 import { YouTubePlayer } from 'youtube-player/dist/types';
+import secondsToTimestamp from '../../utils/secondsToTimestamp';
 
 export enum ControlType {
   ThreeSixty = '360',
@@ -7,12 +8,6 @@ export enum ControlType {
   Pause = 'pause',
   PlaybackRate = 'playback-rate',
   Volume = 'volume',
-}
-
-interface TimeParts {
-  seconds: number;
-  minutes?: number;
-  hours?: number;
 }
 
 abstract class YouTubePlayerControllerEntry {
@@ -31,32 +26,11 @@ abstract class YouTubePlayerControllerEntry {
   abstract getControlStr(): string;
 
   public toString(): string {
-    return `At ${this.secondsToTime(this.atTime)}, ${this.getActionStr()} ${this.getControlStr()}`;
+    return `At ${secondsToTimestamp(this.atTime)}, ${this.getActionStr()} ${this.getControlStr()}`;
   }
 
   public getKey(): string {
     return `${this.controlType}-${this.atTime}`;
-  }
-
-  public secondsToTime(seconds: number): string {
-    const parts = this.secondsToTimeParts(seconds);
-
-    const nlzstr = (x: number): string => (x > 9 ? '' : '0') + x;
-    return `${parts.hours ? `${nlzstr(parts.hours)}:` : ''}${nlzstr(parts.minutes ?? 0)}:${nlzstr(parts.seconds)}`;
-  }
-
-  public secondsToTimeParts(seconds: number): TimeParts {
-    let sec = seconds;
-    const hours = Math.floor(sec / 3600);
-    sec %= 3600;
-    const minutes = Math.floor(sec / 60);
-    sec %= 60;
-
-    return {
-      seconds: sec,
-      minutes,
-      hours,
-    };
   }
 }
 

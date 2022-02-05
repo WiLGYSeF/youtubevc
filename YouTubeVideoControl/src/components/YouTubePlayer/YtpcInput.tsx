@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import YtpcControlSelect from './YtpcControlSelect';
 import YtpcAdd from './YtpcAdd';
 import YtpcInputGoto from './YtpcInputGoto';
-import YtpcInputTime from './YtpcInputTime';
+import TimestampInput from '../common/TimestampInput';
 
 import '../../css/style.min.css';
 
@@ -20,7 +20,7 @@ function YtpcInput() {
     <div className="input">
       <div className="entry-creation">
         <span>At </span>
-        <YtpcInputTime setTime={setAtTime} />
+        <TimestampInput setTime={setAtTime} />
         <span>, </span>
         <YtpcControlSelect setControlInput={setControlInput} />
         {React.createElement(controlInput, {

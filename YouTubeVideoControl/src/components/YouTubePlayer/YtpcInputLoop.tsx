@@ -2,7 +2,7 @@ import React, { ChangeEvent, useEffect, useState } from 'react';
 
 import { YtpcControlInput } from './YtpcControlInput';
 import { YtpcLoopState } from '../../objects/YtpcEntry/YtpcLoopEntry';
-import YtpcInputTime from './YtpcInputTime';
+import TimestampInput from '../common/TimestampInput';
 
 import '../../css/style.min.css';
 import Checkbox from '../common/Checkbox';
@@ -26,7 +26,7 @@ function YtpcInputLoop(props: YtpcControlInput) {
 
   return (
     <div className="loop">
-      <YtpcInputTime setTime={setLoopBackTo} />
+      <TimestampInput setTime={setLoopBackTo} />
       <Checkbox
         label={forever ? 'forever' : 'times'}
         onChange={(e: ChangeEvent<HTMLInputElement>) => {
