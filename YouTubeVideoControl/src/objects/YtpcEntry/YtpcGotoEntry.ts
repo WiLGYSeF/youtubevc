@@ -2,6 +2,10 @@ import { YouTubePlayer } from 'youtube-player/dist/types';
 
 import YouTubePlayerControllerEntry, { ControlType } from './YouTubePlayerControllerEntry';
 
+export interface YtpcGotoState {
+  goto: number;
+}
+
 class YtpcGotoEntry extends YouTubePlayerControllerEntry {
   public static ACTION_STR: string = 'go to';
 

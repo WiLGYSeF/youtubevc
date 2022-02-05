@@ -2,6 +2,11 @@ import { YouTubePlayer } from 'youtube-player/dist/types';
 
 import YouTubePlayerControllerEntry, { ControlType } from './YouTubePlayerControllerEntry';
 
+export interface YtpcLoopState {
+  loopBackTo: number;
+  loopCount: number;
+}
+
 class YtpcLoopEntry extends YouTubePlayerControllerEntry {
   public static ACTION_STR: string = 'loop back to';
 

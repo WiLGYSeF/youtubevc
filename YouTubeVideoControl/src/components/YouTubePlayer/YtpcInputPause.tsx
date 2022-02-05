@@ -12,7 +12,7 @@ function YtpcInputPause(props: YtpcControlInput) {
 
   useEffect(() => {
     const state: YtpcPauseState = {
-      pauseTime: pauseFor
+      pauseTime: pauseFor,
     };
     props.setControlInputState(state);
   }, [pauseFor]);

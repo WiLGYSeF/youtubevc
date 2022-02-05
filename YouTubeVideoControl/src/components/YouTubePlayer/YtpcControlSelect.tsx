@@ -1,5 +1,6 @@
-import React, { ChangeEvent, ReactElement, useState } from 'react';
+import React, { ChangeEvent } from 'react';
 
+import { ControlType } from '../../objects/YtpcEntry/YouTubePlayerControllerEntry';
 import YtpcInput360 from './YtpcInput360';
 import YtpcInputGoto from './YtpcInputGoto';
 import YtpcInputLoop from './YtpcInputLoop';
@@ -14,7 +15,6 @@ import YtpcPlaybackRateEntry from '../../objects/YtpcEntry/YtpcPlaybackRateEntry
 import YtpcVolumeEntry from '../../objects/YtpcEntry/YtpcVolumeEntry';
 
 import '../../css/style.min.css';
-import { ControlType } from '../../objects/YtpcEntry/YouTubePlayerControllerEntry';
 
 interface ControlSelectProps {
   setControlInput(component?: any): void;
@@ -59,11 +59,11 @@ function YtpcControlSelect(props: ControlSelectProps) {
 
   return (
     <select onChange={onChange} defaultValue={ControlType.Goto}>
-      {Array.from(controls.entries()).map((c) =>
+      {Array.from(controls.entries()).map((c) => (
         <option key={c[0]} value={c[0]}>
           {c[1].text}
         </option>
-      )}
+      ))}
     </select>
   );
 }

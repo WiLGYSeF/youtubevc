@@ -71,28 +71,5 @@
 
     .entry-creation {
     }
-
-    .loop {
-      .loop-count {
-        width: 40px;
-      }
-    }
-
-    .time {
-      input {
-        width: 55px;
-      }
-    }
-
-    .volume {
-      input[type="range"] {
-        margin-right: 4px;
-        width: 75px;
-      }
-
-      input[type="number"] {
-        width: 50px;
-      }
-    }
   }
 }

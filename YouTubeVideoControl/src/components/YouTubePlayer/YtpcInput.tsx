@@ -1,12 +1,11 @@
-import React, { ReactElement, useState } from 'react';
+import React, { useState } from 'react';
 
+import YtpcControlSelect from './YtpcControlSelect';
 import YtpcAdd from './YtpcAdd';
+import YtpcInputGoto from './YtpcInputGoto';
 import YtpcInputTime from './YtpcInputTime';
 
 import '../../css/style.min.css';
-import YtpcControlSelect from './YtpcControlSelect';
-import YtpcInputGoto from './YtpcInputGoto';
-import YtpcInputVolume from './YtpcInputVolume';
 
 function YtpcInput() {
   const [atTime, setAtTime] = useState(0);
@@ -14,7 +13,7 @@ function YtpcInput() {
   const [controlInputState, setControlInputState] = useState<object>({});
 
   const onCreateEntry = () => {
-    console.log(controlInputState);
+    console.log(atTime, controlInputState);
   };
 
   return (
@@ -24,7 +23,7 @@ function YtpcInput() {
         <YtpcInputTime setTime={setAtTime} />
         <span>, </span>
         <YtpcControlSelect setControlInput={setControlInput} />
-        {React.createElement(controlInput, {setControlInputState})}
+        {React.createElement(controlInput, { setControlInputState })}
       </div>
       <YtpcAdd onCreateEntry={onCreateEntry} />
     </div>

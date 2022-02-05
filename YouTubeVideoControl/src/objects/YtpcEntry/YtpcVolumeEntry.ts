@@ -4,6 +4,11 @@ import { lerp } from '../../utils/lerp';
 
 import YouTubePlayerControllerEntry, { ControlType } from './YouTubePlayerControllerEntry';
 
+export interface YtpcVolumeState {
+  volume: number;
+  lerpSeconds: number;
+}
+
 class YtpcVolumeEntry extends YouTubePlayerControllerEntry {
   public static ACTION_STR: string = 'set volume to';
 

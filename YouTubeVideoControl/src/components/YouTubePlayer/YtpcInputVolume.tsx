@@ -1,26 +1,24 @@
-import React, { ChangeEvent, useState } from 'react';
+import React, { ChangeEvent, useEffect, useState } from 'react';
 
 import { YtpcControlInput } from './YtpcControlInput';
+import { YtpcVolumeState } from '../../objects/YtpcEntry/YtpcVolumeEntry';
 
 import '../../css/style.min.css';
 
-interface YtpcInputVolumeProps extends YtpcControlInput {
-
-}
-
-function YtpcInputVolume(props: YtpcInputVolumeProps) {
+function YtpcInputVolume(props: YtpcControlInput) {
   const [volume, setVolume] = useState(100);
   const [lerpSet, setLerp] = useState(false);
   const [lerpTime, setLerpTime] = useState(0);
 
   const lerpIdInternal = `ytpci-volume-lerp-${Math.random().toString(36).substring(2)}`;
 
-  const setControlInputState = () => {
-    props.setControlInputState({
+  useEffect(() => {
+    const state: YtpcVolumeState = {
       volume,
-      lerpTime: lerpSet ? lerpTime : -1,
-    });
-  };
+      lerpSeconds: lerpSet ? lerpTime : -1,
+    };
+    props.setControlInputState(state);
+  }, [volume, lerpSet, lerpTime]);
 
   return (
     <div className="volume">
@@ -31,19 +29,19 @@ function YtpcInputVolume(props: YtpcInputVolumeProps) {
         defaultValue="100"
         onChange={(e: ChangeEvent<HTMLInputElement>) => {
           setVolume(Number(e.target.value));
-          setControlInputState();
         }}
       />
       <span>{volume}</span>
-      <input
-        id={lerpIdInternal}
-        type="checkbox"
-        onChange={(e: ChangeEvent<HTMLInputElement>) => {
-          setLerp(e.target.checked);
-          setControlInputState();
-        }}
-      />
-      <label htmlFor={lerpIdInternal}>lerp</label>
+      <label htmlFor={lerpIdInternal}>
+        <input
+          id={lerpIdInternal}
+          type="checkbox"
+          onChange={(e: ChangeEvent<HTMLInputElement>) => {
+            setLerp(e.target.checked);
+          }}
+        />
+        <span>lerp</span>
+      </label>
       {lerpSet && (
         <span>
           <span> for </span>
@@ -53,7 +51,6 @@ function YtpcInputVolume(props: YtpcInputVolumeProps) {
             step="any"
             onChange={(e: ChangeEvent<HTMLInputElement>) => {
               setLerpTime(Number(e.target.value));
-              setControlInputState();
             }}
           />
           <span> seconds</span>
