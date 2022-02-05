@@ -1,6 +1,7 @@
 import { YouTubePlayer } from 'youtube-player/dist/types';
 
 import YouTubePlayerControllerEntry, { ControlType } from './YouTubePlayerControllerEntry';
+import secondsToTimestamp from '../../utils/secondsToTimestamp';
 
 export interface YtpcLoopState {
   loopBackTo: number;
@@ -42,7 +43,7 @@ class YtpcLoopEntry extends YouTubePlayerControllerEntry {
   }
 
   public getControlStr(): string {
-    return `${this.secondsToTime(this.loopBackTo)} ${
+    return `${secondsToTimestamp(this.loopBackTo)} ${
       this.loopCount >= 0
         ? `${this.loopCount} time${this.loopCount !== 1 ? 's' : ''}`
         : 'forever'

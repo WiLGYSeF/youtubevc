@@ -1,7 +1,8 @@
 import { YouTubePlayer } from 'youtube-player/dist/types';
-import Coroutine, { MSEC_PER_SEC } from '../../utils/coroutine';
 
 import YouTubePlayerControllerEntry, { ControlType } from './YouTubePlayerControllerEntry';
+import Coroutine, { MSEC_PER_SEC } from '../../utils/coroutine';
+import secondsToTimeParts from '../../utils/secondsToTimeParts';
 
 export interface YtpcPauseState {
   pauseTime: number;
@@ -36,7 +37,7 @@ class YtpcPauseEntry extends YouTubePlayerControllerEntry {
   }
 
   public getControlStr(): string {
-    const parts = this.secondsToTimeParts(this.pauseTime);
+    const parts = secondsToTimeParts(this.pauseTime);
 
     const nlzstr = (x: number): string => (x > 9 ? '' : '0') + x;
 

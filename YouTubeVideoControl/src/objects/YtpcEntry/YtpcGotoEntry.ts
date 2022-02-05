@@ -1,6 +1,7 @@
 import { YouTubePlayer } from 'youtube-player/dist/types';
 
 import YouTubePlayerControllerEntry, { ControlType } from './YouTubePlayerControllerEntry';
+import secondsToTimestamp from '../../utils/secondsToTimestamp';
 
 export interface YtpcGotoState {
   goto: number;
@@ -26,7 +27,7 @@ class YtpcGotoEntry extends YouTubePlayerControllerEntry {
   }
 
   public getControlStr(): string {
-    return this.secondsToTime(this.gotoTime);
+    return secondsToTimestamp(this.gotoTime);
   }
 }
 
