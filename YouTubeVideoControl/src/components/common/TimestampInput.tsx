@@ -1,13 +1,23 @@
 import React, { ChangeEvent, KeyboardEvent, useState } from 'react';
 
+import secondsToTimestamp from '../../utils/secondsToTimestamp';
 import timestampToSeconds from '../../utils/timestampToSeconds';
 import trimstr from '../../utils/trimstr';
 
 import '../../css/style.min.css';
-import secondsToTimestamp from '../../utils/secondsToTimestamp';
 
 interface YtpcInputTimeProps {
   setTime(seconds: number): void;
+}
+
+const TIME_PLACEHOLDER = '00:00';
+
+function sanitizeTime(time: string): string {
+  return trimstr(time, ':').replace(/::+/, ':');
+}
+
+function getWidth(str: string): string {
+  return `${Math.max(str.length, TIME_PLACEHOLDER.length)}ch`;
 }
 
 function YtpcInputTime(props: YtpcInputTimeProps) {
@@ -17,18 +27,20 @@ function YtpcInputTime(props: YtpcInputTimeProps) {
   const onInputChange = (e: ChangeEvent<HTMLInputElement>) => {
     const val = e.target.value;
 
-    if (/^([0-9]{0,2}:){0,2}[0-9]{0,2}$/.test(val)) {
-      if (!val.includes('::')) {
-        setInput(val);
+    if (/^^(\d?\d?:){0,3}\d?\d?$/.test(val)) {
+      setInput(val);
 
-        try {
-          const seconds = timestampToSeconds(trimstr(val, ':'));
-          props.setTime(seconds);
-          setTime(seconds);
-        } catch (exc) {
-          props.setTime(-1);
-          setTime(-1);
-        }
+      try {
+        const sanitized = sanitizeTime(val);
+        const seconds = sanitized ? timestampToSeconds(sanitized) : 0;
+
+        props.setTime(seconds);
+        setTime(seconds);
+      } catch (exc) {
+        console.error(exc, val, sanitizeTime(val));
+
+        props.setTime(-1);
+        setTime(-1);
       }
     }
   };
@@ -38,10 +50,13 @@ function YtpcInputTime(props: YtpcInputTimeProps) {
   };
 
   return (
-    <span className="time">
+    <span className="timestamp">
       <input
+        style={{
+          width: getWidth(input),
+        }}
         value={input}
-        placeholder="00:00"
+        placeholder={TIME_PLACEHOLDER}
         onChange={onInputChange}
         onBlur={updateInput}
         onKeyUp={(e: KeyboardEvent<HTMLInputElement>) => {

@@ -1,10 +1,13 @@
-export default function timestampToSeconds(timestamp: string): number {
-  const match = timestamp.match(/^(?:(?:(?<hour>[0-9]+):)?(?<min>[0-9]+):)?(?<sec>[0-9]+)$/);
+export default function timestampToSeconds(timestamp: string, hardMatch: boolean = false): number {
+  const match = timestamp.match(hardMatch
+    ? /^(?:(?:(?:(?<day>\d+):)?(?<hour>[01]\d|2[0-3]):)?(?<min>[0-5]?\d):)?(?<sec>[0-5]?\d)$/
+    : /^(?:(?:(?:(?<day>\d+):)?(?<hour>\d+):)?(?<min>\d+):)?(?<sec>\d+)$/);
   if (!match || !match.groups) {
     throw new Error('invalid timestamp input');
   }
 
-  return Number(match.groups.hour ?? 0) * 3600
+  return Number(match.groups.day ?? 0) * 24 * 60 * 60
+    + Number(match.groups.hour ?? 0) * 60 * 60
     + Number(match.groups.min ?? 0) * 60
     + Number(match.groups.sec ?? 0);
 }

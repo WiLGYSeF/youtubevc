@@ -2,12 +2,15 @@ export interface TimeParts {
   seconds: number;
   minutes?: number;
   hours?: number;
+  days?: number;
 }
 
 export default function secondsToTimeParts(seconds: number): TimeParts {
   let sec = seconds;
-  const hours = Math.floor(sec / 3600);
-  sec %= 3600;
+  const days = Math.floor(sec / (24 * 60 * 60));
+  sec %= 24 * 60 * 60;
+  const hours = Math.floor(sec / (60 * 60));
+  sec %= 60 * 60;
   const minutes = Math.floor(sec / 60);
   sec %= 60;
 
@@ -15,5 +18,6 @@ export default function secondsToTimeParts(seconds: number): TimeParts {
     seconds: sec,
     minutes,
     hours,
+    days,
   };
 }

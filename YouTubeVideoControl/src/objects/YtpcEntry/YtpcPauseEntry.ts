@@ -2,7 +2,7 @@ import { YouTubePlayer } from 'youtube-player/dist/types';
 
 import YouTubePlayerControllerEntry, { ControlType } from './YouTubePlayerControllerEntry';
 import Coroutine, { MSEC_PER_SEC } from '../../utils/coroutine';
-import secondsToTimeParts from '../../utils/secondsToTimeParts';
+import secondsToTimestring from '../../utils/secondsToTimestring';
 
 export interface YtpcPauseState {
   pauseTime: number;
@@ -37,25 +37,7 @@ class YtpcPauseEntry extends YouTubePlayerControllerEntry {
   }
 
   public getControlStr(): string {
-    const parts = secondsToTimeParts(this.pauseTime);
-
-    const nlzstr = (x: number): string => (x > 9 ? '' : '0') + x;
-
-    const times = [parts.hours, parts.minutes, parts.seconds];
-    const labels = ['h', 'm', 's'];
-
-    const arr = [];
-
-    for (let i = 0; i < times.length; i += 1) {
-      if (times[i]) {
-        arr.push(
-          (arr.length ? nlzstr(times[i] ?? 0) : times[i])
-          + labels[i],
-        );
-      }
-    }
-
-    return arr.join(' ');
+    return secondsToTimestring(this.pauseTime);
   }
 }
 
