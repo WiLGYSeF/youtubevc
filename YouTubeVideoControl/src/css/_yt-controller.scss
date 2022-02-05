@@ -46,6 +46,8 @@
   }
 
   .input {
+    @import 'ytpc/_.scss';
+
     border: 1px solid #aaa;
     border-radius: 8px;
     display: flex;
@@ -73,6 +75,12 @@
     .loop {
       .loop-count {
         width: 40px;
+      }
+    }
+
+    .time {
+      input {
+        width: 55px;
       }
     }
 

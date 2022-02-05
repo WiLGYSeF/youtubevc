@@ -3,6 +3,10 @@ import Coroutine, { MSEC_PER_SEC } from '../../utils/coroutine';
 
 import YouTubePlayerControllerEntry, { ControlType } from './YouTubePlayerControllerEntry';
 
+export interface YtpcPauseState {
+  pauseTime: number;
+};
+
 class YtpcPauseEntry extends YouTubePlayerControllerEntry {
   public static ACTION_STR: string = 'pause for';
 
