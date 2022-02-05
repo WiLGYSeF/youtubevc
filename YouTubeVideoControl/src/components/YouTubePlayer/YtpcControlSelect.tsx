@@ -56,7 +56,7 @@ function YtpcControlSelect(props: ControlSelectProps) {
   const onChange = (e: ChangeEvent<HTMLSelectElement>) => {
     props.setControlInput(
       e.target.value as ControlType,
-      () => controls.get(e.target.value)?.component
+      () => controls.get(e.target.value)?.component,
     );
   };
 

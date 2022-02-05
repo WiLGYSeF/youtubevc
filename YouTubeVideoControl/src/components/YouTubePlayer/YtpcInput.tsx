@@ -9,7 +9,7 @@ import TimestampInput from '../common/TimestampInput';
 import '../../css/style.min.css';
 
 interface YtpcInputProps {
-  onCreateEntry: (type: ControlType, atTime: number, state: object) => void;
+  onCreateEntry(type: ControlType, atTime: number, state: object): void;
 }
 
 function YtpcInput(props: YtpcInputProps) {
@@ -27,7 +27,8 @@ function YtpcInput(props: YtpcInputProps) {
         <YtpcControlSelect setControlInput={(type: ControlType, component?: any) => {
           setControlInput(component);
           setControlInputType(type);
-        }} />
+        }}
+        />
         {React.createElement(controlInput, {
           setControlInputState,
           playbackRates: undefined,

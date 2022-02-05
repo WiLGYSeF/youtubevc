@@ -28,7 +28,8 @@ function YtpcInputVolume(props: YtpcControlInput) {
 
   return (
     <div className="volume">
-      <input type="range"
+      <input
+        type="range"
         min={VOLUME_MIN} max={VOLUME_MAX}
         defaultValue={VOLUME_DEFAULT}
         onChange={(e: ChangeEvent<HTMLInputElement>) => {

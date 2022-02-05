@@ -14,7 +14,7 @@ interface NumberInputProps {
   clamp?: boolean;
   forceValue?: boolean;
 
-  setValue: (value: number) => void;
+  setValue(value: number): void;
 }
 
 function NumberInput(props: NumberInputProps) {

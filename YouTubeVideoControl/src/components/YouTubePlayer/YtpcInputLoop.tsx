@@ -2,11 +2,11 @@ import React, { ChangeEvent, useEffect, useState } from 'react';
 
 import { YtpcControlInput } from './YtpcControlInput';
 import { YtpcLoopState } from '../../objects/YtpcEntry/YtpcLoopEntry';
+import Checkbox from '../common/Checkbox';
+import NumberInput from '../common/NumberInput';
 import TimestampInput from '../common/TimestampInput';
 
 import '../../css/style.min.css';
-import Checkbox from '../common/Checkbox';
-import NumberInput from '../common/NumberInput';
 
 const LOOP_COUNT_DEFAULT = 3;
 const FOREVER_DEFAULT = true;

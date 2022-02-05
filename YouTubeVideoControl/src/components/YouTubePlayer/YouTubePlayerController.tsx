@@ -17,9 +17,9 @@ function YouTubePlayerController(props: YouTubePlayerControllerProps) {
     const entry = EntryBuilder.buildEntry(type, atTime, state);
 
     // TODO: binary insert
-    props.setEntries([...props.entries, entry].sort((a: YouTubePlayerControllerEntry, b: YouTubePlayerControllerEntry): number => {
-      return a.atTime - b.atTime;
-    }));
+    props.setEntries([...props.entries, entry].sort(
+      (a: YouTubePlayerControllerEntry, b: YouTubePlayerControllerEntry): number => a.atTime - b.atTime,
+    ));
   };
 
   return (

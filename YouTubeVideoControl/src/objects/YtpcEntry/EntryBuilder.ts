@@ -9,24 +9,32 @@ import YtpcVolumeEntry, { YtpcVolumeState } from './YtpcVolumeEntry';
 class EntryBuilder {
   static buildEntry(type: ControlType, atTime: number, state: object): YouTubePlayerControllerEntry {
     switch (type) {
-      case ControlType.Goto:
-        const gotoState: YtpcGotoState = state as YtpcGotoState;
-        return new YtpcGotoEntry(atTime, gotoState.goto);
-      case ControlType.Loop:
-        const loopState: YtpcLoopState = state as YtpcLoopState;
-        return new YtpcLoopEntry(atTime, loopState.loopBackTo, loopState.loopCount);
-      case ControlType.Pause:
-        const pauseState: YtpcPauseState = state as YtpcPauseState;
-        return new YtpcPauseEntry(atTime, pauseState.pauseTime);
-      case ControlType.PlaybackRate:
-        const playbackRateState: YtpcPlaybackRateState = state as YtpcPlaybackRateState;
-        return new YtpcPlaybackRateEntry(atTime, playbackRateState.playbackRate);
-      case ControlType.ThreeSixty:
-        const threeSixtyState: Ytpc360State = state as Ytpc360State;
-        return new Ytpc360Entry(atTime, threeSixtyState.sphereProps, threeSixtyState.lerpSeconds);
-      case ControlType.Volume:
-        const volumeState: YtpcVolumeState = state as YtpcVolumeState;
-        return new YtpcVolumeEntry(atTime, volumeState.volume, volumeState.lerpSeconds);
+      case ControlType.Goto: {
+        const yest: YtpcGotoState = state as YtpcGotoState;
+        return new YtpcGotoEntry(atTime, yest.goto);
+      }
+      case ControlType.Loop: {
+        const yest: YtpcLoopState = state as YtpcLoopState;
+        return new YtpcLoopEntry(atTime, yest.loopBackTo, yest.loopCount);
+      }
+      case ControlType.Pause: {
+        const yest: YtpcPauseState = state as YtpcPauseState;
+        return new YtpcPauseEntry(atTime, yest.pauseTime);
+      }
+      case ControlType.PlaybackRate: {
+        const yest: YtpcPlaybackRateState = state as YtpcPlaybackRateState;
+        return new YtpcPlaybackRateEntry(atTime, yest.playbackRate);
+      }
+      case ControlType.ThreeSixty: {
+        const yest: Ytpc360State = state as Ytpc360State;
+        return new Ytpc360Entry(atTime, yest.sphereProps, yest.lerpSeconds);
+      }
+      case ControlType.Volume: {
+        const yest: YtpcVolumeState = state as YtpcVolumeState;
+        return new YtpcVolumeEntry(atTime, yest.volume, yest.lerpSeconds);
+      }
+      default:
+        throw new Error('unknown entry type');
     }
   }
 }

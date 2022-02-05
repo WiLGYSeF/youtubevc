@@ -42,7 +42,7 @@ function YtpcInput360(props: YtpcControlInput) {
         roll,
         fov,
       },
-      lerpSeconds: lerpSet ? lerpTime : -1
+      lerpSeconds: lerpSet ? lerpTime : -1,
     };
     props.setControlInputState(state);
   }, [yaw, pitch, roll, fov, lerpSet, lerpTime]);

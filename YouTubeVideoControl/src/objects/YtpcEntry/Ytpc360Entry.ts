@@ -28,7 +28,7 @@ class Ytpc360Entry extends YouTubePlayerControllerEntry {
   public sphereProps: SphericalProperties;
   public lerpSeconds: number;
 
-  constructor(atTime: number, sphereProps: SphericalProperties, lerpSeconds?: number,) {
+  constructor(atTime: number, sphereProps: SphericalProperties, lerpSeconds?: number) {
     super(ControlType.Volume, atTime);
 
     this.sphereProps = sphereProps;

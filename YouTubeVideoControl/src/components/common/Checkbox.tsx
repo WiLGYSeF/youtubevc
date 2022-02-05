@@ -22,7 +22,8 @@ function Checkbox(props: CheckboxProps) {
   return (
     <label htmlFor={inputIdInternal} className="cpt-checkbox" data-label-right={labelRight}>
       {!labelRight && eLabel}
-      <input type="checkbox"
+      <input
+        type="checkbox"
         id={inputIdInternal}
         onChange={props.onChange}
         defaultChecked={defaultChecked}
