@@ -76,6 +76,12 @@
       }
     }
 
+    .time {
+      input {
+        width: 55px;
+      }
+    }
+
     .volume {
       input[type="range"] {
         margin-right: 4px;
