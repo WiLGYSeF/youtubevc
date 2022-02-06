@@ -5,7 +5,7 @@ import '../../css/style.min.css';
 function YtpcEntryBar() {
   return (
     <div className="entry-bar">
-      <div />
+      <div className="arrow" />
     </div>
   );
 }
