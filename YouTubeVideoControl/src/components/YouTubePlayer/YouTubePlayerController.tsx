@@ -90,6 +90,10 @@ function YouTubePlayerController(props: YouTubePlayerControllerProps) {
   const onCreateEntry = (type: ControlType, atTime: number, state: object): void => {
     const entry = EntryBuilder.buildEntry(type, atTime, state);
 
+    if (entries.find((e) => e.atTime === atTime && e.controlType === type)) {
+      throw new Error('entry already present at that time');
+    }
+
     setEntries([...entries, entry].sort(
       (a: YouTubePlayerControllerEntry, b: YouTubePlayerControllerEntry): number => a.atTime - b.atTime,
     ));
