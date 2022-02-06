@@ -21,6 +21,8 @@ interface YouTubePlayerControllerProps {
 
 const EVENT_ONSTATECHANGE = 'onStateChange';
 
+const TIME_DIFF_MAX = 0.1;
+
 function playerHas360Video(player: YouTubePlayer360): boolean {
   return Object.keys(player.getSphericalProperties()).length > 0;
 }
@@ -66,7 +68,7 @@ function YouTubePlayerController(props: YouTubePlayerControllerProps) {
 
       for (const entry of entries) {
         if (entry.atTime < curTime) {
-          if (entry.atTime >= lastTime) {
+          if (entry.atTime >= Math.max(lastTime, curTime - TIME_DIFF_MAX)) {
             entry.performAction(props.ytPlayer, curTime);
           }
           lastMatchingIdx = idx;
