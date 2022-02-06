@@ -2,11 +2,12 @@ import React, { useEffect, useState } from 'react';
 
 import { YtpcControlInput } from './YtpcControlInput';
 import { YtpcPauseState } from '../../objects/YtpcEntry/YtpcPauseEntry';
-import NumberInput from '../common/NumberInput';
+import TimestampInput from '../common/TimestampInput';
+import secondsToTimestamp from '../../utils/secondsToTimestamp';
 
 import '../../css/style.min.css';
 
-const PAUSE_FOR_DEFAULT = 3;
+const PAUSE_FOR_DEFAULT = 5;
 
 function YtpcInputPause(props: YtpcControlInput) {
   const [pauseFor, setPauseFor] = useState(PAUSE_FOR_DEFAULT);
@@ -20,12 +21,9 @@ function YtpcInputPause(props: YtpcControlInput) {
 
   return (
     <div className="pause">
-      <NumberInput
-        label=" seconds"
-        labelLeft={false}
-        minValue={0} step={null}
-        defaultValue={PAUSE_FOR_DEFAULT}
-        setValue={setPauseFor}
+      <TimestampInput
+        defaultValue={secondsToTimestamp(PAUSE_FOR_DEFAULT)}
+        setTime={setPauseFor}
       />
     </div>
   );
