@@ -6,6 +6,7 @@ import YtpcControlSelect from './YtpcControlSelect';
 import YtpcAdd from './YtpcAdd';
 import YtpcInputGoto from './YtpcInputGoto';
 import TimestampInput from '../common/TimestampInput';
+import secondsToTimestamp from '../../utils/secondsToTimestamp';
 
 import '../../css/style.min.css';
 
@@ -17,6 +18,7 @@ interface YtpcInputProps {
 
 function YtpcInput(props: YtpcInputProps) {
   const [atTime, setAtTime] = useState(0);
+  const [nowTime, setNowTime] = useState(0);
   const [controlInput, setControlInput] = useState(() => YtpcInputGoto);
   const [controlInputType, setControlInputType] = useState(ControlType.Goto);
   const [controlInputState, setControlInputState] = useState<object>({});
@@ -25,7 +27,22 @@ function YtpcInput(props: YtpcInputProps) {
     <div className="input">
       <div className="entry-creation">
         <span>At </span>
-        <TimestampInput setTime={setAtTime} />
+        <span
+          className="now-time"
+          title="Click to use current time in video"
+          onClick={() => {
+            if (props.ytPlayer) {
+              const curTime = Math.floor(props.ytPlayer.getCurrentTime() * 100) / 100;
+              setNowTime(curTime);
+            }
+          }}
+        >
+          *
+        </span>
+        <TimestampInput
+          defaultValue={secondsToTimestamp(nowTime)}
+          setTime={setAtTime}
+        />
         <span>, </span>
         <YtpcControlSelect
           setControlInput={(type: ControlType, component?: any) => {

@@ -70,7 +70,7 @@ function YtpcControlSelect(props: ControlSelectProps) {
   };
 
   return (
-    <select onChange={onChange} defaultValue={ControlType.Goto}>
+    <select defaultValue={ControlType.Goto} onChange={onChange}>
       {Array.from(controls.entries()).map((c) => (
         <option key={c[0]} value={c[0]} disabled={!c[1].enabled}>
           {c[1].text}

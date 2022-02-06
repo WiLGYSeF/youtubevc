@@ -24,7 +24,7 @@ function YtpcEntryList(props: YtpcEntryListProps) {
   elements.splice(
     props.barIndex,
     0, (
-      <YtpcEntryBar />
+      <YtpcEntryBar key="entrybar" />
     ),
   );
 

@@ -6,7 +6,6 @@
 .yt-controller {
   display: flex;
   padding: 10px;
-  user-select: none;
 
   .left {
     min-width: 450px;
@@ -38,6 +37,7 @@
         background-color: #444;
         border: 1px solid #000;
         height: 10px;
+        user-select: none;
         width: 10px;
 
         &:hover {
@@ -67,6 +67,7 @@
     background-color: #fff;
     border-radius: 50%;
     height: 20px;
+    user-select: none;
     width: 20px;
 
     &:hover {
@@ -101,6 +102,10 @@
     }
 
     .entry-creation {
+      .now-time {
+        cursor: pointer;
+        padding: 0 2px;
+      }
     }
   }
 }
