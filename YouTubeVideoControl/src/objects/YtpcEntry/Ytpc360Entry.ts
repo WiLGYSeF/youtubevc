@@ -12,9 +12,9 @@ export interface SphericalProperties {
 }
 
 // the YouTubePlayer type declaration is outdated and does not contain properties for 360 videos
-interface YouTubePlayer360 extends YouTubePlayer {
-  getSphericalProperties: () => SphericalProperties;
-  setSphericalProperties: (props: SphericalProperties) => void;
+export interface YouTubePlayer360 extends YouTubePlayer {
+  getSphericalProperties(): SphericalProperties | {};
+  setSphericalProperties(props: SphericalProperties): void;
 }
 
 export interface Ytpc360State {
@@ -38,18 +38,21 @@ class Ytpc360Entry extends YouTubePlayerControllerEntry {
   public performAction(ytPlayer: YouTubePlayer360, currentTime: number): void {
     if (this.lerpSeconds > 0) {
       const props = ytPlayer.getSphericalProperties();
-      const lerpMs = this.lerpSeconds * MSEC_PER_SEC;
+      if (Object.keys(props).length) {
+        const p = props as SphericalProperties;
+        const lerpMs = this.lerpSeconds * MSEC_PER_SEC;
 
-      const routine = new Coroutine((timestamp: number) => {
-        const t = (timestamp - routine.startTime) / lerpMs;
-        ytPlayer.setSphericalProperties({
-          yaw: lerp(props.yaw, this.sphereProps.yaw, t),
-          pitch: lerp(props.pitch, this.sphereProps.pitch, t),
-          roll: lerp(props.roll, this.sphereProps.roll, t),
-          fov: lerp(props.fov, this.sphereProps.fov, t),
-        });
-      }, lerpMs);
-      routine.start();
+        const routine = new Coroutine((timestamp: number) => {
+          const t = (timestamp - routine.startTime) / lerpMs;
+          ytPlayer.setSphericalProperties({
+            yaw: lerp(p.yaw, this.sphereProps.yaw, t),
+            pitch: lerp(p.pitch, this.sphereProps.pitch, t),
+            roll: lerp(p.roll, this.sphereProps.roll, t),
+            fov: lerp(p.fov, this.sphereProps.fov, t),
+          });
+        }, lerpMs);
+        routine.start();
+      }
     } else {
       ytPlayer.setSphericalProperties(this.sphereProps);
     }

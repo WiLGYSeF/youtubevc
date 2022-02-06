@@ -45,6 +45,12 @@
         }
       }
     }
+
+    .entry-bar {
+      background-color: #f00;
+      height: 2px;
+      width: 100%;
+    }
   }
 
   .add {
@@ -58,9 +64,11 @@
     }
   }
 
+  .clear {
+  }
+
   .input {
     @import 'ytpc/_.scss';
-
     border: 1px solid #aaa;
     border-radius: 8px;
     display: flex;

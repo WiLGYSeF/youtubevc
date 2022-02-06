@@ -1,7 +1,10 @@
 import React, { useEffect, useState } from 'react';
+import { YouTubePlayer } from 'youtube-player/dist/types';
+import PlayerStates from 'youtube-player/dist/constants/PlayerStates';
 
+import { YouTubePlayer360 } from '../../objects/YtpcEntry/Ytpc360Entry';
 import YouTubePlayerControllerEntry, { ControlType } from '../../objects/YtpcEntry/YouTubePlayerControllerEntry';
-import YtpcEntry from './YtpcEntry';
+import YtpcClear from './YtpcClear';
 import YtpcInput from './YtpcInput';
 import EntryBuilder from '../../objects/YtpcEntry/EntryBuilder';
 import Coroutine from '../../utils/coroutine';
@@ -9,19 +12,47 @@ import Coroutine from '../../utils/coroutine';
 import YtpcLoopEntry from '../../objects/YtpcEntry/YtpcLoopEntry';
 
 import '../../css/style.min.css';
-import { YouTubePlayer } from 'youtube-player/dist/types';
+import YtpcEntryList from './YtpcEntryList';
+import YtpcGotoEntry from '../../objects/YtpcEntry/YtpcGotoEntry';
 
 interface YouTubePlayerControllerProps {
   ytPlayer?: YouTubePlayer;
 }
 
+const EVENT_ONSTATECHANGE = 'onStateChange';
+
+function playerHas360Video(player: YouTubePlayer360): boolean {
+  return Object.keys(player.getSphericalProperties()).length > 0;
+}
+
 function YouTubePlayerController(props: YouTubePlayerControllerProps) {
   const [entries, setEntries] = useState<YouTubePlayerControllerEntry[]>([
+    new YtpcGotoEntry(0, 1),
+    new YtpcGotoEntry(3, 6),
     new YtpcLoopEntry(7 * 60 + 51, 3 * 60 + 25),
   ]);
+  const [barIndex, setBarIndex] = useState(0);
+  const [is360Video, setIs360Video] = useState(false);
 
   useEffect(() => {
-    let lastTime = 0;
+    const onStateChange = (e: CustomEvent) => {
+      const state: PlayerStates = (e as any).data;
+      const has360Video = playerHas360Video(props.ytPlayer as YouTubePlayer360);
+
+      if (is360Video !== has360Video) {
+        setIs360Video(has360Video);
+      }
+    };
+
+    props.ytPlayer?.addEventListener(EVENT_ONSTATECHANGE, onStateChange);
+
+    return () => {
+      props.ytPlayer?.removeEventListener(EVENT_ONSTATECHANGE, onStateChange);
+    };
+  });
+
+  useEffect(() => {
+    let lastTime = props.ytPlayer?.getCurrentTime() ?? 0;
 
     const routine = new Coroutine(() => {
       if (!props.ytPlayer) {
@@ -30,11 +61,20 @@ function YouTubePlayerController(props: YouTubePlayerControllerProps) {
 
       const curTime = props.ytPlayer.getCurrentTime();
 
+      let idx = 0;
+      let lastMatchingIdx = -1;
+
       for (const entry of entries) {
-        if (entry.atTime >= lastTime && entry.atTime < curTime) {
-          entry.performAction(props.ytPlayer, curTime);
+        if (entry.atTime < curTime) {
+          if (entry.atTime >= lastTime) {
+            entry.performAction(props.ytPlayer, curTime);
+          }
+          lastMatchingIdx = idx;
         }
+        idx += 1;
       }
+
+      setBarIndex(lastMatchingIdx + 1);
 
       lastTime = curTime;
     });
@@ -43,7 +83,7 @@ function YouTubePlayerController(props: YouTubePlayerControllerProps) {
     return () => {
       routine.stop();
     };
-  });
+  }, [props.ytPlayer, entries]);
 
   const onCreateEntry = (type: ControlType, atTime: number, state: object): void => {
     const entry = EntryBuilder.buildEntry(type, atTime, state);
@@ -60,17 +100,22 @@ function YouTubePlayerController(props: YouTubePlayerControllerProps) {
   return (
     <div className="yt-controller">
       <div className="left">
-        <YtpcInput ytPlayer={props.ytPlayer} onCreateEntry={onCreateEntry} />
+        <YtpcInput
+          ytPlayer={props.ytPlayer}
+          is360Video={is360Video}
+          onCreateEntry={onCreateEntry}
+        />
 
-        <div className="entry-list">
-          {entries.map((e, i) => (
-            <YtpcEntry
-              key={`${i}-${e.getKey()}`}
-              entry={e}
-              onDeleteEntry={onDeleteEntry}
-            />
-          ))}
-        </div>
+        <YtpcEntryList
+          entries={entries}
+          barIndex={barIndex}
+          deleteEntry={onDeleteEntry}
+        />
+
+        <YtpcClear clearEntries={() => {
+          setEntries([]);
+        }}
+        />
       </div>
       <div className="right" />
     </div>
