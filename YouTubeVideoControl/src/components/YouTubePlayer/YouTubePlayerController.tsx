@@ -88,15 +88,23 @@ function YouTubePlayerController(props: YouTubePlayerControllerProps) {
   }, [props.ytPlayer, entries]);
 
   const onCreateEntry = (type: ControlType, atTime: number, state: object): void => {
+    const newEntries = [...entries];
     const entry = EntryBuilder.buildEntry(type, atTime, state);
 
-    if (entries.find((e) => e.atTime === atTime && e.controlType === type)) {
-      throw new Error('entry already present at that time');
+    const existingEntryIndex = entries.findIndex((e) => e.atTime === atTime && e.controlType === type);
+
+    console.log(existingEntryIndex, entries, entry);
+
+    if (existingEntryIndex === -1) {
+      newEntries.push(entry);
+      newEntries.sort(
+        (a: YouTubePlayerControllerEntry, b: YouTubePlayerControllerEntry): number => a.atTime - b.atTime,
+      );
+    } else {
+      newEntries[existingEntryIndex] = entry;
     }
 
-    setEntries([...entries, entry].sort(
-      (a: YouTubePlayerControllerEntry, b: YouTubePlayerControllerEntry): number => a.atTime - b.atTime,
-    ));
+    setEntries(newEntries);
   };
 
   const onDeleteEntry = (entry: YouTubePlayerControllerEntry): void => {
