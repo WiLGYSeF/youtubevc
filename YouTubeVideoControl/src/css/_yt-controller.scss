@@ -1,3 +1,17 @@
+@mixin entry-button {
+  background-color: #fff;
+  border: 1px solid #aaa;
+  border-radius: 4px;
+  color: #000;
+  height: 20px;
+  user-select: none;
+  width: 20px;
+
+  &:hover {
+    background-color: #ddd;
+  }
+}
+
 .yt-player {
   text-align: center;
   user-select: none;
@@ -15,11 +29,16 @@
     flex: 1;
   }
 
-  $border-radius: 8px;
+  $color: #ddd;
+  $background-color: #444;
+  $border-color: #aaa;
+  $border-radius: 6px;
 
   .entry-list {
-    background-color: grey;
+    background-color: $background-color;
+    border: 1px solid $border-color;
     border-radius: $border-radius;
+    color: $color;
     height: 200px;
     overflow: auto;
 
@@ -28,21 +47,14 @@
       display: flex;
       height: 25px;
       justify-content: space-between;
+      padding: 2px 4px;
 
       &:first-child {
         border-radius: $border-radius $border-radius 0 0;
-      }
+      } 
 
       .delete {
-        background-color: #444;
-        border: 1px solid #000;
-        height: 10px;
-        user-select: none;
-        width: 10px;
-
-        &:hover {
-          background-color: #666;
-        }
+        @include entry-button;
       }
     }
 
@@ -54,7 +66,7 @@
       width: 100%;
 
       .arrow {
-        border: solid 5px;
+        border: solid 6px;
         height: 0;
         width: 0;
         border-color: transparent transparent transparent #f00;
@@ -64,15 +76,7 @@
   }
 
   .add {
-    background-color: #fff;
-    border-radius: 50%;
-    height: 20px;
-    user-select: none;
-    width: 20px;
-
-    &:hover {
-      background-color: #ddd;
-    }
+    @include entry-button;
   }
 
   .clear {
@@ -80,8 +84,11 @@
 
   .input {
     @import 'ytpc/_.scss';
-    border: 1px solid #aaa;
+
+    background-color: $background-color;
+    border: 1px solid $border-color;
     border-radius: 8px;
+    color: $color;
     display: flex;
     justify-content: space-between;
     margin-bottom: 5px;
