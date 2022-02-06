@@ -2,14 +2,15 @@ import React from 'react';
 
 import YouTubePlayerControllerEntry from '../../objects/YtpcEntry/YouTubePlayerControllerEntry';
 import YtpcEntry from './YtpcEntry';
+import YtpcEntryBar from './YtpcEntryBar';
 
 import '../../css/style.min.css';
-import YtpcEntryBar from './YtpcEntryBar';
 
 interface YtpcEntryListProps {
   entries: YouTubePlayerControllerEntry[];
   barIndex: number;
   deleteEntry(entry: YouTubePlayerControllerEntry): void;
+  editEntry(entry: YouTubePlayerControllerEntry): void;
 }
 
 function YtpcEntryList(props: YtpcEntryListProps) {
@@ -17,7 +18,8 @@ function YtpcEntryList(props: YtpcEntryListProps) {
     <YtpcEntry
       key={`${i}-${e.getKey()}`}
       entry={e}
-      onDeleteEntry={props.deleteEntry}
+      deleteEntry={props.deleteEntry}
+      editEntry={props.editEntry}
     />
   ));
 

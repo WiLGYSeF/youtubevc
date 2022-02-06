@@ -6,20 +6,31 @@ import '../../css/style.min.css';
 
 interface YtpcEntryProps {
   entry: YouTubePlayerControllerEntry;
-  onDeleteEntry(entry: YouTubePlayerControllerEntry): void;
+  deleteEntry(entry: YouTubePlayerControllerEntry): void;
+  editEntry(entry: YouTubePlayerControllerEntry): void;
 }
 
 function YtpcEntry(props: YtpcEntryProps) {
   return (
     <div className="entry">
       <span>{`${props.entry}`}</span>
-      <div
-        className="delete"
-        onClick={() => {
-          props.onDeleteEntry(props.entry);
-        }}
-      >
-        x
+      <div className="buttons">
+        <div
+          className="edit"
+          onClick={() => {
+            props.editEntry(props.entry);
+          }}
+        >
+          e
+        </div>
+        <div
+          className="delete"
+          onClick={() => {
+            props.deleteEntry(props.entry);
+          }}
+        >
+          x
+        </div>
       </div>
     </div>
   );

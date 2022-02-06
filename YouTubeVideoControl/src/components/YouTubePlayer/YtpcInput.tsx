@@ -12,16 +12,23 @@ import '../../css/style.min.css';
 
 interface YtpcInputProps {
   ytPlayer?: YouTubePlayer;
-  is360Video: boolean,
-  onCreateEntry(type: ControlType, atTime: number, state: object): void;
+  is360Video: boolean;
+
+  controlInputType: ControlType;
+
+  createEntry(type: ControlType, atTime: number, state: object): void;
 }
 
 function YtpcInput(props: YtpcInputProps) {
   const [atTime, setAtTime] = useState(0);
   const [nowTime, setNowTime] = useState(0);
   const [controlInput, setControlInput] = useState(() => YtpcInputGoto);
-  const [controlInputType, setControlInputType] = useState(ControlType.Goto);
+  const [controlInputType, setControlInputType] = useState(props.controlInputType);
   const [controlInputState, setControlInputState] = useState<object>({});
+
+  useEffect(() => {
+    setControlInputType(props.controlInputType);
+  }, [props.controlInputType]);
 
   return (
     <div className="input">
@@ -45,18 +52,19 @@ function YtpcInput(props: YtpcInputProps) {
         />
         <span>, </span>
         <YtpcControlSelect
+          is360Video={props.is360Video}
+          controlInputType={controlInputType}
           setControlInput={(type: ControlType, component?: any) => {
             setControlInput(component);
             setControlInputType(type);
           }}
-          is360Video={props.is360Video}
         />
         {React.createElement(controlInput, {
           setControlInputState,
           playbackRates: props.ytPlayer?.getAvailablePlaybackRates(),
         })}
       </div>
-      <YtpcAdd createEntry={() => props.onCreateEntry(controlInputType, atTime, controlInputState)} />
+      <YtpcAdd createEntry={() => props.createEntry(controlInputType, atTime, controlInputState)} />
     </div>
   );
 }

@@ -35,6 +35,7 @@ function YouTubePlayerController(props: YouTubePlayerControllerProps) {
   ]);
   const [barIndex, setBarIndex] = useState(0);
   const [is360Video, setIs360Video] = useState(false);
+  const [controlInputType, setControlInputType] = useState(ControlType.Goto);
 
   useEffect(() => {
     const onStateChange = (e: CustomEvent) => {
@@ -87,7 +88,7 @@ function YouTubePlayerController(props: YouTubePlayerControllerProps) {
     };
   }, [props.ytPlayer, entries]);
 
-  const onCreateEntry = (type: ControlType, atTime: number, state: object): void => {
+  const createEntry = (type: ControlType, atTime: number, state: object): void => {
     const newEntries = [...entries];
     const entry = EntryBuilder.buildEntry(type, atTime, state);
 
@@ -107,8 +108,13 @@ function YouTubePlayerController(props: YouTubePlayerControllerProps) {
     setEntries(newEntries);
   };
 
-  const onDeleteEntry = (entry: YouTubePlayerControllerEntry): void => {
+  const deleteEntry = (entry: YouTubePlayerControllerEntry): void => {
     setEntries([...entries.filter((e) => e !== entry)]);
+  };
+
+  const editEntry = (entry: YouTubePlayerControllerEntry): void => {
+    console.log(entry);
+    setControlInputType(entry.controlType);
   };
 
   return (
@@ -117,13 +123,15 @@ function YouTubePlayerController(props: YouTubePlayerControllerProps) {
         <YtpcInput
           ytPlayer={props.ytPlayer}
           is360Video={is360Video}
-          onCreateEntry={onCreateEntry}
+          controlInputType={controlInputType}
+          createEntry={createEntry}
         />
 
         <YtpcEntryList
           entries={entries}
           barIndex={barIndex}
-          deleteEntry={onDeleteEntry}
+          deleteEntry={deleteEntry}
+          editEntry={editEntry}
         />
 
         <YtpcClear clearEntries={() => {

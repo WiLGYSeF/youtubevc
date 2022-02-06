@@ -18,6 +18,7 @@ import '../../css/style.min.css';
 
 interface ControlSelectProps {
   is360Video: boolean;
+  controlInputType: ControlType;
   setControlInput(type: ControlType, component?: any): void;
 }
 
@@ -70,9 +71,9 @@ function YtpcControlSelect(props: ControlSelectProps) {
   };
 
   return (
-    <select defaultValue={ControlType.Goto} onChange={onChange}>
+    <select onChange={onChange}>
       {Array.from(controls.entries()).map((c) => (
-        <option key={c[0]} value={c[0]} disabled={!c[1].enabled}>
+        <option key={c[0]} value={c[0]} disabled={!c[1].enabled} selected={c[0] === props.controlInputType}>
           {c[1].text}
         </option>
       ))}

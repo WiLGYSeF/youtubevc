@@ -49,11 +49,11 @@
       justify-content: space-between;
       padding: 2px 4px;
 
-      &:first-child {
-        border-radius: $border-radius $border-radius 0 0;
-      } 
+      .buttons {
+        display: flex;
+      }
 
-      .delete {
+      .delete, .edit {
         @include entry-button;
       }
     }
