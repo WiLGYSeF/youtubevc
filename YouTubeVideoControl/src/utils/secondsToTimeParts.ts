@@ -1,3 +1,5 @@
+import Decimal from 'decimal.js-light';
+
 export interface TimeParts {
   seconds: number;
   minutes?: number;
@@ -6,16 +8,16 @@ export interface TimeParts {
 }
 
 export default function secondsToTimeParts(seconds: number): TimeParts {
-  let sec = seconds;
-  const days = Math.floor(sec / (24 * 60 * 60));
-  sec %= 24 * 60 * 60;
-  const hours = Math.floor(sec / (60 * 60));
-  sec %= 60 * 60;
-  const minutes = Math.floor(sec / 60);
-  sec %= 60;
+  let sec = new Decimal(seconds);
+  const days = Math.floor(sec.div(24 * 60 * 60).toNumber());
+  sec = sec.mod(24 * 60 * 60);
+  const hours = Math.floor(sec.div(60 * 60).toNumber());
+  sec = sec.mod(60 * 60);
+  const minutes = Math.floor(sec.div(60).toNumber());
+  sec = sec.mod(60);
 
   return {
-    seconds: sec,
+    seconds: sec.toNumber(),
     minutes,
     hours,
     days,

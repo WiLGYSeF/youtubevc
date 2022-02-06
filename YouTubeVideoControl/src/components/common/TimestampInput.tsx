@@ -27,7 +27,7 @@ function YtpcInputTime(props: YtpcInputTimeProps) {
   const onInputChange = (e: ChangeEvent<HTMLInputElement>) => {
     const val = e.target.value;
 
-    if (/^^(\d?\d?:){0,3}\d?\d?$/.test(val)) {
+    if (/^(\d?\d?:){0,3}\d?\d?(\.\d*)?$/.test(val)) {
       setInput(val);
 
       try {
