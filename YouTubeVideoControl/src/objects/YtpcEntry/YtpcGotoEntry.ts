@@ -18,12 +18,18 @@ class YtpcGotoEntry extends YouTubePlayerControllerEntry {
     this.gotoTime = gotoTime;
   }
 
+  public get actionStr(): string {
+    return YtpcGotoEntry.ACTION_STR;
+  }
+
   public performAction(ytPlayer: YouTubePlayer, currentTime: number): void {
     ytPlayer.seekTo(this.gotoTime, true);
   }
 
-  public getActionStr(): string {
-    return YtpcGotoEntry.ACTION_STR;
+  public getState(): YtpcGotoState {
+    return {
+      goto: this.gotoTime,
+    };
   }
 
   public getControlStr(): string {

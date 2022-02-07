@@ -1,20 +1,21 @@
-import React, { ChangeEvent, useEffect, useState } from 'react';
+import React, { ChangeEvent, useEffect } from 'react';
 
 import { YtpcControlInput } from './YtpcControlInput';
 import { YtpcLoopState } from '../../objects/YtpcEntry/YtpcLoopEntry';
 import Checkbox from '../common/Checkbox';
 import NumberInput from '../common/NumberInput';
 import TimestampInput from '../common/TimestampInput';
+import useStatePropBacked from '../../utils/useStatePropBacked';
 
 import '../../css/style.min.css';
 
-const LOOP_COUNT_DEFAULT = 3;
-const FOREVER_DEFAULT = true;
+const LOOP_COUNT_DEFAULT = 1;
 
 function YtpcInputLoop(props: YtpcControlInput) {
-  const [loopBackTo, setLoopBackTo] = useState(0);
-  const [forever, setForever] = useState(FOREVER_DEFAULT);
-  const [loopCount, setLoopCount] = useState(LOOP_COUNT_DEFAULT);
+  const pstate = props.state as YtpcLoopState;
+  const [loopBackTo, setLoopBackTo] = useStatePropBacked(pstate?.loopBackTo ?? 0);
+  const [forever, setForever] = useStatePropBacked((pstate?.loopCount ?? -1) < 0);
+  const [loopCount, setLoopCount] = useStatePropBacked(pstate?.loopCount ?? LOOP_COUNT_DEFAULT);
 
   useEffect(() => {
     const state: YtpcLoopState = {
@@ -26,20 +27,26 @@ function YtpcInputLoop(props: YtpcControlInput) {
 
   return (
     <div className="loop">
-      <TimestampInput setTime={setLoopBackTo} />
+      <TimestampInput
+        value={loopBackTo}
+        setTime={setLoopBackTo}
+      />
       <Checkbox
         label={forever ? 'forever' : 'times'}
-        onChange={(e: ChangeEvent<HTMLInputElement>) => {
-          setForever(e.target.checked);
+        checked={forever}
+        setChecked={(checked: boolean) => {
+          if (!checked) {
+            setLoopCount(LOOP_COUNT_DEFAULT);
+          }
+          setForever(checked);
         }}
-        defaultChecked={FOREVER_DEFAULT}
       />
       {!forever && (
         <span className="loop-count">
           <NumberInput
             minValue={0}
-            defaultValue={LOOP_COUNT_DEFAULT}
-            clamp forceValue
+            value={loopCount}
+            forceValue
             setValue={setLoopCount}
           />
         </span>

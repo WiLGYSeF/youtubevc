@@ -19,14 +19,16 @@ abstract class YouTubePlayerControllerEntry {
     this.atTime = atTime;
   }
 
+  abstract get actionStr(): string;
+
   abstract performAction(ytPlayer: YouTubePlayer, currentTime: number): void;
 
-  abstract getActionStr(): string;
+  abstract getState(): object;
 
   abstract getControlStr(): string;
 
   public toString(): string {
-    return `At ${secondsToTimestamp(this.atTime)}, ${this.getActionStr()} ${this.getControlStr()}`;
+    return `At ${secondsToTimestamp(this.atTime)}, ${this.actionStr} ${this.getControlStr()}`;
   }
 
   public getKey(): string {

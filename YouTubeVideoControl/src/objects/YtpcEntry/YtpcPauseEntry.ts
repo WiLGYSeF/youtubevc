@@ -19,6 +19,10 @@ class YtpcPauseEntry extends YouTubePlayerControllerEntry {
     this.pauseTime = pauseTime;
   }
 
+  public get actionStr(): string {
+    return YtpcPauseEntry.ACTION_STR;
+  }
+
   public performAction(ytPlayer: YouTubePlayer, currentTime: number): void {
     ytPlayer.pauseVideo();
 
@@ -32,8 +36,10 @@ class YtpcPauseEntry extends YouTubePlayerControllerEntry {
     routine.start();
   }
 
-  public getActionStr(): string {
-    return YtpcPauseEntry.ACTION_STR;
+  public getState(): YtpcPauseState {
+    return {
+      pauseTime: this.pauseTime,
+    };
   }
 
   public getControlStr(): string {

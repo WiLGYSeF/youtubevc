@@ -3,23 +3,27 @@ import React, { useEffect } from 'react';
 import { YtpcControlInput } from './YtpcControlInput';
 import { YtpcGotoState } from '../../objects/YtpcEntry/YtpcGotoEntry';
 import TimestampInput from '../common/TimestampInput';
+import secondsToTimestamp from '../../utils/secondsToTimestamp';
+import useStatePropBacked from '../../utils/useStatePropBacked';
 
 import '../../css/style.min.css';
 
 function YtpcInputGoto(props: YtpcControlInput) {
-  const setControlInputState = (seconds: number): void => {
-    const state: YtpcGotoState = {
-      goto: seconds,
-    };
-    props.setControlInputState(state);
-  };
+  const pstate = props.state as YtpcGotoState;
+  const [gotoTime, setGotoTime] = useStatePropBacked(pstate?.goto ?? 0);
 
   useEffect(() => {
-    setControlInputState(0);
-  }, []);
+    const state: YtpcGotoState = {
+      goto: gotoTime,
+    };
+    props.setControlInputState(state);
+  }, [gotoTime]);
 
   return (
-    <TimestampInput setTime={setControlInputState} />
+    <TimestampInput
+      value={secondsToTimestamp(gotoTime)}
+      setTime={setGotoTime}
+    />
   );
 }
 

@@ -2,18 +2,21 @@ import React, { useEffect, useState } from 'react';
 import { YouTubePlayer } from 'youtube-player/dist/types';
 import PlayerStates from 'youtube-player/dist/constants/PlayerStates';
 
-import { YouTubePlayer360 } from '../../objects/YtpcEntry/Ytpc360Entry';
+import Ytpc360Entry, { YouTubePlayer360 } from '../../objects/YtpcEntry/Ytpc360Entry';
 import YouTubePlayerControllerEntry, { ControlType } from '../../objects/YtpcEntry/YouTubePlayerControllerEntry';
+import YtpcEntryList from './YtpcEntryList';
 import YtpcClear from './YtpcClear';
 import YtpcInput from './YtpcInput';
 import EntryBuilder from '../../objects/YtpcEntry/EntryBuilder';
 import Coroutine from '../../utils/coroutine';
 
-import YtpcLoopEntry from '../../objects/YtpcEntry/YtpcLoopEntry';
-
 import '../../css/style.min.css';
-import YtpcEntryList from './YtpcEntryList';
+
 import YtpcGotoEntry from '../../objects/YtpcEntry/YtpcGotoEntry';
+import YtpcLoopEntry from '../../objects/YtpcEntry/YtpcLoopEntry';
+import YtpcPauseEntry from '../../objects/YtpcEntry/YtpcPauseEntry';
+import YtpcPlaybackRateEntry from '../../objects/YtpcEntry/YtpcPlaybackRateEntry';
+import YtpcVolumeEntry from '../../objects/YtpcEntry/YtpcVolumeEntry';
 
 interface YouTubePlayerControllerProps {
   ytPlayer?: YouTubePlayer;
@@ -31,11 +34,24 @@ function YouTubePlayerController(props: YouTubePlayerControllerProps) {
   const [entries, setEntries] = useState<YouTubePlayerControllerEntry[]>([
     new YtpcGotoEntry(0, 1),
     new YtpcGotoEntry(3, 6),
+    new YtpcPauseEntry(30, 1),
+    new YtpcPlaybackRateEntry(31, 2),
+    new YtpcVolumeEntry(32, 30, 5),
+    new YtpcVolumeEntry(33, 80),
+    new Ytpc360Entry(33, {
+      yaw: 1, pitch: 2, roll: 3, fov: 5,
+    }),
+    new Ytpc360Entry(34, {
+      yaw: 5, pitch: 2, roll: 3, fov: 5,
+    }, 2),
     new YtpcLoopEntry(7 * 60 + 51, 3 * 60 + 25),
+    new YtpcLoopEntry(7 * 60 + 52, 3 * 60 + 25, 3),
   ]);
   const [barIndex, setBarIndex] = useState(0);
   const [is360Video, setIs360Video] = useState(false);
+  const [atTime, setAtTime] = useState(0);
   const [controlInputType, setControlInputType] = useState(ControlType.Goto);
+  const [controlInputState, setControlInputState] = useState<object>({});
 
   useEffect(() => {
     const onStateChange = (e: CustomEvent) => {
@@ -94,7 +110,7 @@ function YouTubePlayerController(props: YouTubePlayerControllerProps) {
 
     const existingEntryIndex = entries.findIndex((e) => e.atTime === atTime && e.controlType === type);
 
-    console.log(existingEntryIndex, entries, entry);
+    console.log(existingEntryIndex, entries, entry, state);
 
     if (existingEntryIndex === -1) {
       newEntries.push(entry);
@@ -114,7 +130,9 @@ function YouTubePlayerController(props: YouTubePlayerControllerProps) {
 
   const editEntry = (entry: YouTubePlayerControllerEntry): void => {
     console.log(entry);
+    setAtTime(entry.atTime);
     setControlInputType(entry.controlType);
+    setControlInputState(entry.getState());
   };
 
   return (
@@ -123,7 +141,9 @@ function YouTubePlayerController(props: YouTubePlayerControllerProps) {
         <YtpcInput
           ytPlayer={props.ytPlayer}
           is360Video={is360Video}
+          atTime={atTime}
           controlInputType={controlInputType}
+          controlInputState={controlInputState}
           createEntry={createEntry}
         />
 

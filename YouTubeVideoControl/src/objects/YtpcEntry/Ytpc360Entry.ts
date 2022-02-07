@@ -29,10 +29,14 @@ class Ytpc360Entry extends YouTubePlayerControllerEntry {
   public lerpSeconds: number;
 
   constructor(atTime: number, sphereProps: SphericalProperties, lerpSeconds?: number) {
-    super(ControlType.Volume, atTime);
+    super(ControlType.ThreeSixty, atTime);
 
     this.sphereProps = sphereProps;
     this.lerpSeconds = lerpSeconds ?? -1;
+  }
+
+  public get actionStr(): string {
+    return Ytpc360Entry.ACTION_STR;
   }
 
   public performAction(ytPlayer: YouTubePlayer360, currentTime: number): void {
@@ -58,8 +62,11 @@ class Ytpc360Entry extends YouTubePlayerControllerEntry {
     }
   }
 
-  public getActionStr(): string {
-    return Ytpc360Entry.ACTION_STR;
+  public getState(): Ytpc360State {
+    return {
+      sphereProps: { ...this.sphereProps },
+      lerpSeconds: this.lerpSeconds,
+    };
   }
 
   public getControlStr(): string {

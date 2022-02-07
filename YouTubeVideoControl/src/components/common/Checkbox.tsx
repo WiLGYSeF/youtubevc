@@ -1,34 +1,37 @@
 import React, { ChangeEvent } from 'react';
 
-import '../../css/style.min.css';
+import useStatePropBacked from '../../utils/useStatePropBacked';
 
 interface CheckboxProps {
   label: string;
-  labelRight?: boolean;
+  labelLeft?: boolean;
 
-  defaultChecked?: boolean;
-
-  onChange(e: ChangeEvent<HTMLInputElement>): void;
+  checked?: boolean;
+  setChecked(checked: boolean): void;
 }
 
 function Checkbox(props: CheckboxProps) {
-  const labelRight = props.labelRight ?? true;
-  const defaultChecked = props.defaultChecked ?? false;
+  const labelLeft = props.labelLeft ?? false;
+  const [checked, setChecked] = useStatePropBacked(props.checked ?? false);
 
   const inputIdInternal = `checkbox-${Math.random().toString(36).substring(2)}`;
 
   const eLabel = (<span>{props.label}</span>);
 
   return (
-    <label htmlFor={inputIdInternal} className="cpt-checkbox" data-label-right={labelRight}>
-      {!labelRight && eLabel}
+    <label htmlFor={inputIdInternal} className="cpt-checkbox" data-label-left={labelLeft}>
+      {labelLeft && eLabel}
       <input
         type="checkbox"
         id={inputIdInternal}
-        onChange={props.onChange}
-        defaultChecked={defaultChecked}
+        checked={checked}
+        onChange={(e: ChangeEvent<HTMLInputElement>) => {
+          const isChecked = e.target.checked;
+          props.setChecked(isChecked);
+          setChecked(isChecked);
+        }}
       />
-      {labelRight && eLabel}
+      {!labelLeft && eLabel}
     </label>
   );
 }

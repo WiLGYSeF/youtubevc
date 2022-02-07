@@ -29,6 +29,10 @@ class YtpcLoopEntry extends YouTubePlayerControllerEntry {
     this.loopNum = 0;
   }
 
+  public get actionStr(): string {
+    return YtpcLoopEntry.ACTION_STR;
+  }
+
   public performAction(ytPlayer: YouTubePlayer, currentTime: number): void {
     if (this.loopCount >= 0 && this.loopNum >= this.loopCount) {
       return;
@@ -38,8 +42,11 @@ class YtpcLoopEntry extends YouTubePlayerControllerEntry {
     this.loopNum += 1;
   }
 
-  public getActionStr(): string {
-    return YtpcLoopEntry.ACTION_STR;
+  public getState(): YtpcLoopState {
+    return {
+      loopBackTo: this.loopBackTo,
+      loopCount: this.loopCount,
+    };
   }
 
   public getControlStr(): string {

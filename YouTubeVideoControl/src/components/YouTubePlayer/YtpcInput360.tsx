@@ -1,9 +1,10 @@
-import React, { ChangeEvent, useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 
 import { YtpcControlInput } from './YtpcControlInput';
 import { Ytpc360State } from '../../objects/YtpcEntry/Ytpc360Entry';
 import Checkbox from '../common/Checkbox';
 import NumberInput from '../common/NumberInput';
+import useStatePropBacked from '../../utils/useStatePropBacked';
 
 import '../../css/style.min.css';
 
@@ -26,13 +27,18 @@ const FOV_DEFAULT = 100;
 const LERP_TIME_DEFAULT = 0;
 
 function YtpcInput360(props: YtpcControlInput) {
-  const [yaw, setYaw] = useState(YAW_DEFAULT);
-  const [pitch, setPitch] = useState(PITCH_DEFAULT);
-  const [roll, setRoll] = useState(ROLL_DEFAULT);
-  const [fov, setFov] = useState(FOV_DEFAULT);
+  const pstate = props.state as Ytpc360State;
+  const [yaw, setYaw] = useStatePropBacked(pstate?.sphereProps?.yaw ?? YAW_DEFAULT);
+  const [pitch, setPitch] = useStatePropBacked(pstate?.sphereProps?.pitch ?? PITCH_DEFAULT);
+  const [roll, setRoll] = useStatePropBacked(pstate?.sphereProps?.roll ?? ROLL_DEFAULT);
+  const [fov, setFov] = useStatePropBacked(pstate?.sphereProps?.fov ?? FOV_DEFAULT);
 
-  const [lerpSet, setLerp] = useState(false);
-  const [lerpTime, setLerpTime] = useState(LERP_TIME_DEFAULT);
+  const [lerpSet, setLerp] = useStatePropBacked((pstate?.lerpSeconds ?? -1) >= 0);
+
+  const lerpSeconds = pstate?.lerpSeconds ?? -1;
+  const [lerpTime, setLerpTime] = useStatePropBacked(lerpSeconds < 0
+    ? LERP_TIME_DEFAULT
+    : lerpSeconds);
 
   useEffect(() => {
     const state: Ytpc360State = {
@@ -52,45 +58,45 @@ function YtpcInput360(props: YtpcControlInput) {
       <NumberInput
         label="yaw: "
         minValue={YAW_MIN} maxValue={YAW_MAX} step={null}
-        defaultValue={YAW_DEFAULT}
+        value={yaw}
         clamp={false}
         setValue={setYaw}
       />
       <NumberInput
         label="pitch: "
         minValue={PITCH_MIN} maxValue={PITCH_MAX} step={null}
-        defaultValue={PITCH_DEFAULT}
+        value={pitch}
         clamp={false}
         setValue={setPitch}
       />
       <NumberInput
         label="roll: "
         minValue={ROLL_MIN} maxValue={ROLL_MAX} step={null}
-        defaultValue={ROLL_DEFAULT}
+        value={roll}
         clamp={false}
         setValue={setRoll}
       />
       <NumberInput
         label="fov: "
         minValue={FOV_MIN} maxValue={FOV_MAX} step={null}
-        defaultValue={FOV_DEFAULT}
+        value={fov}
         forceValue
         setValue={setFov}
       />
       <Checkbox
         label="lerp"
-        onChange={(e: ChangeEvent<HTMLInputElement>) => {
-          setLerp(e.target.checked);
-        }}
+        checked={lerpSet}
+        setChecked={setLerp}
       />
       {lerpSet && (
         <span>
           <span> for </span>
           <NumberInput
             label=" seconds"
-            labelLeft={false}
+            labelRight
             minValue={0} step={null}
-            defaultValue={LERP_TIME_DEFAULT}
+            value={lerpTime}
+            forceValue
             setValue={setLerpTime}
           />
         </span>

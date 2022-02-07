@@ -1,15 +1,16 @@
-import React, { ChangeEvent, KeyboardEvent, useState } from 'react';
+import React, { ChangeEvent, KeyboardEvent } from 'react';
 
 import coerceNumber from '../../utils/coerceNumber';
+import useStatePropBacked from '../../utils/useStatePropBacked';
 
 interface NumberInputProps {
   label?: string;
-  labelLeft?: boolean;
+  labelRight?: boolean;
 
   minValue?: number;
   maxValue?: number;
   step?: number | null;
-  defaultValue: number;
+  value: number;
 
   clamp?: boolean;
   forceValue?: boolean;
@@ -18,10 +19,10 @@ interface NumberInputProps {
 }
 
 function NumberInput(props: NumberInputProps) {
-  const [number, setNumber] = useState(props.defaultValue);
-  const [value, setValue] = useState(props.defaultValue.toString());
+  const [number, setNumber] = useStatePropBacked(props.value);
+  const [value, setValue] = useStatePropBacked(props.value.toString());
 
-  const labelLeft = props.labelLeft ?? true;
+  const labelRight = props.labelRight ?? false;
   const doClamp = props.clamp ?? true;
   const forceValue = props.forceValue ?? false;
 
@@ -44,13 +45,9 @@ function NumberInput(props: NumberInputProps) {
     }
   };
 
-  if (doClamp && props.minValue === undefined && props.maxValue === undefined) {
-    throw new Error('cannot have undefined min and max values when clamping');
-  }
-
   return (
-    <label>
-      {labelLeft && eLabel}
+    <label data-label-right={labelRight}>
+      {!labelRight && eLabel}
       <input
         type="number"
         min={props.minValue} max={props.maxValue} step={step ?? 'any'}
@@ -75,7 +72,7 @@ function NumberInput(props: NumberInputProps) {
           }
         }}
       />
-      {!labelLeft && eLabel}
+      {labelRight && eLabel}
     </label>
   );
 }

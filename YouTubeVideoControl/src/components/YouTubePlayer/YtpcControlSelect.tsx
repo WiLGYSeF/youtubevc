@@ -1,4 +1,4 @@
-import React, { ChangeEvent } from 'react';
+import React, { ChangeEvent, useEffect } from 'react';
 
 import { ControlType } from '../../objects/YtpcEntry/YouTubePlayerControllerEntry';
 import YtpcInput360 from './YtpcInput360';
@@ -19,7 +19,7 @@ import '../../css/style.min.css';
 interface ControlSelectProps {
   is360Video: boolean;
   controlInputType: ControlType;
-  setControlInput(type: ControlType, component?: any): void;
+  setControlInput(type: ControlType, component: (props: any) => JSX.Element): void;
 }
 
 type Control = {
@@ -63,17 +63,24 @@ function YtpcControlSelect(props: ControlSelectProps) {
     }],
   ]);
 
-  const onChange = (e: ChangeEvent<HTMLSelectElement>) => {
-    props.setControlInput(
-      e.target.value as ControlType,
-      () => controls.get(e.target.value)?.component,
-    );
+  const setControlInput = (type: ControlType) => {
+    const control = controls.get(type) as Control;
+    props.setControlInput(type, control.component);
   };
 
+  useEffect(() => {
+    setControlInput(props.controlInputType);
+  }, [props.controlInputType]);
+
   return (
-    <select onChange={onChange}>
+    <select
+      value={props.controlInputType}
+      onChange={(e: ChangeEvent<HTMLSelectElement>) => {
+        setControlInput(e.target.value as ControlType);
+      }}
+    >
       {Array.from(controls.entries()).map((c) => (
-        <option key={c[0]} value={c[0]} disabled={!c[1].enabled} selected={c[0] === props.controlInputType}>
+        <option key={c[0]} value={c[0]} disabled={!c[1].enabled}>
           {c[1].text}
         </option>
       ))}

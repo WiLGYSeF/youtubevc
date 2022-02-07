@@ -1,15 +1,12 @@
-import React, {
-  ChangeEvent, KeyboardEvent, useEffect, useState,
-} from 'react';
+import React, { ChangeEvent, KeyboardEvent } from 'react';
 
 import secondsToTimestamp from '../../utils/secondsToTimestamp';
 import timestampToSeconds from '../../utils/timestampToSeconds';
 import trimstr from '../../utils/trimstr';
-
-import '../../css/style.min.css';
+import useStatePropBacked from '../../utils/useStatePropBacked';
 
 interface YtpcInputTimeProps {
-  defaultValue?: string;
+  value?: string | number;
   setTime(seconds: number): void;
 }
 
@@ -29,20 +26,17 @@ function getWidth(str: string): string {
 }
 
 function YtpcInputTime(props: YtpcInputTimeProps) {
-  const [input, setInput] = useState(props.defaultValue ?? '');
-  const [time, setTime] = useState(strToSeconds(input));
-
-  useEffect(() => {
-    const val = props.defaultValue ?? '';
-    const seconds = strToSeconds(val);
-
-    setInput(val);
-    setTime(seconds);
-    props.setTime(seconds);
-  }, [props.defaultValue]);
+  const value = props.value ?? '';
+  const [input, setInput] = useStatePropBacked(typeof value === 'number'
+    ? secondsToTimestamp(value)
+    : value);
+  const [time, setTime] = useStatePropBacked(typeof value === 'number'
+    ? value
+    : strToSeconds(input));
 
   const onInputChange = (e: ChangeEvent<HTMLInputElement>) => {
     const val = e.target.value;
+    console.log(val);
 
     if (/^(\d?\d?:){0,3}\d?\d?(\.\d*)?$/.test(val)) {
       setInput(val);

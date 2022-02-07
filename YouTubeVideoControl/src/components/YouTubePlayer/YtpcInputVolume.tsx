@@ -1,11 +1,12 @@
-import React, { ChangeEvent, useEffect, useState } from 'react';
+import React, { ChangeEvent, useEffect } from 'react';
 
 import { YtpcControlInput } from './YtpcControlInput';
 import { YtpcVolumeState } from '../../objects/YtpcEntry/YtpcVolumeEntry';
-
-import '../../css/style.min.css';
 import Checkbox from '../common/Checkbox';
 import NumberInput from '../common/NumberInput';
+import useStatePropBacked from '../../utils/useStatePropBacked';
+
+import '../../css/style.min.css';
 
 const VOLUME_MIN = 0;
 const VOLUME_MAX = 100;
@@ -14,9 +15,14 @@ const VOLUME_DEFAULT = 100;
 const LERP_TIME_DEFAULT = 0;
 
 function YtpcInputVolume(props: YtpcControlInput) {
-  const [volume, setVolume] = useState(VOLUME_DEFAULT);
-  const [lerpSet, setLerp] = useState(false);
-  const [lerpTime, setLerpTime] = useState(LERP_TIME_DEFAULT);
+  const pstate = props.state as YtpcVolumeState;
+  const [volume, setVolume] = useStatePropBacked(pstate?.volume ?? VOLUME_DEFAULT);
+  const [lerpSet, setLerp] = useStatePropBacked((pstate?.lerpSeconds ?? -1) >= 0);
+
+  const lerpSeconds = pstate?.lerpSeconds ?? -1;
+  const [lerpTime, setLerpTime] = useStatePropBacked(lerpSeconds < 0
+    ? LERP_TIME_DEFAULT
+    : lerpSeconds);
 
   useEffect(() => {
     const state: YtpcVolumeState = {
@@ -31,7 +37,7 @@ function YtpcInputVolume(props: YtpcControlInput) {
       <input
         type="range"
         min={VOLUME_MIN} max={VOLUME_MAX}
-        defaultValue={VOLUME_DEFAULT}
+        value={volume}
         onChange={(e: ChangeEvent<HTMLInputElement>) => {
           setVolume(Number(e.target.value));
         }}
@@ -39,18 +45,18 @@ function YtpcInputVolume(props: YtpcControlInput) {
       <span>{volume}</span>
       <Checkbox
         label="lerp"
-        onChange={(e: ChangeEvent<HTMLInputElement>) => {
-          setLerp(e.target.checked);
-        }}
+        checked={lerpSet}
+        setChecked={setLerp}
       />
       {lerpSet && (
         <span>
           <span> for </span>
           <NumberInput
             label=" seconds"
-            labelLeft={false}
+            labelRight
             minValue={0} step={null}
-            defaultValue={LERP_TIME_DEFAULT}
+            value={lerpTime}
+            forceValue
             setValue={setLerpTime}
           />
         </span>

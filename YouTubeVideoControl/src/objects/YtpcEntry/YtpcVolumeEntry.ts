@@ -22,6 +22,10 @@ class YtpcVolumeEntry extends YouTubePlayerControllerEntry {
     this.lerpSeconds = lerpSeconds ?? -1;
   }
 
+  public get actionStr(): string {
+    return YtpcVolumeEntry.ACTION_STR;
+  }
+
   public performAction(ytPlayer: YouTubePlayer, currentTime: number): void {
     if (this.lerpSeconds > 0) {
       const vol = ytPlayer.getVolume();
@@ -36,8 +40,11 @@ class YtpcVolumeEntry extends YouTubePlayerControllerEntry {
     }
   }
 
-  public getActionStr(): string {
-    return YtpcVolumeEntry.ACTION_STR;
+  public getState(): YtpcVolumeState {
+    return {
+      volume: this.volume,
+      lerpSeconds: this.lerpSeconds,
+    };
   }
 
   public getControlStr(): string {
