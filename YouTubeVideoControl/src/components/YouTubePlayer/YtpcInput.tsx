@@ -19,13 +19,13 @@ interface YtpcInputProps {
   controlInputState: object;
 
   createEntry(type: ControlType, atTime: number, state: object): void;
+  setControlInputState(state: object): void;
 }
 
 function YtpcInput(props: YtpcInputProps) {
   const [atTime, setAtTime] = useStatePropBacked(props.atTime);
   const [controlInput, setControlInput] = useState(() => YtpcInputGoto);
   const [controlInputType, setControlInputType] = useStatePropBacked(props.controlInputType);
-  const [controlInputState, setControlInputState] = useStatePropBacked(props.controlInputState);
 
   return (
     <div className="input">
@@ -57,12 +57,12 @@ function YtpcInput(props: YtpcInputProps) {
           }}
         />
         {React.createElement(controlInput, {
-          state: controlInputState,
-          setControlInputState,
+          state: props.controlInputState,
+          setControlInputState: props.setControlInputState,
           playbackRates: props.ytPlayer?.getAvailablePlaybackRates(),
         })}
       </div>
-      <YtpcAdd createEntry={() => props.createEntry(controlInputType, atTime, controlInputState)} />
+      <YtpcAdd createEntry={() => props.createEntry(controlInputType, atTime, props.controlInputState)} />
     </div>
   );
 }

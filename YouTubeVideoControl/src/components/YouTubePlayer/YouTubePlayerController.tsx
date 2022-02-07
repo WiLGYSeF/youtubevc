@@ -129,7 +129,6 @@ function YouTubePlayerController(props: YouTubePlayerControllerProps) {
   };
 
   const editEntry = (entry: YouTubePlayerControllerEntry): void => {
-    console.log(entry);
     setAtTime(entry.atTime);
     setControlInputType(entry.controlType);
     setControlInputState(entry.getState());
@@ -145,6 +144,7 @@ function YouTubePlayerController(props: YouTubePlayerControllerProps) {
           controlInputType={controlInputType}
           controlInputState={controlInputState}
           createEntry={createEntry}
+          setControlInputState={setControlInputState}
         />
 
         <YtpcEntryList
