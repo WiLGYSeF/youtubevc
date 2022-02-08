@@ -15,7 +15,7 @@ interface NumberInputProps {
   clamp?: boolean;
   forceValue?: boolean;
 
-  setValue(value: number): void;
+  onChange(value: number): void;
 }
 
 function NumberInput(props: NumberInputProps) {
@@ -61,7 +61,7 @@ function NumberInput(props: NumberInputProps) {
             doClamp,
           );
 
-          props.setValue(num);
+          props.onChange(num);
           setNumber(num);
           setValue(e.target.value);
         }}

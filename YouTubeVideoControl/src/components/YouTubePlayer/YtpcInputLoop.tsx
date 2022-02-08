@@ -29,12 +29,12 @@ function YtpcInputLoop(props: YtpcControlInput) {
     <div className="loop">
       <TimestampInput
         value={loopBackTo}
-        setTime={setLoopBackTo}
+        onChange={setLoopBackTo}
       />
       <Checkbox
         label={forever ? 'forever' : 'times'}
         checked={forever}
-        setChecked={(checked: boolean) => {
+        onChange={(checked: boolean) => {
           if (!checked) {
             setLoopCount(LOOP_COUNT_DEFAULT);
           }
@@ -47,7 +47,7 @@ function YtpcInputLoop(props: YtpcControlInput) {
             minValue={0}
             value={loopCount}
             forceValue
-            setValue={setLoopCount}
+            onChange={setLoopCount}
           />
         </span>
       )}

@@ -23,8 +23,8 @@ function YtpcInputPause(props: YtpcControlInput) {
   return (
     <div className="pause">
       <TimestampInput
-        value={pauseFor}
-        setTime={setPauseFor}
+        value={pstate.pauseTime}
+        onChange={setPauseFor}
       />
     </div>
   );

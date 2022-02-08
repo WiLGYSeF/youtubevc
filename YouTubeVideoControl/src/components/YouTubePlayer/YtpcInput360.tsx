@@ -60,33 +60,33 @@ function YtpcInput360(props: YtpcControlInput) {
         minValue={YAW_MIN} maxValue={YAW_MAX} step={null}
         value={yaw}
         clamp={false}
-        setValue={setYaw}
+        onChange={setYaw}
       />
       <NumberInput
         label="pitch: "
         minValue={PITCH_MIN} maxValue={PITCH_MAX} step={null}
         value={pitch}
         clamp={false}
-        setValue={setPitch}
+        onChange={setPitch}
       />
       <NumberInput
         label="roll: "
         minValue={ROLL_MIN} maxValue={ROLL_MAX} step={null}
         value={roll}
         clamp={false}
-        setValue={setRoll}
+        onChange={setRoll}
       />
       <NumberInput
         label="fov: "
         minValue={FOV_MIN} maxValue={FOV_MAX} step={null}
         value={fov}
         forceValue
-        setValue={setFov}
+        onChange={setFov}
       />
       <Checkbox
         label="lerp"
         checked={lerpSet}
-        setChecked={setLerp}
+        onChange={setLerp}
       />
       {lerpSet && (
         <span>
@@ -97,7 +97,7 @@ function YtpcInput360(props: YtpcControlInput) {
             minValue={0} step={null}
             value={lerpTime}
             forceValue
-            setValue={setLerpTime}
+            onChange={setLerpTime}
           />
         </span>
       )}

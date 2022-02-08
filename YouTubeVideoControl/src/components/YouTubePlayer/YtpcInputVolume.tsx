@@ -46,7 +46,7 @@ function YtpcInputVolume(props: YtpcControlInput) {
       <Checkbox
         label="lerp"
         checked={lerpSet}
-        setChecked={setLerp}
+        onChange={setLerp}
       />
       {lerpSet && (
         <span>
@@ -57,7 +57,7 @@ function YtpcInputVolume(props: YtpcControlInput) {
             minValue={0} step={null}
             value={lerpTime}
             forceValue
-            setValue={setLerpTime}
+            onChange={setLerpTime}
           />
         </span>
       )}

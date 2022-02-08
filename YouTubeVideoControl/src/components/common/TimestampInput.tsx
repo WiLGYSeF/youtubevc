@@ -1,13 +1,15 @@
-import React, { ChangeEvent, KeyboardEvent } from 'react';
+import React, {
+  ChangeEvent, KeyboardEvent, useEffect, useState,
+} from 'react';
 
 import secondsToTimestamp from '../../utils/secondsToTimestamp';
 import timestampToSeconds from '../../utils/timestampToSeconds';
 import trimstr from '../../utils/trimstr';
-import useStatePropBacked from '../../utils/useStatePropBacked';
 
-interface YtpcInputTimeProps {
-  value?: string | number;
-  setTime(seconds: number): void;
+interface TimestampInputProps {
+  value: number | string;
+  onChange(seconds: number): void;
+  setInput?(input: string): void;
 }
 
 const TIME_PLACEHOLDER = '00:00';
@@ -25,36 +27,51 @@ function getWidth(str: string): string {
   return `${Math.max(str.length, TIME_PLACEHOLDER.length)}ch`;
 }
 
-function YtpcInputTime(props: YtpcInputTimeProps) {
+function TimestampInput(props: TimestampInputProps) {
   const value = props.value ?? '';
-  const [input, setInput] = useStatePropBacked(typeof value === 'number'
+  const getInput = () => (typeof value === 'number'
     ? secondsToTimestamp(value)
-    : value);
-  const [time, setTime] = useStatePropBacked(typeof value === 'number'
+    : value
+  );
+  const getTime = () => (typeof value === 'number'
     ? value
-    : strToSeconds(input));
+    : strToSeconds(input)
+  );
+
+  const [input, setInput] = useState(getInput());
+  const [time, setTime] = useState(getTime());
+  const [isFocused, setFocused] = useState(false);
+
+  useEffect(() => {
+    if (!isFocused) {
+      setInput(getInput());
+      setTime(getTime());
+    }
+  }, [value, isFocused]);
 
   const onInputChange = (e: ChangeEvent<HTMLInputElement>) => {
     const val = e.target.value;
-    console.log(val);
 
     if (/^(\d?\d?:){0,3}\d?\d?(\.\d*)?$/.test(val)) {
+      props.setInput && props.setInput(val);
       setInput(val);
 
       try {
         const seconds = strToSeconds(val);
-        props.setTime(seconds);
+        props.onChange(seconds);
         setTime(seconds);
       } catch (exc) {
         console.error(exc, val, sanitizeTime(val));
-        props.setTime(-1);
+        props.onChange(-1);
         setTime(-1);
       }
     }
   };
 
   const updateInput = () => {
-    setInput(secondsToTimestamp(time));
+    const input = secondsToTimestamp(time);
+    props.setInput && props.setInput(input);
+    setInput(input);
   };
 
   return (
@@ -66,7 +83,8 @@ function YtpcInputTime(props: YtpcInputTimeProps) {
         value={input}
         placeholder={TIME_PLACEHOLDER}
         onChange={onInputChange}
-        onBlur={updateInput}
+        onFocus={() => setFocused(true)}
+        onBlur={() => setFocused(false)}
         onKeyUp={(e: KeyboardEvent<HTMLInputElement>) => {
           if (e.key === 'Enter') {
             updateInput();
@@ -77,4 +95,4 @@ function YtpcInputTime(props: YtpcInputTimeProps) {
   );
 }
 
-export default YtpcInputTime;
+export default TimestampInput;

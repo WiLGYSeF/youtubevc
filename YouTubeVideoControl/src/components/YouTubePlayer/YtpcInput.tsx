@@ -45,7 +45,7 @@ function YtpcInput(props: YtpcInputProps) {
         </span>
         <TimestampInput
           value={atTime}
-          setTime={setAtTime}
+          onChange={setAtTime}
         />
         <span>, </span>
         <YtpcControlSelect

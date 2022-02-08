@@ -7,7 +7,7 @@ interface CheckboxProps {
   labelLeft?: boolean;
 
   checked?: boolean;
-  setChecked(checked: boolean): void;
+  onChange(checked: boolean): void;
 }
 
 function Checkbox(props: CheckboxProps) {
@@ -27,7 +27,7 @@ function Checkbox(props: CheckboxProps) {
         checked={checked}
         onChange={(e: ChangeEvent<HTMLInputElement>) => {
           const isChecked = e.target.checked;
-          props.setChecked(isChecked);
+          props.onChange(isChecked);
           setChecked(isChecked);
         }}
       />

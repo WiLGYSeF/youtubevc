@@ -22,7 +22,7 @@ function YtpcInputGoto(props: YtpcControlInput) {
   return (
     <TimestampInput
       value={secondsToTimestamp(gotoTime)}
-      setTime={setGotoTime}
+      onChange={setGotoTime}
     />
   );
 }
