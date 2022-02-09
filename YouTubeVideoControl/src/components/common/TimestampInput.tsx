@@ -35,7 +35,7 @@ function TimestampInput(props: TimestampInputProps) {
   );
   const getTime = () => (typeof value === 'number'
     ? value
-    : strToSeconds(input)
+    : strToSeconds(value)
   );
 
   const [input, setInput] = useState(getInput());
@@ -53,7 +53,9 @@ function TimestampInput(props: TimestampInputProps) {
     const val = e.target.value;
 
     if (/^(\d?\d?:){0,3}\d?\d?(\.\d*)?$/.test(val)) {
-      props.setInput && props.setInput(val);
+      if (props.setInput) {
+        props.setInput(val);
+      }
       setInput(val);
 
       try {
@@ -69,9 +71,11 @@ function TimestampInput(props: TimestampInputProps) {
   };
 
   const updateInput = () => {
-    const input = secondsToTimestamp(time);
-    props.setInput && props.setInput(input);
-    setInput(input);
+    const val = secondsToTimestamp(time);
+    if (props.setInput) {
+      props.setInput(val);
+    }
+    setInput(val);
   };
 
   return (

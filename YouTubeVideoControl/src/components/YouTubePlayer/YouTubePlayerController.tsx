@@ -4,8 +4,11 @@ import PlayerStates from 'youtube-player/dist/constants/PlayerStates';
 
 import Ytpc360Entry, { YouTubePlayer360 } from '../../objects/YtpcEntry/Ytpc360Entry';
 import YouTubePlayerControllerEntry, { ControlType } from '../../objects/YtpcEntry/YouTubePlayerControllerEntry';
-import YtpcEntryList from './YtpcEntryList';
 import YtpcClear from './YtpcClear';
+import YtpcCopyLink from './YtpcCopyLink';
+import YtpcEntryList from './YtpcEntryList';
+import YtpcExport from './YtpcExport';
+import YtpcImport from './YtpcImport';
 import YtpcInput from './YtpcInput';
 import EntryBuilder from '../../objects/YtpcEntry/EntryBuilder';
 import Coroutine from '../../utils/coroutine';
@@ -25,6 +28,15 @@ interface YouTubePlayerControllerProps {
 const EVENT_ONSTATECHANGE = 'onStateChange';
 
 const TIME_DIFF_MAX = 0.1;
+
+function getVideoIdByUrl(url: string): string | null {
+  try {
+    const urlObj = new URL(url);
+    return urlObj.searchParams.get('v');
+  } catch {
+    return null;
+  }
+}
 
 function playerHas360Video(player: YouTubePlayer360): boolean {
   return Object.keys(player.getSphericalProperties()).length > 0;
@@ -104,7 +116,7 @@ function YouTubePlayerController(props: YouTubePlayerControllerProps) {
     };
   }, [props.ytPlayer, entries]);
 
-  const createEntry = (type: ControlType, atTime: number, state: object): void => {
+  const createEntry = (type: ControlType, atTime: number, state: object): YouTubePlayerControllerEntry => {
     const newEntries = [...entries];
     const entry = EntryBuilder.buildEntry(type, atTime, state);
 
@@ -122,6 +134,7 @@ function YouTubePlayerController(props: YouTubePlayerControllerProps) {
     }
 
     setEntries(newEntries);
+    return entry;
   };
 
   const deleteEntry = (entry: YouTubePlayerControllerEntry): void => {
@@ -154,10 +167,18 @@ function YouTubePlayerController(props: YouTubePlayerControllerProps) {
           editEntry={editEntry}
         />
 
-        <YtpcClear clearEntries={() => {
-          setEntries([]);
-        }}
-        />
+        <div>
+          <YtpcClear clearEntries={() => {
+            setEntries([]);
+          }}
+          />
+          <YtpcImport createEntry={createEntry} />
+          <YtpcExport
+            filename={`${getVideoIdByUrl(props.ytPlayer?.getVideoUrl() ?? '')}.json`}
+            entries={entries}
+          />
+          <YtpcCopyLink entries={entries} />
+        </div>
       </div>
       <div className="right" />
     </div>
