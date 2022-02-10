@@ -11,7 +11,7 @@ class EntryBuilder {
     switch (type) {
       case ControlType.Goto: {
         const yest: YtpcGotoState = state as YtpcGotoState;
-        return new YtpcGotoEntry(atTime, yest.goto);
+        return new YtpcGotoEntry(atTime, yest.gotoTime);
       }
       case ControlType.Loop: {
         const yest: YtpcLoopState = state as YtpcLoopState;

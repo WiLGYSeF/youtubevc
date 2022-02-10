@@ -10,11 +10,11 @@ import '../../css/style.min.css';
 
 function YtpcInputGoto(props: YtpcControlInput) {
   const pstate = props.state as YtpcGotoState;
-  const [gotoTime, setGotoTime] = useStatePropBacked(pstate?.goto ?? 0);
+  const [gotoTime, setGotoTime] = useStatePropBacked(pstate?.gotoTime ?? 0);
 
   useEffect(() => {
     const state: YtpcGotoState = {
-      goto: gotoTime,
+      gotoTime: gotoTime,
     };
     props.setControlInputState(state);
   }, [gotoTime]);

@@ -116,24 +116,25 @@ function YouTubePlayerController(props: YouTubePlayerControllerProps) {
     };
   }, [props.ytPlayer, entries]);
 
-  const createEntry = (type: ControlType, atTime: number, state: object): YouTubePlayerControllerEntry => {
-    const newEntries = [...entries];
+  const addEntry = (
+    entries: YouTubePlayerControllerEntry[],
+    type: ControlType,
+    atTime: number,
+    state: object
+  ): YouTubePlayerControllerEntry => {
     const entry = EntryBuilder.buildEntry(type, atTime, state);
-
     const existingEntryIndex = entries.findIndex((e) => e.atTime === atTime && e.controlType === type);
 
-    console.log(existingEntryIndex, entries, entry, state);
-
     if (existingEntryIndex === -1) {
-      newEntries.push(entry);
-      newEntries.sort(
-        (a: YouTubePlayerControllerEntry, b: YouTubePlayerControllerEntry): number => a.atTime - b.atTime,
-      );
+      entries.push(entry);
     } else {
-      newEntries[existingEntryIndex] = entry;
+      entries[existingEntryIndex] = entry;
     }
 
-    setEntries(newEntries);
+    entries.sort(
+      (a: YouTubePlayerControllerEntry, b: YouTubePlayerControllerEntry): number => a.atTime - b.atTime,
+    );
+
     return entry;
   };
 
@@ -147,6 +148,10 @@ function YouTubePlayerController(props: YouTubePlayerControllerProps) {
     setControlInputState(entry.getState());
   };
 
+  const clearEntries = (): void => {
+    setEntries([]);
+  };
+
   return (
     <div className="yt-controller">
       <div className="left">
@@ -156,7 +161,10 @@ function YouTubePlayerController(props: YouTubePlayerControllerProps) {
           atTime={atTime}
           controlInputType={controlInputType}
           controlInputState={controlInputState}
-          createEntry={createEntry}
+          createEntry={(type: ControlType, atTime: number, state: object) => {
+            addEntry(entries, type, atTime, state);
+            setEntries(entries);
+          }}
           setControlInputState={setControlInputState}
         />
 
@@ -168,11 +176,9 @@ function YouTubePlayerController(props: YouTubePlayerControllerProps) {
         />
 
         <div>
-          <YtpcClear clearEntries={() => {
-            setEntries([]);
-          }}
+          <YtpcClear clearEntries={clearEntries}
           />
-          <YtpcImport createEntry={createEntry} />
+          <YtpcImport addEntry={addEntry} setEntries={setEntries} />
           <YtpcExport
             filename={`${getVideoIdByUrl(props.ytPlayer?.getVideoUrl() ?? '')}.json`}
             entries={entries}
