@@ -2,6 +2,8 @@ import { YouTubePlayer } from 'youtube-player/dist/types';
 
 import YouTubePlayerControllerEntry, { ControlType } from './YouTubePlayerControllerEntry';
 import secondsToTimestamp from '../../utils/secondsToTimestamp';
+import timestampToSeconds from '../../utils/timestampToSeconds';
+import { mget } from '../../utils/regexp-match-group';
 
 export interface YtpcLoopState {
   loopBackTo: number;
@@ -55,6 +57,31 @@ class YtpcLoopEntry extends YouTubePlayerControllerEntry {
         ? `${this.loopCount} time${this.loopCount !== 1 ? 's' : ''}`
         : 'forever'
     }`;
+  }
+
+  public static fromString(str: string): YtpcLoopEntry | null {
+    const regex = new RegExp([
+      String.raw`^At (?<timestamp>${YouTubePlayerControllerEntry.REGEXSTR_TIMESTAMP}),`,
+      String.raw` ${YtpcLoopEntry.ACTION_STR}`,
+      String.raw` (?<loopBackTo>${YouTubePlayerControllerEntry.REGEXSTR_TIMESTAMP})`,
+      String.raw` (?:(?<loopCount>\d+) times?|forever)`,
+      String.raw`$`,
+    ].join(''));
+
+    const match = str.match(regex);
+    if (!match) {
+      return null;
+    }
+
+    try {
+      return new YtpcLoopEntry(
+        timestampToSeconds(mget(match, 'timestamp')),
+        timestampToSeconds(mget(match, 'loopBackTo')),
+        Number(match.groups ? match.groups.loopCount ?? -1 : -1),
+      );
+    } catch {
+      return null;
+    }
   }
 }
 

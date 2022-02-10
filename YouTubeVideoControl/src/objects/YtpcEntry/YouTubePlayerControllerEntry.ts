@@ -11,6 +11,8 @@ export enum ControlType {
 }
 
 abstract class YouTubePlayerControllerEntry {
+  public static REGEXSTR_TIMESTAMP = String.raw`(?:\d+:)*\d+(?:\.\d*)?`;
+
   public controlType: ControlType;
   public atTime: number;
 

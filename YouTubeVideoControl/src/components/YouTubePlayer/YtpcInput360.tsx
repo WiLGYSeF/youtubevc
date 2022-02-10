@@ -1,37 +1,21 @@
 import React, { useEffect } from 'react';
 
 import { YtpcControlInput } from './YtpcControlInput';
-import { Ytpc360State } from '../../objects/YtpcEntry/Ytpc360Entry';
+import Ytpc360Entry, { Ytpc360State } from '../../objects/YtpcEntry/Ytpc360Entry';
 import Checkbox from '../common/Checkbox';
 import NumberInput from '../common/NumberInput';
 import useStatePropBacked from '../../utils/useStatePropBacked';
 
 import '../../css/style.min.css';
 
-const YAW_MIN = 0;
-const YAW_MAX = 360;
-const YAW_DEFAULT = 0;
-
-const PITCH_MIN = -90;
-const PITCH_MAX = 90;
-const PITCH_DEFAULT = 0;
-
-const ROLL_MIN = -180;
-const ROLL_MAX = 180;
-const ROLL_DEFAULT = 0;
-
-const FOV_MIN = 30;
-const FOV_MAX = 120;
-const FOV_DEFAULT = 100;
-
 const LERP_TIME_DEFAULT = 0;
 
 function YtpcInput360(props: YtpcControlInput) {
   const pstate = props.state as Ytpc360State;
-  const [yaw, setYaw] = useStatePropBacked(pstate?.sphereProps?.yaw ?? YAW_DEFAULT);
-  const [pitch, setPitch] = useStatePropBacked(pstate?.sphereProps?.pitch ?? PITCH_DEFAULT);
-  const [roll, setRoll] = useStatePropBacked(pstate?.sphereProps?.roll ?? ROLL_DEFAULT);
-  const [fov, setFov] = useStatePropBacked(pstate?.sphereProps?.fov ?? FOV_DEFAULT);
+  const [yaw, setYaw] = useStatePropBacked(pstate?.sphereProps?.yaw ?? Ytpc360Entry.YAW_DEFAULT);
+  const [pitch, setPitch] = useStatePropBacked(pstate?.sphereProps?.pitch ?? Ytpc360Entry.PITCH_DEFAULT);
+  const [roll, setRoll] = useStatePropBacked(pstate?.sphereProps?.roll ?? Ytpc360Entry.ROLL_DEFAULT);
+  const [fov, setFov] = useStatePropBacked(pstate?.sphereProps?.fov ?? Ytpc360Entry.FOV_DEFAULT);
 
   const [lerpSet, setLerp] = useStatePropBacked((pstate?.lerpSeconds ?? -1) >= 0);
 
@@ -57,28 +41,28 @@ function YtpcInput360(props: YtpcControlInput) {
     <div className="three-sixty">
       <NumberInput
         label="yaw: "
-        minValue={YAW_MIN} maxValue={YAW_MAX} step={null}
+        minValue={Ytpc360Entry.YAW_MIN} maxValue={Ytpc360Entry.YAW_MAX} step={null}
         value={yaw}
         clamp={false}
         onChange={setYaw}
       />
       <NumberInput
         label="pitch: "
-        minValue={PITCH_MIN} maxValue={PITCH_MAX} step={null}
+        minValue={Ytpc360Entry.PITCH_MIN} maxValue={Ytpc360Entry.PITCH_MAX} step={null}
         value={pitch}
         clamp={false}
         onChange={setPitch}
       />
       <NumberInput
         label="roll: "
-        minValue={ROLL_MIN} maxValue={ROLL_MAX} step={null}
+        minValue={Ytpc360Entry.ROLL_MIN} maxValue={Ytpc360Entry.ROLL_MAX} step={null}
         value={roll}
         clamp={false}
         onChange={setRoll}
       />
       <NumberInput
         label="fov: "
-        minValue={FOV_MIN} maxValue={FOV_MAX} step={null}
+        minValue={Ytpc360Entry.FOV_MIN} maxValue={Ytpc360Entry.FOV_MAX} step={null}
         value={fov}
         forceValue
         onChange={setFov}
