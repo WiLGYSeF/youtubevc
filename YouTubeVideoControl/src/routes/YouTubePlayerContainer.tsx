@@ -14,6 +14,7 @@ function YouTubePlayerContainer() {
   const [searchParams] = useSearchParams();
 
   let videoId = searchParams.get('v');
+  const entries = searchParams.get('entries');
 
   if (!videoId) {
     videoId = '_BSSJi-sHh8';
@@ -36,7 +37,7 @@ function YouTubePlayerContainer() {
           }}
         />
       </div>
-      <YouTubePlayerController ytPlayer={ytPlayer} />
+      <YouTubePlayerController ytPlayer={ytPlayer} entries={entries} />
     </div>
   );
 }

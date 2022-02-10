@@ -23,6 +23,7 @@ import YtpcVolumeEntry from '../../objects/YtpcEntry/YtpcVolumeEntry';
 
 interface YouTubePlayerControllerProps {
   ytPlayer?: YouTubePlayer;
+  entries?: string | null;
 }
 
 const EVENT_ONSTATECHANGE = 'onStateChange';
@@ -105,6 +106,21 @@ function YouTubePlayerController(props: YouTubePlayerControllerProps) {
   });
 
   useEffect(() => {
+    if (!props.entries) {
+      return;
+    }
+
+    try {
+      const parsedEntries: YouTubePlayerControllerEntry[] = [];
+
+      JSON.parse(props.entries).forEach((o) => addEntry(parsedEntries, o.controlType, o.atTime, o));
+      setEntries(parsedEntries);
+    } catch (exc) {
+      console.error(exc);
+    }
+  }, [props.entries]);
+
+  useEffect(() => {
     let lastTime = props.ytPlayer?.getCurrentTime() ?? 0;
 
     const routine = new Coroutine(() => {
@@ -183,7 +199,7 @@ function YouTubePlayerController(props: YouTubePlayerControllerProps) {
             entries={entries}
             exportType={ExportType.Text}
           />
-          <YtpcCopyLink entries={entries} />
+          <YtpcCopyLink videoId={getVideoIdByUrl(props.ytPlayer?.getVideoUrl() ?? '')} entries={entries} />
         </div>
       </div>
       <div className="right" />
