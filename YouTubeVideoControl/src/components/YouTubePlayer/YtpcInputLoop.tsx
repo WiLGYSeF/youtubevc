@@ -1,4 +1,4 @@
-import React, { ChangeEvent, useEffect } from 'react';
+import React, { useEffect } from 'react';
 
 import { YtpcControlInput } from './YtpcControlInput';
 import { YtpcLoopState } from '../../objects/YtpcEntry/YtpcLoopEntry';

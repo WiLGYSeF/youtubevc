@@ -1,4 +1,4 @@
-import React, { ChangeEvent, useEffect, useState } from 'react';
+import React, { ChangeEvent } from 'react';
 
 import YouTubePlayerControllerEntry, { ControlType } from '../../objects/YtpcEntry/YouTubePlayerControllerEntry';
 
@@ -53,9 +53,10 @@ function YtpcImport(props: YtpcImportProps) {
           id={importIdInternal}
           type="file"
           style={{
-            display: 'none'
+            display: 'none',
           }}
-          onChange={loadFile} />
+          onChange={loadFile}
+        />
         Import
       </button>
     </div>

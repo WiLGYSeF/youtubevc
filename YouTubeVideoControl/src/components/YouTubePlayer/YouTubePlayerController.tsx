@@ -7,7 +7,7 @@ import YouTubePlayerControllerEntry, { ControlType } from '../../objects/YtpcEnt
 import YtpcClear from './YtpcClear';
 import YtpcCopyLink from './YtpcCopyLink';
 import YtpcEntryList from './YtpcEntryList';
-import YtpcExport from './YtpcExport';
+import YtpcExport, { ExportType } from './YtpcExport';
 import YtpcImport from './YtpcImport';
 import YtpcInput from './YtpcInput';
 import EntryBuilder from '../../objects/YtpcEntry/EntryBuilder';
@@ -28,6 +28,28 @@ interface YouTubePlayerControllerProps {
 const EVENT_ONSTATECHANGE = 'onStateChange';
 
 const TIME_DIFF_MAX = 0.1;
+
+const addEntry = (
+  entries: YouTubePlayerControllerEntry[],
+  type: ControlType,
+  atTime: number,
+  state: object,
+): YouTubePlayerControllerEntry => {
+  const entry = EntryBuilder.buildEntry(type, atTime, state);
+  const existingEntryIndex = entries.findIndex((e) => e.atTime === atTime && e.controlType === type);
+
+  if (existingEntryIndex === -1) {
+    entries.push(entry);
+  } else {
+    entries[existingEntryIndex] = entry;
+  }
+
+  entries.sort(
+    (a: YouTubePlayerControllerEntry, b: YouTubePlayerControllerEntry): number => a.atTime - b.atTime,
+  );
+
+  return entry;
+};
 
 function getVideoIdByUrl(url: string): string | null {
   try {
@@ -116,28 +138,6 @@ function YouTubePlayerController(props: YouTubePlayerControllerProps) {
     };
   }, [props.ytPlayer, entries]);
 
-  const addEntry = (
-    entries: YouTubePlayerControllerEntry[],
-    type: ControlType,
-    atTime: number,
-    state: object
-  ): YouTubePlayerControllerEntry => {
-    const entry = EntryBuilder.buildEntry(type, atTime, state);
-    const existingEntryIndex = entries.findIndex((e) => e.atTime === atTime && e.controlType === type);
-
-    if (existingEntryIndex === -1) {
-      entries.push(entry);
-    } else {
-      entries[existingEntryIndex] = entry;
-    }
-
-    entries.sort(
-      (a: YouTubePlayerControllerEntry, b: YouTubePlayerControllerEntry): number => a.atTime - b.atTime,
-    );
-
-    return entry;
-  };
-
   const deleteEntry = (entry: YouTubePlayerControllerEntry): void => {
     setEntries([...entries.filter((e) => e !== entry)]);
   };
@@ -176,12 +176,12 @@ function YouTubePlayerController(props: YouTubePlayerControllerProps) {
         />
 
         <div>
-          <YtpcClear clearEntries={clearEntries}
-          />
+          <YtpcClear clearEntries={clearEntries} />
           <YtpcImport addEntry={addEntry} setEntries={setEntries} />
           <YtpcExport
-            filename={`${getVideoIdByUrl(props.ytPlayer?.getVideoUrl() ?? '')}.json`}
+            filename={`${getVideoIdByUrl(props.ytPlayer?.getVideoUrl() ?? '')}.txt`}
             entries={entries}
+            exportType={ExportType.Text}
           />
           <YtpcCopyLink entries={entries} />
         </div>
