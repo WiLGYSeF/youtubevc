@@ -14,12 +14,15 @@ import YtpcInput from './YtpcInput';
 import YtpcOptions from './YtpcOptions';
 import EntryBuilder from '../../objects/YtpcEntry/EntryBuilder';
 import Coroutine from '../../utils/coroutine';
+import useStatePropBacked from '../../utils/useStatePropBacked';
 
 import '../../css/style.min.css';
 
 interface YouTubePlayerControllerProps {
   ytPlayer?: YouTubePlayer;
   entries?: string | null;
+  loopShuffle: boolean;
+  shuffleWeight: boolean;
 }
 
 const EVENT_ONSTATECHANGE = 'onStateChange';
@@ -89,8 +92,8 @@ function YouTubePlayerController(props: YouTubePlayerControllerProps) {
   const [atTime, setAtTime] = useState(0);
   const [controlInputType, setControlInputType] = useState(ControlType.Goto);
   const [controlInputState, setControlInputState] = useState<object>({});
-  const [useLoopShuffle, setLoopShuffle] = useState(false);
-  const [useLoopCountForWeights, setUseLoopCountForWeights] = useState(false);
+  const [useLoopShuffle, setLoopShuffle] = useStatePropBacked(props.loopShuffle);
+  const [useLoopCountForWeights, setUseLoopCountForWeights] = useStatePropBacked(props.shuffleWeight);
 
   useEffect(() => {
     const onStateChange = (e: CustomEvent) => {
