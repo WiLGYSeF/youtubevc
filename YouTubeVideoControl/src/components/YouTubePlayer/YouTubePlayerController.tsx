@@ -107,7 +107,9 @@ function YouTubePlayerController(props: YouTubePlayerControllerProps) {
     try {
       const parsedEntries: YouTubePlayerControllerEntry[] = [];
 
-      JSON.parse(props.entries).forEach((o) => addEntry(parsedEntries, o.controlType, o.atTime, o));
+      JSON.parse(props.entries).forEach(
+        (o) => addEntry(parsedEntries, EntryBuilder.buildEntry(o.controlType, o.atTime, o))
+      );
       setEntries(parsedEntries);
     } catch (exc) {
       console.error(exc);
