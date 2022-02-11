@@ -21,12 +21,19 @@
   display: flex;
   padding: 10px;
 
-  .left {
+  .controls {
     min-width: 450px;
+    padding: 4px;
   }
 
-  .right {
+  .options {
+    min-width: 100px;
+    padding: 4px;
+  }
+
+  .padding {
     flex: 1;
+    padding: 4px;
   }
 
   $color: #ddd;
@@ -75,6 +82,16 @@
     }
   }
 
+  .option-container {
+    border: 1px solid #aaa;
+    border-radius: 5px;
+    min-height: 45px;
+
+    .indent {
+      margin-left: 15px;
+    }
+  }
+
   .add {
     @include entry-button;
   }
@@ -84,7 +101,6 @@
 
   .input {
     @import 'ytpc/_.scss';
-
     background-color: $background-color;
     border: 1px solid $border-color;
     border-radius: 8px;

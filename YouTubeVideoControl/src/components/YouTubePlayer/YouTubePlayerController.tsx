@@ -10,6 +10,7 @@ import YtpcEntryList from './YtpcEntryList';
 import YtpcExport, { ExportType } from './YtpcExport';
 import YtpcImport from './YtpcImport';
 import YtpcInput from './YtpcInput';
+import YtpcOptions from './YtpcOptions';
 import EntryBuilder from '../../objects/YtpcEntry/EntryBuilder';
 import Coroutine from '../../utils/coroutine';
 
@@ -81,6 +82,8 @@ function YouTubePlayerController(props: YouTubePlayerControllerProps) {
   const [atTime, setAtTime] = useState(0);
   const [controlInputType, setControlInputType] = useState(ControlType.Goto);
   const [controlInputState, setControlInputState] = useState<object>({});
+  const [useLoopShuffle, setLoopShuffle] = useState(false);
+  const [useLoopCountForWeights, setUseLoopCountForWeights] = useState(false);
 
   useEffect(() => {
     const onStateChange = (e: CustomEvent) => {
@@ -164,7 +167,7 @@ function YouTubePlayerController(props: YouTubePlayerControllerProps) {
 
   return (
     <div className="yt-controller">
-      <div className="left">
+      <div className="controls">
         <YtpcInput
           ytPlayer={props.ytPlayer}
           is360Video={is360Video}
@@ -196,7 +199,15 @@ function YouTubePlayerController(props: YouTubePlayerControllerProps) {
           <YtpcCopyLink videoId={getVideoIdByUrl(props.ytPlayer?.getVideoUrl() ?? '')} entries={entries} />
         </div>
       </div>
-      <div className="right" />
+      <div className="options">
+        <YtpcOptions
+          useLoopsForShuffling={useLoopShuffle}
+          useLoopCountForWeights={useLoopCountForWeights}
+          setLoopsForShuffling={setLoopShuffle}
+          setLoopCountForWeights={setUseLoopCountForWeights}
+        />
+      </div>
+      <div className="padding" />
     </div>
   );
 }
