@@ -2,8 +2,9 @@ import React, { useEffect, useState } from 'react';
 import { YouTubePlayer } from 'youtube-player/dist/types';
 import PlayerStates from 'youtube-player/dist/constants/PlayerStates';
 
-import Ytpc360Entry, { YouTubePlayer360 } from '../../objects/YtpcEntry/Ytpc360Entry';
 import YouTubePlayerControllerEntry, { ControlType } from '../../objects/YtpcEntry/YouTubePlayerControllerEntry';
+import { YouTubePlayer360 } from '../../objects/YtpcEntry/Ytpc360Entry';
+import YtpcLoopEntry from '../../objects/YtpcEntry/YtpcLoopEntry';
 import YtpcClear from './YtpcClear';
 import YtpcCopyLink from './YtpcCopyLink';
 import YtpcEntryList from './YtpcEntryList';
@@ -15,12 +16,6 @@ import EntryBuilder from '../../objects/YtpcEntry/EntryBuilder';
 import Coroutine from '../../utils/coroutine';
 
 import '../../css/style.min.css';
-
-import YtpcGotoEntry from '../../objects/YtpcEntry/YtpcGotoEntry';
-import YtpcLoopEntry from '../../objects/YtpcEntry/YtpcLoopEntry';
-import YtpcPauseEntry from '../../objects/YtpcEntry/YtpcPauseEntry';
-import YtpcPlaybackRateEntry from '../../objects/YtpcEntry/YtpcPlaybackRateEntry';
-import YtpcVolumeEntry from '../../objects/YtpcEntry/YtpcVolumeEntry';
 
 interface YouTubePlayerControllerProps {
   ytPlayer?: YouTubePlayer;
@@ -47,6 +42,33 @@ function addEntry(entries: YouTubePlayerControllerEntry[], entry: YouTubePlayerC
   );
 }
 
+function getRandomLoopEntry(entries: YouTubePlayerControllerEntry[], useLoopCountForWeights: boolean): YtpcLoopEntry {
+  const loopEntries = entries.filter((e) => e.controlType === ControlType.Loop) as YtpcLoopEntry[];
+  const loopWeights: number[] = [];
+
+  let highestWeight = 0;
+  let totalWeight = 0;
+
+  if (useLoopCountForWeights) {
+    for (let i = 0; i < loopEntries.length; highestWeight = Math.max(highestWeight, loopEntries[i].loopCount, i += 1));
+  }
+
+  for (const entry of loopEntries) {
+    const count = useLoopCountForWeights
+      ? entry.loopCount >= 0
+        ? entry.loopCount
+        : highestWeight
+      : 1;
+    loopWeights.push(count);
+    totalWeight += count;
+  }
+
+  let random = Math.floor(Math.random() * (totalWeight + 1));
+  let selected = 0;
+  for (; selected < loopEntries.length && random - loopWeights[selected] > 0; random -= loopWeights[selected], selected += 1);
+  return loopEntries[selected];
+}
+
 function getVideoIdByUrl(url: string): string | null {
   try {
     const urlObj = new URL(url);
@@ -61,22 +83,7 @@ function playerHas360Video(player: YouTubePlayer360): boolean {
 }
 
 function YouTubePlayerController(props: YouTubePlayerControllerProps) {
-  const [entries, setEntries] = useState<YouTubePlayerControllerEntry[]>([
-    new YtpcGotoEntry(0, 1),
-    new YtpcGotoEntry(3, 6),
-    new YtpcPauseEntry(30, 1),
-    new YtpcPlaybackRateEntry(31, 2),
-    new YtpcVolumeEntry(32, 30, 5),
-    new YtpcVolumeEntry(33, 80),
-    new Ytpc360Entry(33, {
-      yaw: 1, pitch: 2, roll: 3, fov: 5,
-    }),
-    new Ytpc360Entry(34, {
-      yaw: 5, pitch: 2, roll: 3, fov: 5,
-    }, 2),
-    new YtpcLoopEntry(7 * 60 + 51, 3 * 60 + 25),
-    new YtpcLoopEntry(7 * 60 + 52, 3 * 60 + 25, 3),
-  ]);
+  const [entries, setEntries] = useState<YouTubePlayerControllerEntry[]>([]);
   const [barIndex, setBarIndex] = useState(0);
   const [is360Video, setIs360Video] = useState(false);
   const [atTime, setAtTime] = useState(0);
@@ -111,7 +118,7 @@ function YouTubePlayerController(props: YouTubePlayerControllerProps) {
       const parsedEntries: YouTubePlayerControllerEntry[] = [];
 
       JSON.parse(props.entries).forEach(
-        (o) => addEntry(parsedEntries, EntryBuilder.buildEntry(o.controlType, o.atTime, o))
+        (o) => addEntry(parsedEntries, EntryBuilder.buildEntry(o.controlType, o.atTime, o)),
       );
       setEntries(parsedEntries);
     } catch (exc) {
@@ -135,7 +142,12 @@ function YouTubePlayerController(props: YouTubePlayerControllerProps) {
       for (const entry of entries) {
         if (entry.atTime < curTime) {
           if (entry.atTime >= Math.max(lastTime, curTime - TIME_DIFF_MAX)) {
-            entry.performAction(props.ytPlayer, curTime);
+            if (entry.controlType === ControlType.Loop && useLoopShuffle) {
+              const loopEntry = getRandomLoopEntry(entries, useLoopCountForWeights);
+              props.ytPlayer.seekTo(loopEntry.loopBackTo, true);
+            } else {
+              entry.performAction(props.ytPlayer, curTime);
+            }
           }
           lastMatchingIdx = idx;
         }
@@ -151,7 +163,7 @@ function YouTubePlayerController(props: YouTubePlayerControllerProps) {
     return () => {
       routine.stop();
     };
-  }, [props.ytPlayer, entries]);
+  }, [props.ytPlayer, entries, useLoopShuffle, useLoopCountForWeights]);
 
   const deleteEntry = (entry: YouTubePlayerControllerEntry): void => {
     setEntries([...entries.filter((e) => e !== entry)]);
