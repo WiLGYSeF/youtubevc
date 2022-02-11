@@ -1,6 +1,8 @@
 import { YouTubePlayer } from 'youtube-player/dist/types';
 import Coroutine, { MSEC_PER_SEC } from '../../utils/coroutine';
 import lerp from '../../utils/lerp';
+import { mget } from '../../utils/regexp-match-group';
+import timestampToSeconds from '../../utils/timestampToSeconds';
 
 import YouTubePlayerControllerEntry, { ControlType } from './YouTubePlayerControllerEntry';
 
@@ -23,6 +25,22 @@ export interface Ytpc360State {
 }
 
 class Ytpc360Entry extends YouTubePlayerControllerEntry {
+  public static YAW_MIN = 0;
+  public static YAW_MAX = 360;
+  public static YAW_DEFAULT = 0;
+
+  public static PITCH_MIN = -90;
+  public static PITCH_MAX = 90;
+  public static PITCH_DEFAULT = 0;
+
+  public static ROLL_MIN = -180;
+  public static ROLL_MAX = 180;
+  public static ROLL_DEFAULT = 0;
+
+  public static FOV_MIN = 30;
+  public static FOV_MAX = 120;
+  public static FOV_DEFAULT = 100;
+
   public static ACTION_STR: string = 'set 360° view to';
 
   public sphereProps: SphericalProperties;
@@ -77,6 +95,40 @@ class Ytpc360Entry extends YouTubePlayerControllerEntry {
     }
 
     return result;
+  }
+
+  public static fromString(str: string): Ytpc360Entry | null {
+    const rsNum = String.raw`-?\d+(?:\.\d*)?`;
+    const regex = new RegExp([
+      String.raw`^At (?<timestamp>${YouTubePlayerControllerEntry.REGEXSTR_TIMESTAMP}),`,
+      String.raw` ${Ytpc360Entry.ACTION_STR}`,
+      String.raw` yaw (?<yaw>${rsNum})`,
+      String.raw`, pitch (?<pitch>${rsNum})`,
+      String.raw`, roll (?<roll>${rsNum})`,
+      String.raw`, fov (?<fov>${rsNum})`,
+      String.raw`(?: during the next (?<lerp>${rsNum}) seconds)?`,
+      String.raw`$`,
+    ].join(''));
+
+    const match = str.match(regex);
+    if (!match) {
+      return null;
+    }
+
+    try {
+      return new Ytpc360Entry(
+        timestampToSeconds(mget(match, 'timestamp')),
+        {
+          yaw: Number(mget(match, 'yaw')),
+          pitch: Number(mget(match, 'pitch')),
+          roll: Number(mget(match, 'roll')),
+          fov: Number(mget(match, 'fov')),
+        },
+        Number(match.groups ? match.groups.lerp ?? -1 : -1),
+      );
+    } catch {
+      return null;
+    }
   }
 }
 

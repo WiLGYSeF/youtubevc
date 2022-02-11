@@ -37,6 +37,29 @@ class EntryBuilder {
         throw new Error('unknown entry type');
     }
   }
+
+  static fromString(str: string): YouTubePlayerControllerEntry | null {
+    const entryList = [
+      Ytpc360Entry,
+      YtpcGotoEntry,
+      YtpcLoopEntry,
+      YtpcPauseEntry,
+      YtpcPlaybackRateEntry,
+      YtpcVolumeEntry,
+    ];
+
+    let result: YouTubePlayerControllerEntry | null = null;
+
+    for (const entry of entryList) {
+      const entryResult = entry.fromString(str);
+      if (entryResult) {
+        result = entryResult;
+        break;
+      }
+    }
+
+    return result;
+  }
 }
 
 export default EntryBuilder;

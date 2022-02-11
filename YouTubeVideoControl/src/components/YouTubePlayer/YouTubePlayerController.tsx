@@ -29,14 +29,10 @@ const EVENT_ONSTATECHANGE = 'onStateChange';
 
 const TIME_DIFF_MAX = 0.1;
 
-const addEntry = (
-  entries: YouTubePlayerControllerEntry[],
-  type: ControlType,
-  atTime: number,
-  state: object,
-): YouTubePlayerControllerEntry => {
-  const entry = EntryBuilder.buildEntry(type, atTime, state);
-  const existingEntryIndex = entries.findIndex((e) => e.atTime === atTime && e.controlType === type);
+function addEntry(entries: YouTubePlayerControllerEntry[], entry: YouTubePlayerControllerEntry): void {
+  const existingEntryIndex = entries.findIndex(
+    (e) => e.atTime === entry.atTime && e.controlType === entry.controlType,
+  );
 
   if (existingEntryIndex === -1) {
     entries.push(entry);
@@ -47,9 +43,7 @@ const addEntry = (
   entries.sort(
     (a: YouTubePlayerControllerEntry, b: YouTubePlayerControllerEntry): number => a.atTime - b.atTime,
   );
-
-  return entry;
-};
+}
 
 function getVideoIdByUrl(url: string): string | null {
   try {
@@ -162,7 +156,7 @@ function YouTubePlayerController(props: YouTubePlayerControllerProps) {
           controlInputType={controlInputType}
           controlInputState={controlInputState}
           createEntry={(type: ControlType, atTime: number, state: object) => {
-            addEntry(entries, type, atTime, state);
+            addEntry(entries, EntryBuilder.buildEntry(type, atTime, state));
             setEntries(entries);
           }}
           setControlInputState={setControlInputState}
@@ -179,7 +173,7 @@ function YouTubePlayerController(props: YouTubePlayerControllerProps) {
           <YtpcClear clearEntries={clearEntries} />
           <YtpcImport addEntry={addEntry} setEntries={setEntries} />
           <YtpcExport
-            filename={`${getVideoIdByUrl(props.ytPlayer?.getVideoUrl() ?? '')}.txt`}
+            filename={`youtubevc-${getVideoIdByUrl(props.ytPlayer?.getVideoUrl() ?? '')}.txt`}
             entries={entries}
             exportType={ExportType.Text}
           />

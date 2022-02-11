@@ -1,6 +1,8 @@
 import { YouTubePlayer } from 'youtube-player/dist/types';
 import Coroutine, { MSEC_PER_SEC } from '../../utils/coroutine';
 import lerp from '../../utils/lerp';
+import { mget } from '../../utils/regexp-match-group';
+import timestampToSeconds from '../../utils/timestampToSeconds';
 
 import YouTubePlayerControllerEntry, { ControlType } from './YouTubePlayerControllerEntry';
 
@@ -55,6 +57,32 @@ class YtpcVolumeEntry extends YouTubePlayerControllerEntry {
     }
 
     return result;
+  }
+
+  public static fromString(str: string): YtpcVolumeEntry | null {
+    const rs_num = String.raw`-?\d+(?:\.\d*)?`;
+    const regex = new RegExp([
+      String.raw`^At (?<timestamp>${YouTubePlayerControllerEntry.REGEXSTR_TIMESTAMP}),`,
+      String.raw` ${YtpcVolumeEntry.ACTION_STR}`,
+      String.raw` (?<volume>${rs_num})`,
+      String.raw`(?: during the next (?<lerp>${rs_num}) seconds)?`,
+      String.raw`$`,
+    ].join(''));
+
+    const match = str.match(regex);
+    if (!match) {
+      return null;
+    }
+
+    try {
+      return new YtpcVolumeEntry(
+        timestampToSeconds(mget(match, 'timestamp')),
+        Number(mget(match, 'volume')),
+        Number(match.groups ? match.groups.lerp ?? -1 : -1),
+      );
+    } catch {
+      return null;
+    }
   }
 }
 
