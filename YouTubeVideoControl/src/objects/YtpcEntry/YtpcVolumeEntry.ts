@@ -4,9 +4,9 @@ import Coroutine, { MSEC_PER_SEC } from 'utils/coroutine';
 import lerp from 'utils/lerp';
 import { mget } from 'utils/regexp-match-group';
 import timestampToSeconds from 'utils/timestampToSeconds';
-import YouTubePlayerControllerEntry, { ControlType } from './YouTubePlayerControllerEntry';
+import YouTubePlayerControllerEntry, { ControlType, YtpcEntryState } from './YouTubePlayerControllerEntry';
 
-export interface YtpcVolumeState {
+export interface YtpcVolumeState extends YtpcEntryState {
   volume: number;
   lerpSeconds: number;
 }
@@ -44,6 +44,7 @@ class YtpcVolumeEntry extends YouTubePlayerControllerEntry {
 
   public getState(): YtpcVolumeState {
     return {
+      ...super.getState(),
       volume: this.volume,
       lerpSeconds: this.lerpSeconds,
     };

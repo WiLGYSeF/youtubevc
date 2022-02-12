@@ -1,4 +1,6 @@
+import { YtpcEntryState } from 'objects/YtpcEntry/YouTubePlayerControllerEntry';
+
 export interface YtpcControlInput {
-  state: object;
-  setControlInputState(state: object): void;
+  state: YtpcEntryState;
+  setEntryState(state: YtpcEntryState): void;
 }

@@ -3,7 +3,7 @@ import { useSearchParams } from 'react-router-dom';
 import YouTube, { Options } from 'react-youtube';
 import { YouTubePlayer } from 'youtube-player/dist/types';
 
-import YouTubePlayerController from '../components/YouTubePlayer/YouTubePlayerController';
+import YouTubePlayerController from 'components/YouTubePlayer/YouTubePlayerController';
 
 import './YouTubePlayerContainer.scss';
 

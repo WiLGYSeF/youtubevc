@@ -3,7 +3,7 @@ import { YouTubePlayer } from 'youtube-player/dist/types';
 import PlayerStates from 'youtube-player/dist/constants/PlayerStates';
 
 import EntryBuilder from 'objects/YtpcEntry/EntryBuilder';
-import YouTubePlayerControllerEntry, { ControlType } from 'objects/YtpcEntry/YouTubePlayerControllerEntry';
+import YouTubePlayerControllerEntry, { ControlType, YtpcEntryState } from 'objects/YtpcEntry/YouTubePlayerControllerEntry';
 import { YouTubePlayer360 } from 'objects/YtpcEntry/Ytpc360Entry';
 import YtpcLoopEntry from 'objects/YtpcEntry/YtpcLoopEntry';
 import Coroutine from 'utils/coroutine';
@@ -91,9 +91,10 @@ function YouTubePlayerController(props: YouTubePlayerControllerProps) {
   ]);
   const [barIndex, setBarIndex] = useState(0);
   const [is360Video, setIs360Video] = useState(false);
-  const [atTime, setAtTime] = useState(0);
-  const [controlInputType, setControlInputType] = useState(ControlType.Goto);
-  const [controlInputState, setControlInputState] = useState<object>({});
+  const [entryState, setEntryState] = useState<YtpcEntryState>({
+    atTime: 0,
+    controlType: ControlType.Goto
+  });
   const [useLoopShuffle, setLoopShuffle] = useStatePropBacked(props.loopShuffle);
   const [useLoopCountForWeights, setUseLoopCountForWeights] = useStatePropBacked(props.shuffleWeight);
 
@@ -123,7 +124,7 @@ function YouTubePlayerController(props: YouTubePlayerControllerProps) {
       const parsedEntries: YouTubePlayerControllerEntry[] = [];
 
       JSON.parse(props.entries).forEach(
-        (o) => addEntry(parsedEntries, EntryBuilder.buildEntry(o.controlType, o.atTime, o)),
+        (e: YtpcEntryState) => addEntry(parsedEntries, EntryBuilder.buildEntry(e)),
       );
       setEntries(parsedEntries);
     } catch (exc) {
@@ -170,45 +171,36 @@ function YouTubePlayerController(props: YouTubePlayerControllerProps) {
     };
   }, [props.ytPlayer, entries, useLoopShuffle, useLoopCountForWeights]);
 
-  const deleteEntry = (entry: YouTubePlayerControllerEntry): void => {
-    setEntries([...entries.filter((e) => e !== entry)]);
-  };
-
-  const editEntry = (entry: YouTubePlayerControllerEntry): void => {
-    setAtTime(entry.atTime);
-    setControlInputType(entry.controlType);
-    setControlInputState(entry.getState());
-  };
-
-  const clearEntries = (): void => {
-    setEntries([]);
-  };
-
   return (
     <div className="yt-controller">
       <div className="controls">
         <YtpcInput
           ytPlayer={props.ytPlayer}
           is360Video={is360Video}
-          atTime={atTime}
-          controlInputType={controlInputType}
-          controlInputState={controlInputState}
-          createEntry={(type: ControlType, atTime: number, state: object) => {
-            addEntry(entries, EntryBuilder.buildEntry(type, atTime, state));
-            setEntries(entries);
+          entryState={entryState}
+          createEntry={(state: YtpcEntryState) => {
+            const newEntries = [...entries];
+            addEntry(newEntries, EntryBuilder.buildEntry(state));
+            setEntries(newEntries);
           }}
-          setControlInputState={setControlInputState}
+          setEntryState={setEntryState}
         />
 
         <YtpcEntryList
           entries={entries}
           barIndex={barIndex}
-          deleteEntry={deleteEntry}
-          editEntry={editEntry}
+          deleteEntry={(entry: YouTubePlayerControllerEntry): void => {
+            setEntries([...entries.filter((e) => e !== entry)]);
+          }}
+          editEntry={(entry: YouTubePlayerControllerEntry) => {
+            setEntryState(entry.getState());
+          }}
         />
 
         <div>
-          <YtpcClear clearEntries={clearEntries} />
+          <YtpcClear clearEntries={() => {
+            setEntries([]);
+          }} />
           <YtpcImport addEntry={addEntry} setEntries={setEntries} />
           <YtpcExport
             filename={`youtubevc-${getVideoIdByUrl(props.ytPlayer?.getVideoUrl() ?? '')}.txt`}

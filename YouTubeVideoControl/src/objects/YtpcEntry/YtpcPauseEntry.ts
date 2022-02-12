@@ -5,9 +5,9 @@ import { mget } from 'utils/regexp-match-group';
 import secondsToTimestring from 'utils/secondsToTimestring';
 import timestampToSeconds from 'utils/timestampToSeconds';
 import timestringToSeconds from 'utils/timestringToSeconds';
-import YouTubePlayerControllerEntry, { ControlType } from './YouTubePlayerControllerEntry';
+import YouTubePlayerControllerEntry, { ControlType, YtpcEntryState } from './YouTubePlayerControllerEntry';
 
-export interface YtpcPauseState {
+export interface YtpcPauseState extends YtpcEntryState {
   pauseTime: number;
 }
 
@@ -41,6 +41,7 @@ class YtpcPauseEntry extends YouTubePlayerControllerEntry {
 
   public getState(): YtpcPauseState {
     return {
+      ...super.getState(),
       pauseTime: this.pauseTime,
     };
   }

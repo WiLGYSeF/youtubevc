@@ -3,9 +3,9 @@ import { YouTubePlayer } from 'youtube-player/dist/types';
 import secondsToTimestamp from 'utils/secondsToTimestamp';
 import timestampToSeconds from 'utils/timestampToSeconds';
 import { mget } from 'utils/regexp-match-group';
-import YouTubePlayerControllerEntry, { ControlType } from './YouTubePlayerControllerEntry';
+import YouTubePlayerControllerEntry, { ControlType, YtpcEntryState } from './YouTubePlayerControllerEntry';
 
-export interface YtpcGotoState {
+export interface YtpcGotoState extends YtpcEntryState {
   gotoTime: number;
 }
 
@@ -30,6 +30,7 @@ class YtpcGotoEntry extends YouTubePlayerControllerEntry {
 
   public getState(): YtpcGotoState {
     return {
+      ...super.getState(),
       gotoTime: this.gotoTime,
     };
   }

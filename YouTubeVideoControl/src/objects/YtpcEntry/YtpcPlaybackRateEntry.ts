@@ -2,9 +2,9 @@ import { YouTubePlayer } from 'youtube-player/dist/types';
 
 import { mget } from 'utils/regexp-match-group';
 import timestampToSeconds from 'utils/timestampToSeconds';
-import YouTubePlayerControllerEntry, { ControlType } from './YouTubePlayerControllerEntry';
+import YouTubePlayerControllerEntry, { ControlType, YtpcEntryState } from './YouTubePlayerControllerEntry';
 
-export interface YtpcPlaybackRateState {
+export interface YtpcPlaybackRateState extends YtpcEntryState {
   playbackRate: number;
 }
 
@@ -29,6 +29,7 @@ class YtpcPlaybackRateEntry extends YouTubePlayerControllerEntry {
 
   public getState(): YtpcPlaybackRateState {
     return {
+      ...super.getState(),
       playbackRate: this.playbackRate,
     };
   }

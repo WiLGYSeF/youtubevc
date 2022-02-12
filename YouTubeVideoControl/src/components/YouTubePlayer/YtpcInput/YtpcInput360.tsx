@@ -26,6 +26,8 @@ function YtpcInput360(props: YtpcControlInput) {
 
   useEffect(() => {
     const state: Ytpc360State = {
+      atTime: pstate.atTime,
+      controlType: pstate.controlType,
       sphereProps: {
         yaw: yaw === 360 ? 0 : yaw,
         pitch,
@@ -34,7 +36,7 @@ function YtpcInput360(props: YtpcControlInput) {
       },
       lerpSeconds: lerpSet ? lerpTime : -1,
     };
-    props.setControlInputState(state);
+    props.setEntryState(state);
   }, [yaw, pitch, roll, fov, lerpSet, lerpTime]);
 
   return (

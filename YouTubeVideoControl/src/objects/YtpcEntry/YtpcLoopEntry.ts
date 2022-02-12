@@ -3,9 +3,9 @@ import { YouTubePlayer } from 'youtube-player/dist/types';
 import secondsToTimestamp from 'utils/secondsToTimestamp';
 import timestampToSeconds from 'utils/timestampToSeconds';
 import { mget } from 'utils/regexp-match-group';
-import YouTubePlayerControllerEntry, { ControlType } from './YouTubePlayerControllerEntry';
+import YouTubePlayerControllerEntry, { ControlType, YtpcEntryState } from './YouTubePlayerControllerEntry';
 
-export interface YtpcLoopState {
+export interface YtpcLoopState extends YtpcEntryState {
   loopBackTo: number;
   loopCount: number;
 }
@@ -46,6 +46,7 @@ class YtpcLoopEntry extends YouTubePlayerControllerEntry {
 
   public getState(): YtpcLoopState {
     return {
+      ...super.getState(),
       loopBackTo: this.loopBackTo,
       loopCount: this.loopCount,
     };

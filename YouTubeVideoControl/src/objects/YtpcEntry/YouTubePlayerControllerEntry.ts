@@ -11,6 +11,11 @@ export enum ControlType {
   Volume = 'volume',
 }
 
+export interface YtpcEntryState {
+  atTime: number;
+  controlType: ControlType;
+}
+
 abstract class YouTubePlayerControllerEntry {
   public static REGEXSTR_TIMESTAMP = String.raw`(?:\d+:)*\d+(?:\.\d*)?`;
 
@@ -26,7 +31,12 @@ abstract class YouTubePlayerControllerEntry {
 
   abstract performAction(ytPlayer: YouTubePlayer, currentTime: number): void;
 
-  abstract getState(): object;
+  public getState(): YtpcEntryState {
+    return {
+      controlType: this.controlType,
+      atTime: this.atTime
+    };
+  }
 
   abstract getControlStr(): string;
 

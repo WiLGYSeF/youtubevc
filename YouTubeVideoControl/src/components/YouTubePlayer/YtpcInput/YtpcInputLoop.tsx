@@ -19,10 +19,12 @@ function YtpcInputLoop(props: YtpcControlInput) {
 
   useEffect(() => {
     const state: YtpcLoopState = {
+      atTime: pstate.atTime,
+      controlType: pstate.controlType,
       loopBackTo,
       loopCount: forever ? -1 : loopCount,
     };
-    props.setControlInputState(state);
+    props.setEntryState(state);
   }, [loopBackTo, forever, loopCount]);
 
   return (

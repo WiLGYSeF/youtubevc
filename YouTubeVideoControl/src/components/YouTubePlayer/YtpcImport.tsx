@@ -1,13 +1,8 @@
 import React, { ChangeEvent } from 'react';
 
 import EntryBuilder from 'objects/YtpcEntry/EntryBuilder';
-import YouTubePlayerControllerEntry, { ControlType } from 'objects/YtpcEntry/YouTubePlayerControllerEntry';
+import YouTubePlayerControllerEntry, { ControlType, YtpcEntryState } from 'objects/YtpcEntry/YouTubePlayerControllerEntry';
 import trimstr from 'utils/trimstr';
-
-interface Entry {
-  controlType: ControlType,
-  atTime: number;
-}
 
 interface ImportResult {
   entries: YouTubePlayerControllerEntry[];
@@ -29,9 +24,9 @@ function tryImportJson(
   try {
     const json = JSON.parse(data);
     for (let i = 0; i < json.length; i += 1) {
-      const entry: Entry = json[i];
+      const entry: YtpcEntryState = json[i];
 
-      addEntry(entries, EntryBuilder.buildEntry(entry.controlType, entry.atTime, entry));
+      addEntry(entries, EntryBuilder.buildEntry(entry));
     }
 
     return {

@@ -26,10 +26,12 @@ function YtpcInputVolume(props: YtpcControlInput) {
 
   useEffect(() => {
     const state: YtpcVolumeState = {
+      atTime: pstate.atTime,
+      controlType: pstate.controlType,
       volume,
       lerpSeconds: lerpSet ? lerpTime : -1,
     };
-    props.setControlInputState(state);
+    props.setEntryState(state);
   }, [volume, lerpSet, lerpTime]);
 
   return (
