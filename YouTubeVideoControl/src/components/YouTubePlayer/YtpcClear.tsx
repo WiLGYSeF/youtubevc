@@ -1,7 +1,5 @@
 import React from 'react';
 
-import '../../css/style.min.css';
-
 interface YtpcClearProps {
   clearEntries(): void;
 }

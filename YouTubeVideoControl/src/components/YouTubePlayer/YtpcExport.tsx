@@ -1,9 +1,7 @@
 import React from 'react';
 import { saveAs } from 'file-saver';
 
-import YouTubePlayerControllerEntry from '../../objects/YtpcEntry/YouTubePlayerControllerEntry';
-
-import '../../css/style.min.css';
+import YouTubePlayerControllerEntry from 'objects/YtpcEntry/YouTubePlayerControllerEntry';
 
 export enum ExportType {
   Json = 'json',

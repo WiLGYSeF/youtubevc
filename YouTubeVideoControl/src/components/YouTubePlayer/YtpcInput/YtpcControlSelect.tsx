@@ -1,20 +1,18 @@
 import React, { ChangeEvent, useEffect } from 'react';
 
-import { ControlType } from '../../objects/YtpcEntry/YouTubePlayerControllerEntry';
-import YtpcInput360 from './YtpcInput360';
-import YtpcInputGoto from './YtpcInputGoto';
-import YtpcInputLoop from './YtpcInputLoop';
-import YtpcInputPause from './YtpcInputPause';
-import YtpcInputPlaybackRate from './YtpcInputPlaybackRate';
+import { ControlType } from 'objects/YtpcEntry/YouTubePlayerControllerEntry';
+import Ytpc360Entry from 'objects/YtpcEntry/Ytpc360Entry';
+import YtpcGotoEntry from 'objects/YtpcEntry/YtpcGotoEntry';
+import YtpcLoopEntry from 'objects/YtpcEntry/YtpcLoopEntry';
+import YtpcPauseEntry from 'objects/YtpcEntry/YtpcPauseEntry';
+import YtpcPlaybackRateEntry from 'objects/YtpcEntry/YtpcPlaybackRateEntry';
+import YtpcVolumeEntry from 'objects/YtpcEntry/YtpcVolumeEntry';
 import YtpcInputVolume from './YtpcInputVolume';
-import Ytpc360Entry from '../../objects/YtpcEntry/Ytpc360Entry';
-import YtpcGotoEntry from '../../objects/YtpcEntry/YtpcGotoEntry';
-import YtpcLoopEntry from '../../objects/YtpcEntry/YtpcLoopEntry';
-import YtpcPauseEntry from '../../objects/YtpcEntry/YtpcPauseEntry';
-import YtpcPlaybackRateEntry from '../../objects/YtpcEntry/YtpcPlaybackRateEntry';
-import YtpcVolumeEntry from '../../objects/YtpcEntry/YtpcVolumeEntry';
-
-import '../../css/style.min.css';
+import YtpcInputPlaybackRate from './YtpcInputPlaybackRate';
+import YtpcInputPause from './YtpcInputPause';
+import YtpcInputLoop from './YtpcInputLoop';
+import YtpcInputGoto from './YtpcInputGoto';
+import YtpcInput360 from './YtpcInput360';
 
 interface ControlSelectProps {
   is360Video: boolean;

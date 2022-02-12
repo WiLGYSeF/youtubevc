@@ -1,12 +1,12 @@
 import React, { ChangeEvent, useEffect } from 'react';
 
+import Checkbox from 'components/common/Checkbox';
+import NumberInput from 'components/common/NumberInput';
+import { YtpcVolumeState } from 'objects/YtpcEntry/YtpcVolumeEntry';
+import useStatePropBacked from 'utils/useStatePropBacked';
 import { YtpcControlInput } from './YtpcControlInput';
-import { YtpcVolumeState } from '../../objects/YtpcEntry/YtpcVolumeEntry';
-import Checkbox from '../common/Checkbox';
-import NumberInput from '../common/NumberInput';
-import useStatePropBacked from '../../utils/useStatePropBacked';
 
-import '../../css/style.min.css';
+import './YtpcInputVolume.scss';
 
 const VOLUME_MIN = 0;
 const VOLUME_MAX = 100;

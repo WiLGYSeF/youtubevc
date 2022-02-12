@@ -1,12 +1,12 @@
 import React, { useEffect } from 'react';
 
+import Checkbox from 'components/common/Checkbox';
+import NumberInput from 'components/common/NumberInput';
+import Ytpc360Entry, { Ytpc360State } from 'objects/YtpcEntry/Ytpc360Entry';
+import useStatePropBacked from 'utils/useStatePropBacked';
 import { YtpcControlInput } from './YtpcControlInput';
-import Ytpc360Entry, { Ytpc360State } from '../../objects/YtpcEntry/Ytpc360Entry';
-import Checkbox from '../common/Checkbox';
-import NumberInput from '../common/NumberInput';
-import useStatePropBacked from '../../utils/useStatePropBacked';
 
-import '../../css/style.min.css';
+import './YtpcInput360.scss';
 
 const LERP_TIME_DEFAULT = 0;
 

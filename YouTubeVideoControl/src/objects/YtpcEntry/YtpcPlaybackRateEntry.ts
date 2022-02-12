@@ -1,7 +1,7 @@
 import { YouTubePlayer } from 'youtube-player/dist/types';
-import { mget } from '../../utils/regexp-match-group';
-import timestampToSeconds from '../../utils/timestampToSeconds';
 
+import { mget } from 'utils/regexp-match-group';
+import timestampToSeconds from 'utils/timestampToSeconds';
 import YouTubePlayerControllerEntry, { ControlType } from './YouTubePlayerControllerEntry';
 
 export interface YtpcPlaybackRateState {

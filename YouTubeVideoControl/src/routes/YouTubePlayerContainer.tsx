@@ -1,12 +1,11 @@
 import React, { useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
-
 import YouTube, { Options } from 'react-youtube';
 import { YouTubePlayer } from 'youtube-player/dist/types';
 
 import YouTubePlayerController from '../components/YouTubePlayer/YouTubePlayerController';
 
-import '../css/style.min.css';
+import './YouTubePlayerContainer.scss';
 
 function YouTubePlayerContainer() {
   const [ytPlayer, setYtPlayer] = useState<YouTubePlayer>();

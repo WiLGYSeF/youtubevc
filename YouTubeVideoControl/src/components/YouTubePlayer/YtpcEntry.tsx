@@ -1,8 +1,8 @@
 import React from 'react';
 
-import YouTubePlayerControllerEntry from '../../objects/YtpcEntry/YouTubePlayerControllerEntry';
+import YouTubePlayerControllerEntry from 'objects/YtpcEntry/YouTubePlayerControllerEntry';
 
-import '../../css/style.min.css';
+import './YtpcEntry.scss';
 
 interface YtpcEntryProps {
   entry: YouTubePlayerControllerEntry;

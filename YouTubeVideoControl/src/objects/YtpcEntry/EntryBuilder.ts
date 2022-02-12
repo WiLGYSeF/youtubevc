@@ -1,9 +1,9 @@
 import YouTubePlayerControllerEntry, { ControlType } from './YouTubePlayerControllerEntry';
+import Ytpc360Entry, { Ytpc360State } from './Ytpc360Entry';
 import YtpcGotoEntry, { YtpcGotoState } from './YtpcGotoEntry';
 import YtpcLoopEntry, { YtpcLoopState } from './YtpcLoopEntry';
 import YtpcPauseEntry, { YtpcPauseState } from './YtpcPauseEntry';
 import YtpcPlaybackRateEntry, { YtpcPlaybackRateState } from './YtpcPlaybackRateEntry';
-import Ytpc360Entry, { Ytpc360State } from './Ytpc360Entry';
 import YtpcVolumeEntry, { YtpcVolumeState } from './YtpcVolumeEntry';
 
 class EntryBuilder {

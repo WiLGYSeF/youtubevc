@@ -1,11 +1,11 @@
 import { YouTubePlayer } from 'youtube-player/dist/types';
 
+import Coroutine, { MSEC_PER_SEC } from 'utils/coroutine';
+import { mget } from 'utils/regexp-match-group';
+import secondsToTimestring from 'utils/secondsToTimestring';
+import timestampToSeconds from 'utils/timestampToSeconds';
+import timestringToSeconds from 'utils/timestringToSeconds';
 import YouTubePlayerControllerEntry, { ControlType } from './YouTubePlayerControllerEntry';
-import Coroutine, { MSEC_PER_SEC } from '../../utils/coroutine';
-import secondsToTimestring from '../../utils/secondsToTimestring';
-import { mget } from '../../utils/regexp-match-group';
-import timestampToSeconds from '../../utils/timestampToSeconds';
-import timestringToSeconds from '../../utils/timestringToSeconds';
 
 export interface YtpcPauseState {
   pauseTime: number;

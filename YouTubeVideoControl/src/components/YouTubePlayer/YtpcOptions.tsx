@@ -1,8 +1,8 @@
 import React from 'react';
 
-import Checkbox from '../common/Checkbox';
+import Checkbox from 'components/common/Checkbox';
 
-import '../../css/style.min.css';
+import './YtpcOptions.scss';
 
 interface YtpcOptionsProps {
   useLoopsForShuffling: boolean;

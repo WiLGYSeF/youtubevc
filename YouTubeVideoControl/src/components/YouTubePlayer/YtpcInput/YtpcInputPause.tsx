@@ -1,11 +1,11 @@
 import React, { useEffect } from 'react';
 
+import TimestampInput from 'components/common/TimestampInput';
+import { YtpcPauseState } from 'objects/YtpcEntry/YtpcPauseEntry';
+import useStatePropBacked from 'utils/useStatePropBacked';
 import { YtpcControlInput } from './YtpcControlInput';
-import { YtpcPauseState } from '../../objects/YtpcEntry/YtpcPauseEntry';
-import TimestampInput from '../common/TimestampInput';
-import useStatePropBacked from '../../utils/useStatePropBacked';
 
-import '../../css/style.min.css';
+import './YtpcInputPause.scss';
 
 const PAUSE_FOR_DEFAULT = 5;
 

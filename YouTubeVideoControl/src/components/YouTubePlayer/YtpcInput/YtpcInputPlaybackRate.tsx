@@ -1,10 +1,8 @@
 import React, { ChangeEvent, useEffect } from 'react';
 
+import { YtpcPlaybackRateState } from 'objects/YtpcEntry/YtpcPlaybackRateEntry';
+import useStatePropBacked from 'utils/useStatePropBacked';
 import { YtpcControlInput } from './YtpcControlInput';
-import { YtpcPlaybackRateState } from '../../objects/YtpcEntry/YtpcPlaybackRateEntry';
-import useStatePropBacked from '../../utils/useStatePropBacked';
-
-import '../../css/style.min.css';
 
 interface YtpcInputPlaybackRateProps extends YtpcControlInput {
   playbackRates?: number[];

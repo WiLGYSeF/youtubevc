@@ -1,6 +1,8 @@
 import React, { ChangeEvent } from 'react';
 
-import useStatePropBacked from '../../utils/useStatePropBacked';
+import useStatePropBacked from 'utils/useStatePropBacked';
+
+import './Checkbox.scss';
 
 interface CheckboxProps {
   label: string;

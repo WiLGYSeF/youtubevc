@@ -1,10 +1,8 @@
 import React, { ChangeEvent } from 'react';
 
-import YouTubePlayerControllerEntry, { ControlType } from '../../objects/YtpcEntry/YouTubePlayerControllerEntry';
-import EntryBuilder from '../../objects/YtpcEntry/EntryBuilder';
-import trimstr from '../../utils/trimstr';
-
-import '../../css/style.min.css';
+import EntryBuilder from 'objects/YtpcEntry/EntryBuilder';
+import YouTubePlayerControllerEntry, { ControlType } from 'objects/YtpcEntry/YouTubePlayerControllerEntry';
+import trimstr from 'utils/trimstr';
 
 interface Entry {
   controlType: ControlType,

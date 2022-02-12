@@ -1,9 +1,9 @@
 import { YouTubePlayer } from 'youtube-player/dist/types';
 
+import secondsToTimestamp from 'utils/secondsToTimestamp';
+import timestampToSeconds from 'utils/timestampToSeconds';
+import { mget } from 'utils/regexp-match-group';
 import YouTubePlayerControllerEntry, { ControlType } from './YouTubePlayerControllerEntry';
-import secondsToTimestamp from '../../utils/secondsToTimestamp';
-import timestampToSeconds from '../../utils/timestampToSeconds';
-import { mget } from '../../utils/regexp-match-group';
 
 export interface YtpcGotoState {
   gotoTime: number;
