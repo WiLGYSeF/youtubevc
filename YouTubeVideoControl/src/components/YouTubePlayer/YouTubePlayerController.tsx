@@ -2,21 +2,21 @@ import React, { useEffect, useState } from 'react';
 import { YouTubePlayer } from 'youtube-player/dist/types';
 import PlayerStates from 'youtube-player/dist/constants/PlayerStates';
 
-import YouTubePlayerControllerEntry, { ControlType } from '../../objects/YtpcEntry/YouTubePlayerControllerEntry';
-import { YouTubePlayer360 } from '../../objects/YtpcEntry/Ytpc360Entry';
-import YtpcLoopEntry from '../../objects/YtpcEntry/YtpcLoopEntry';
+import EntryBuilder from 'objects/YtpcEntry/EntryBuilder';
+import YouTubePlayerControllerEntry, { ControlType } from 'objects/YtpcEntry/YouTubePlayerControllerEntry';
+import { YouTubePlayer360 } from 'objects/YtpcEntry/Ytpc360Entry';
+import YtpcLoopEntry from 'objects/YtpcEntry/YtpcLoopEntry';
+import Coroutine from 'utils/coroutine';
+import useStatePropBacked from 'utils/useStatePropBacked';
 import YtpcClear from './YtpcClear';
 import YtpcCopyLink from './YtpcCopyLink';
 import YtpcEntryList from './YtpcEntryList';
 import YtpcExport, { ExportType } from './YtpcExport';
 import YtpcImport from './YtpcImport';
-import YtpcInput from './YtpcInput';
 import YtpcOptions from './YtpcOptions';
-import EntryBuilder from '../../objects/YtpcEntry/EntryBuilder';
-import Coroutine from '../../utils/coroutine';
-import useStatePropBacked from '../../utils/useStatePropBacked';
+import YtpcInput from './YtpcInput/YtpcInput';
 
-import '../../css/style.min.css';
+import './YouTubePlayerController.scss';
 
 interface YouTubePlayerControllerProps {
   ytPlayer?: YouTubePlayer;
@@ -86,7 +86,9 @@ function playerHas360Video(player: YouTubePlayer360): boolean {
 }
 
 function YouTubePlayerController(props: YouTubePlayerControllerProps) {
-  const [entries, setEntries] = useState<YouTubePlayerControllerEntry[]>([]);
+  const [entries, setEntries] = useState<YouTubePlayerControllerEntry[]>([
+    new YtpcLoopEntry(5, 1, 2),
+  ]);
   const [barIndex, setBarIndex] = useState(0);
   const [is360Video, setIs360Video] = useState(false);
   const [atTime, setAtTime] = useState(0);

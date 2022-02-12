@@ -1,7 +1,7 @@
 import React, { ChangeEvent, KeyboardEvent } from 'react';
 
-import coerceNumber from '../../utils/coerceNumber';
-import useStatePropBacked from '../../utils/useStatePropBacked';
+import coerceNumber from 'utils/coerceNumber';
+import useStatePropBacked from 'utils/useStatePropBacked';
 
 interface NumberInputProps {
   label?: string;

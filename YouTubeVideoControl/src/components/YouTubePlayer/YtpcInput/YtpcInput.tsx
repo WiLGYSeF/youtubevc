@@ -1,14 +1,14 @@
 import React, { useState } from 'react';
 import { YouTubePlayer } from 'youtube-player/dist/types';
 
-import { ControlType } from '../../objects/YtpcEntry/YouTubePlayerControllerEntry';
+import TimestampInput from 'components/common/TimestampInput';
+import { ControlType } from 'objects/YtpcEntry/YouTubePlayerControllerEntry';
+import useStatePropBacked from 'utils/useStatePropBacked';
 import YtpcControlSelect from './YtpcControlSelect';
-import YtpcAdd from './YtpcAdd';
+import YtpcAdd from '../YtpcAdd';
 import YtpcInputGoto from './YtpcInputGoto';
-import TimestampInput from '../common/TimestampInput';
-import useStatePropBacked from '../../utils/useStatePropBacked';
 
-import '../../css/style.min.css';
+import './YtpcInput.scss';
 
 interface YtpcInputProps {
   ytPlayer?: YouTubePlayer;

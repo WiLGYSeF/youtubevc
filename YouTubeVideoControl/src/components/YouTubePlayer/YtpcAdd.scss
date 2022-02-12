@@ -1,0 +1,13 @@
+.add {
+  background-color: #fff;
+  border: 1px solid #aaa;
+  border-radius: 4px;
+  color: #000;
+  height: 20px;
+  user-select: none;
+  width: 20px;
+
+  &:hover {
+    background-color: #ddd;
+  }
+}

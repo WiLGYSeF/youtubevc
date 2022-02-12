@@ -1,10 +1,10 @@
 import React from 'react';
 
-import YouTubePlayerControllerEntry from '../../objects/YtpcEntry/YouTubePlayerControllerEntry';
+import YouTubePlayerControllerEntry from 'objects/YtpcEntry/YouTubePlayerControllerEntry';
 import YtpcEntry from './YtpcEntry';
 import YtpcEntryBar from './YtpcEntryBar';
 
-import '../../css/style.min.css';
+import './YtpcEntryList.scss';
 
 interface YtpcEntryListProps {
   entries: YouTubePlayerControllerEntry[];

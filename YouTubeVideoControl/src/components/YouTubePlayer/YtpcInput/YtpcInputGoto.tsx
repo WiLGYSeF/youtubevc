@@ -1,12 +1,10 @@
 import React, { useEffect } from 'react';
 
+import TimestampInput from 'components/common/TimestampInput';
+import { YtpcGotoState } from 'objects/YtpcEntry/YtpcGotoEntry';
+import secondsToTimestamp from 'utils/secondsToTimestamp';
+import useStatePropBacked from 'utils/useStatePropBacked';
 import { YtpcControlInput } from './YtpcControlInput';
-import { YtpcGotoState } from '../../objects/YtpcEntry/YtpcGotoEntry';
-import TimestampInput from '../common/TimestampInput';
-import secondsToTimestamp from '../../utils/secondsToTimestamp';
-import useStatePropBacked from '../../utils/useStatePropBacked';
-
-import '../../css/style.min.css';
 
 function YtpcInputGoto(props: YtpcControlInput) {
   const pstate = props.state as YtpcGotoState;

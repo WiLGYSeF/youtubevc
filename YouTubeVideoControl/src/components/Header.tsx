@@ -1,6 +1,6 @@
 import React from 'react';
 
-import '../css/style.min.css';
+import './Header.scss';
 
 function Header() {
   return (

@@ -2,9 +2,9 @@ import React, {
   ChangeEvent, KeyboardEvent, useEffect, useState,
 } from 'react';
 
-import secondsToTimestamp from '../../utils/secondsToTimestamp';
-import timestampToSeconds from '../../utils/timestampToSeconds';
-import trimstr from '../../utils/trimstr';
+import secondsToTimestamp from 'utils/secondsToTimestamp';
+import timestampToSeconds from 'utils/timestampToSeconds';
+import trimstr from 'utils/trimstr';
 
 interface TimestampInputProps {
   value: number | string;

@@ -1,9 +1,7 @@
 import React from 'react';
 import copy from 'copy-to-clipboard';
 
-import YouTubePlayerControllerEntry from '../../objects/YtpcEntry/YouTubePlayerControllerEntry';
-
-import '../../css/style.min.css';
+import YouTubePlayerControllerEntry from 'objects/YtpcEntry/YouTubePlayerControllerEntry';
 
 interface YtpcCopyLinkProps {
   videoId: string | null,

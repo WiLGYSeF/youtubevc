@@ -1,9 +1,9 @@
 import { YouTubePlayer } from 'youtube-player/dist/types';
-import Coroutine, { MSEC_PER_SEC } from '../../utils/coroutine';
-import lerp from '../../utils/lerp';
-import { mget } from '../../utils/regexp-match-group';
-import timestampToSeconds from '../../utils/timestampToSeconds';
 
+import Coroutine, { MSEC_PER_SEC } from 'utils/coroutine';
+import lerp from 'utils/lerp';
+import { mget } from 'utils/regexp-match-group';
+import timestampToSeconds from 'utils/timestampToSeconds';
 import YouTubePlayerControllerEntry, { ControlType } from './YouTubePlayerControllerEntry';
 
 export interface YtpcVolumeState {

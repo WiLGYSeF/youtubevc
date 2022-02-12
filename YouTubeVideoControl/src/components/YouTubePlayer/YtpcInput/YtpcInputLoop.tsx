@@ -1,13 +1,13 @@
 import React, { useEffect } from 'react';
 
+import Checkbox from 'components/common/Checkbox';
+import NumberInput from 'components/common/NumberInput';
+import TimestampInput from 'components/common/TimestampInput';
+import { YtpcLoopState } from 'objects/YtpcEntry/YtpcLoopEntry';
+import useStatePropBacked from 'utils/useStatePropBacked';
 import { YtpcControlInput } from './YtpcControlInput';
-import { YtpcLoopState } from '../../objects/YtpcEntry/YtpcLoopEntry';
-import Checkbox from '../common/Checkbox';
-import NumberInput from '../common/NumberInput';
-import TimestampInput from '../common/TimestampInput';
-import useStatePropBacked from '../../utils/useStatePropBacked';
 
-import '../../css/style.min.css';
+import './YtpcInputLoop.scss';
 
 const LOOP_COUNT_DEFAULT = 1;
 
