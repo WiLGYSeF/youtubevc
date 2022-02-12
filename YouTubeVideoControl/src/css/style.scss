@@ -1,11 +1,27 @@
+@import 'yt-controller';
+
 html {
   height: 100%;
 }
 
 body {
   background-color: #2a2a2a;
+  color: #eee;
+  font-family: sans-serif;
+  font-size: 13px;
   height: 100%;
   margin: 0;
+}
+
+label.cpt-checkbox {
+  cursor: pointer;
+  margin-right: 4px;
+
+  input[type="checkbox"] {
+    cursor: pointer;
+    position: relative;
+    top: 2px;
+  }
 }
 
 .App {
@@ -13,7 +29,6 @@ body {
   flex-direction: column;
 
   .app-contents {
-
   }
 
   .header {
@@ -26,4 +41,8 @@ body {
     background-color: #181818;
     height: 40px;
   }
+}
+
+iframe[id="webpack-dev-server-client-overlay"] {
+  display: none;
 }

@@ -1,0 +1,134 @@
+@mixin entry-button {
+  background-color: #fff;
+  border: 1px solid #aaa;
+  border-radius: 4px;
+  color: #000;
+  height: 20px;
+  user-select: none;
+  width: 20px;
+
+  &:hover {
+    background-color: #ddd;
+  }
+}
+
+.yt-player {
+  text-align: center;
+  user-select: none;
+}
+
+.yt-controller {
+  display: flex;
+  padding: 10px;
+
+  .controls {
+    min-width: 450px;
+    padding: 4px;
+  }
+
+  .options {
+    min-width: 100px;
+    padding: 4px;
+  }
+
+  .padding {
+    flex: 1;
+    padding: 4px;
+  }
+
+  $color: #ddd;
+  $background-color: #444;
+  $border-color: #aaa;
+  $border-radius: 6px;
+
+  .entry-list {
+    background-color: $background-color;
+    border: 1px solid $border-color;
+    border-radius: $border-radius;
+    color: $color;
+    height: 200px;
+    overflow: auto;
+
+    .entry {
+      border: 1px solid #aaa;
+      display: flex;
+      height: 25px;
+      justify-content: space-between;
+      padding: 2px 4px;
+
+      .buttons {
+        display: flex;
+      }
+
+      .delete, .edit {
+        @include entry-button;
+      }
+    }
+
+    .entry-bar {
+      align-items: center;
+      background-color: #f00;
+      display: flex;
+      height: 2px;
+      width: 100%;
+
+      .arrow {
+        border: solid 6px;
+        height: 0;
+        width: 0;
+        border-color: transparent transparent transparent #f00;
+        z-index: 10;
+      }
+    }
+  }
+
+  .option-container {
+    border: 1px solid #aaa;
+    border-radius: 5px;
+    min-height: 45px;
+
+    .indent {
+      margin-left: 15px;
+    }
+  }
+
+  .add {
+    @include entry-button;
+  }
+
+  .clear {
+  }
+
+  .input {
+    @import 'ytpc/_.scss';
+    background-color: $background-color;
+    border: 1px solid $border-color;
+    border-radius: 8px;
+    color: $color;
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 5px;
+    min-height: 30px;
+    padding: 5px;
+
+    div {
+      display: inline;
+    }
+
+    input[type="range"] {
+      position: relative;
+      top: 3px;
+    }
+
+    select {
+      margin-right: 4px;
+    }
+
+    .entry-creation {
+      .now-time {
+        cursor: pointer;
+        padding: 0 2px;
+      }
+    }
+  }
+}

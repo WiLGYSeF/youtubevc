@@ -1,10 +1,12 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
+import {
+  BrowserRouter, Navigate, Route, Routes,
+} from 'react-router-dom';
 
 import App from './App';
 import Home from './routes/Home';
-import YouTubePlayer from './routes/YouTubePlayer';
+import YouTubePlayer from './routes/YouTubePlayerContainer';
 
 import reportWebVitals from './reportWebVitals';
 
@@ -14,15 +16,15 @@ ReactDOM.render(
   <React.StrictMode>
     <BrowserRouter>
       <Routes>
-        <Route path='/' element={<App />}>
-          <Route path='watch' element={<YouTubePlayer />} />
+        <Route path="/" element={<App />}>
+          <Route path="watch" element={<YouTubePlayer />} />
           <Route index element={<Home />} />
         </Route>
-        <Route path='*' element={<Navigate to='/' />} />
+        <Route path="*" element={<Navigate to="/" />} />
       </Routes>
     </BrowserRouter>
   </React.StrictMode>,
-  document.getElementById('root')
+  document.getElementById('root'),
 );
 
 // If you want to start measuring performance in your app, pass a function
