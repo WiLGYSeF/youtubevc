@@ -60,12 +60,12 @@ class YtpcVolumeEntry extends YouTubePlayerControllerEntry {
   }
 
   public static fromString(str: string): YtpcVolumeEntry | null {
-    const rs_num = String.raw`-?\d+(?:\.\d*)?`;
+    const rsNum = String.raw`-?\d+(?:\.\d*)?`;
     const regex = new RegExp([
       String.raw`^At (?<timestamp>${YouTubePlayerControllerEntry.REGEXSTR_TIMESTAMP}),`,
       String.raw` ${YtpcVolumeEntry.ACTION_STR}`,
-      String.raw` (?<volume>${rs_num})`,
-      String.raw`(?: during the next (?<lerp>${rs_num}) seconds)?`,
+      String.raw` (?<volume>${rsNum})`,
+      String.raw`(?: during the next (?<lerp>${rsNum}) seconds)?`,
       String.raw`$`,
     ].join(''));
 

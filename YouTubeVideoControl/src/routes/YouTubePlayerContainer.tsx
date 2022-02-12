@@ -13,12 +13,10 @@ function YouTubePlayerContainer() {
 
   const [searchParams] = useSearchParams();
 
-  let videoId = searchParams.get('v');
+  const videoId = searchParams.get('v');
   const entries = searchParams.get('entries');
-
-  if (!videoId) {
-    videoId = '_BSSJi-sHh8';
-  }
+  const loopShuffle = searchParams.get('loopShuffle');
+  const shuffleWeight = searchParams.get('shuffleWeight');
 
   const opts: Options = {
     playerVars: {
@@ -31,13 +29,18 @@ function YouTubePlayerContainer() {
       <div className="yt-player">
         <YouTube
           opts={opts}
-          videoId={videoId}
+          videoId={videoId ?? '_BSSJi-sHh8'}
           onReady={(e: { target: YouTubePlayer }) => {
             setYtPlayer(e.target);
           }}
         />
       </div>
-      <YouTubePlayerController ytPlayer={ytPlayer} entries={entries} />
+      <YouTubePlayerController
+        ytPlayer={ytPlayer}
+        entries={entries}
+        loopShuffle={Number(loopShuffle) > 0}
+        shuffleWeight={Number(shuffleWeight) > 0}
+      />
     </div>
   );
 }
