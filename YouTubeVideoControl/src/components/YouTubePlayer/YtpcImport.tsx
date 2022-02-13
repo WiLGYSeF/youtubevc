@@ -53,8 +53,7 @@ function tryImportText(
     const lines = data.split('\n');
 
     for (let line of lines) {
-      line = trimstr(trimstr(line, '\r'), ' ');
-
+      line = trimstr(line, '\r', ' ');
       const entry = EntryBuilder.fromString(line);
       if (entry) {
         addEntry(entries, entry);

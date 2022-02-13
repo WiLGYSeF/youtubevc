@@ -15,7 +15,7 @@ interface TimestampInputProps {
 const TIME_PLACEHOLDER = '00:00';
 
 function sanitizeTime(time: string): string {
-  return trimstr(trimstr(time, ':'), '.').replace(/::+/, ':');
+  return trimstr(time, ':', '.').replace(/::+/, ':');
 }
 
 function strToSeconds(str: string): number {
