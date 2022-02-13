@@ -1,7 +1,6 @@
 import { YouTubePlayer } from 'youtube-player/dist/types';
 
-import secondsToTimestamp from 'utils/secondsToTimestamp';
-import timestampToSeconds from 'utils/timestampToSeconds';
+import { secondsToTimestamp, timestampToSeconds } from 'utils/timestr';
 import { mget } from 'utils/regexp-match-group';
 import YouTubePlayerControllerEntry, { ControlType, YtpcEntryState } from './YouTubePlayerControllerEntry';
 

@@ -2,8 +2,7 @@ import React, {
   ChangeEvent, KeyboardEvent, useEffect, useState,
 } from 'react';
 
-import secondsToTimestamp from 'utils/secondsToTimestamp';
-import timestampToSeconds from 'utils/timestampToSeconds';
+import { secondsToTimestamp, timestampToSeconds } from 'utils/timestr';
 import trimstr from 'utils/trimstr';
 
 interface TimestampInputProps {

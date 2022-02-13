@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 
 import TimestampInput from 'components/common/TimestampInput';
 import { YtpcGotoState } from 'objects/YtpcEntry/YtpcGotoEntry';
-import secondsToTimestamp from 'utils/secondsToTimestamp';
+import { secondsToTimestamp } from 'utils/timestr';
 import useStatePropBacked from 'utils/useStatePropBacked';
 import { YtpcControlInput } from './YtpcControlInput';
 

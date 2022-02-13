@@ -1,6 +1,6 @@
 import { YouTubePlayer } from 'youtube-player/dist/types';
 
-import secondsToTimestamp from 'utils/secondsToTimestamp';
+import { secondsToTimestamp } from 'utils/timestr';
 
 export enum ControlType {
   ThreeSixty = '360',
