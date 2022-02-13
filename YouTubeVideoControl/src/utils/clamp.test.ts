@@ -8,9 +8,9 @@ describe('clamp', () => {
     [1, 1, 10, 1],
     [10, 1, 10, 10],
   ])(
-    'clamp %d between %d and %d',
+    'clamps %d between %d and %d',
     (x: number, a: number, b: number, expected: number) => {
-      expect(clamp(x, a, b)).toBe(expected);
+      expect(clamp(x, a, b)).toBeCloseTo(expected);
     },
   );
 
@@ -21,9 +21,9 @@ describe('clamp', () => {
     [0, 0],
     [1, 1],
   ])(
-    'clamp %d between 0 and 1',
+    'clamps %d between 0 and 1',
     (x: number, expected: number) => {
-      expect(clamp01(x)).toBe(expected);
+      expect(clamp01(x)).toBeCloseTo(expected);
     },
   );
 });
