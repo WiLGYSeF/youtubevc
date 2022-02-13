@@ -7,47 +7,75 @@ export interface TimeParts {
   days?: number;
 }
 
-export function secondsToTimeParts(seconds: number): TimeParts {
-  let sec = new Decimal(seconds);
-  const days = Math.floor(sec.div(24 * 60 * 60).toNumber());
-  sec = sec.mod(24 * 60 * 60);
-  const hours = Math.floor(sec.div(60 * 60).toNumber());
-  sec = sec.mod(60 * 60);
-  const minutes = Math.floor(sec.div(60).toNumber());
-  sec = sec.mod(60);
-
-  return {
-    seconds: sec.toNumber(),
-    minutes,
-    hours,
-    days,
-  };
+function matchgroupToSeconds(groups: { [key: string]: string }): number {
+  return Number(groups.day ?? 0) * 24 * 60 * 60
+    + Number(groups.hour ?? 0) * 60 * 60
+    + Number(groups.min ?? 0) * 60
+    + Number(groups.sec ?? 0);
 }
 
 function nlzstr(x: number): string {
   return (x >= 10 ? '' : '0') + x;
 }
 
-export function secondsToTimestamp(seconds: number): string {
+export function secondsToTimeParts(seconds: number): TimeParts {
+  let sec = new Decimal(seconds);
+
+  const isNeg = sec.isNegative();
+  sec = sec.abs();
+
+  const days = sec.dividedToIntegerBy(24 * 60 * 60);
+  sec = sec.mod(24 * 60 * 60);
+  const hours = sec.dividedToIntegerBy(60 * 60);
+  sec = sec.mod(60 * 60);
+  const minutes = sec.dividedToIntegerBy(60);
+  sec = sec.mod(60);
+
+  const toNum = (x: Decimal, isNeg: boolean) => (isNeg ? x.neg().toNumber() : x.toNumber());
+
+  return {
+    seconds: toNum(sec, isNeg),
+    minutes: toNum(minutes, isNeg),
+    hours: toNum(hours, isNeg),
+    days: toNum(days, isNeg),
+  };
+}
+
+export function secondsToTimePartList(seconds: number): number[] {
   const parts = secondsToTimeParts(seconds);
-  return `${[
-    parts.days, parts.hours,
-  ].map((p) => (p ? `${nlzstr(p)}:` : '')).join('')
-  }${nlzstr(parts.minutes ?? 0)}:${nlzstr(parts.seconds)}`;
+  const arr = [
+    parts.days ?? 0,
+    parts.hours ?? 0,
+    parts.minutes ?? 0,
+    parts.seconds,
+  ];
+
+  let idx = 0;
+  for (; idx < arr.length - 1 && arr[idx] === 0; idx += 1);
+  return arr.slice(idx);
+}
+
+export function secondsToTimestamp(seconds: number): string {
+  const parts = secondsToTimePartList(seconds);
+  if (parts.length === 1) {
+    parts.unshift(0);
+  }
+  return parts.map(nlzstr).join(':');
 }
 
 export function secondsToTimestring(seconds: number) {
-  const parts = secondsToTimeParts(seconds);
-  const times = [parts.days, parts.hours, parts.minutes, parts.seconds];
-  const labels = ['d', 'h', 'm', 's'];
+  const parts = secondsToTimePartList(seconds);
+
+  let labels = ['d', 'h', 'm', 's'];
+  labels = labels.slice(labels.length - parts.length);
 
   const arr = [];
-  for (let i = 0; i < times.length; i += 1) {
-    if (times[i]) {
-      arr.push((arr.length ? nlzstr(times[i] ?? 0) : times[i]) + labels[i]);
+  for (let i = 0; i < parts.length; i += 1) {
+    if (parts[i]) {
+      arr.push((arr.length ? nlzstr(parts[i]) : parts[i]) + labels[i]);
     }
   }
-  return arr.join(' ');
+  return arr.length ? arr.join(' ') : '0s';
 }
 
 export function timestampToSeconds(timestamp: string, hardMatch: boolean = false): number {
@@ -77,11 +105,4 @@ export function timestringToSeconds(timestring: string): number {
   }
 
   return matchgroupToSeconds(match.groups);
-}
-
-function matchgroupToSeconds(groups: { [key: string]: string }): number {
-  return Number(groups.day ?? 0) * 24 * 60 * 60
-    + Number(groups.hour ?? 0) * 60 * 60
-    + Number(groups.min ?? 0) * 60
-    + Number(groups.sec ?? 0);
 }
