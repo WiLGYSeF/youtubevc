@@ -30,10 +30,10 @@ function nlzstr(x: number): string {
 
 export function secondsToTimestamp(seconds: number): string {
   const parts = secondsToTimeParts(seconds);
-  return [
-    parts.days, parts.hours
-  ].map((p) => p ? `${nlzstr(p)}:` : '').join('')
-    + `${nlzstr(parts.minutes ?? 0)}:${nlzstr(parts.seconds)}`;
+  return `${[
+    parts.days, parts.hours,
+  ].map((p) => (p ? `${nlzstr(p)}:` : '')).join('')
+  }${nlzstr(parts.minutes ?? 0)}:${nlzstr(parts.seconds)}`;
 }
 
 export function secondsToTimestring(seconds: number) {
