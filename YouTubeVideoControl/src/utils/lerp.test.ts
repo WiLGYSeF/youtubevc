@@ -11,6 +11,6 @@ describe('lerp', () => {
     'lerps between %d and %d at %d',
     (a: number, b: number, t: number, expected: number) => {
       expect(lerp(a, b, t)).toBeCloseTo(expected);
-    }
+    },
   );
 });
