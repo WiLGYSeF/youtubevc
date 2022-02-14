@@ -38,6 +38,10 @@ class YtpcGotoEntry extends YouTubePlayerControllerEntry {
     return secondsToTimestamp(this.gotoTime);
   }
 
+  public static fromState(state: YtpcGotoState): YtpcGotoEntry {
+    return new YtpcGotoEntry(state.atTime, state.gotoTime);
+  }
+
   public static fromString(str: string): YtpcGotoEntry | null {
     const regex = new RegExp([
       String.raw`^At (?<timestamp>${YouTubePlayerControllerEntry.REGEXSTR_TIMESTAMP}),`,

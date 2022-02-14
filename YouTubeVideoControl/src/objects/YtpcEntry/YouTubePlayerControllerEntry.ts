@@ -34,7 +34,7 @@ abstract class YouTubePlayerControllerEntry {
   public getState(): YtpcEntryState {
     return {
       controlType: this.controlType,
-      atTime: this.atTime
+      atTime: this.atTime,
     };
   }
 
