@@ -4,7 +4,7 @@ class Coroutine {
   public callback: (timestamp: number) => void;
 
   public timeout: number;
-  public frequency: number;
+  public interval: number;
   public callbackLimit: number;
 
   private stopped: boolean;
@@ -16,13 +16,13 @@ class Coroutine {
   constructor(
     callback: (timestamp: number) => void,
     timeout?: number,
-    frequency?: number,
+    interval?: number,
     callbackLimit?: number,
   ) {
     this.callback = callback;
 
     this.timeout = timeout ?? -1;
-    this.frequency = frequency ?? -1;
+    this.interval = interval ?? -1;
     this.callbackLimit = callbackLimit ?? -1;
 
     this.stopped = false;
@@ -60,9 +60,9 @@ class Coroutine {
     if (
       (this.timeout < 0 || timestamp - this.startTime < this.timeout)
       && (
-        this.frequency < 0
+        this.interval < 0
         || this._lastCallbackTime < 0
-        || timestamp - this._lastCallbackTime >= this.frequency
+        || timestamp - this._lastCallbackTime >= this.interval
       )
       && (this.callbackLimit < 0 || this._callbackCount < this.callbackLimit)
       && !this.stopped

@@ -55,7 +55,7 @@ describe('coroutine', () => {
     raf.mockRestore();
   });
 
-  it('runs callback at frequency', () => {
+  it('runs callback at interval', () => {
     const raf = mockRequestAnimationFrame();
 
     const start = 1;
