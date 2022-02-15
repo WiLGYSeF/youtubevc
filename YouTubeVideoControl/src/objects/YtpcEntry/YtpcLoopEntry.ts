@@ -59,12 +59,16 @@ class YtpcLoopEntry extends YouTubePlayerControllerEntry {
     }`;
   }
 
+  public static fromState(state: YtpcLoopState): YtpcLoopEntry {
+    return new YtpcLoopEntry(state.atTime, state.loopBackTo, state.loopCount);
+  }
+
   public static fromString(str: string): YtpcLoopEntry | null {
     const regex = new RegExp([
       String.raw`^At (?<timestamp>${YouTubePlayerControllerEntry.REGEXSTR_TIMESTAMP}),`,
       String.raw` ${YtpcLoopEntry.ACTION_STR}`,
       String.raw` (?<loopBackTo>${YouTubePlayerControllerEntry.REGEXSTR_TIMESTAMP})`,
-      String.raw` (?:(?<loopCount>\d+) times?|forever)`,
+      String.raw`(?: (?<loopCount>\d+) times?| forever)?`,
       String.raw`$`,
     ].join(''));
 

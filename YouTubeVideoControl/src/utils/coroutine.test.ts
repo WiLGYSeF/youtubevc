@@ -1,9 +1,14 @@
 import Coroutine from './coroutine';
 
 describe('coroutine', () => {
-  const mockRequestAnimationFrame =
-    () => jest.spyOn(window, 'requestAnimationFrame')
-      .mockImplementation(() => 0);
+  const mockRequestAnimationFrame = () => jest.spyOn(window, 'requestAnimationFrame')
+    .mockImplementation(() => 0);
+
+  const doCallback = (routine: Coroutine, timestamp: number): void => {
+    // dot notation is not used because doCallback is private and causes an error in typescript
+    // eslint-disable-next-line @typescript-eslint/dot-notation
+    routine['doCallback'](timestamp);
+  };
 
   it('runs callback', () => {
     const raf = mockRequestAnimationFrame();
@@ -16,10 +21,10 @@ describe('coroutine', () => {
 
     routine.start();
     for (let time = start; time < total; time += 1) {
-      routine['doCallback'](time);
+      doCallback(routine, time);
     }
     routine.stop();
-    routine['doCallback'](total);
+    doCallback(routine, total);
 
     expect(func).toBeCalledTimes(total);
     expect(routine.startTime).toBe(start);
@@ -39,7 +44,7 @@ describe('coroutine', () => {
 
     routine.start();
     for (let time = start; time < timeout + 3; time += 1) {
-      routine['doCallback'](time);
+      doCallback(routine, time);
     }
     routine.stop();
 
@@ -61,7 +66,7 @@ describe('coroutine', () => {
 
     routine.start();
     for (let time = start; time < 10; time += 1) {
-      routine['doCallback'](time);
+      doCallback(routine, time);
     }
     routine.stop();
 
@@ -83,7 +88,7 @@ describe('coroutine', () => {
 
     routine.start();
     for (let time = start; time < 10; time += 1) {
-      routine['doCallback'](time);
+      doCallback(routine, time);
     }
     routine.stop();
 
@@ -106,7 +111,7 @@ describe('coroutine', () => {
 
     routine.start();
     for (let time = start; time < total; time += 1) {
-      routine['doCallback'](time);
+      doCallback(routine, time);
     }
     routine.stop();
 

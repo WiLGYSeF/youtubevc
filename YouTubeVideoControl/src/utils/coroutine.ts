@@ -17,7 +17,7 @@ class Coroutine {
     callback: (timestamp: number) => void,
     timeout?: number,
     frequency?: number,
-    callbackLimit?: number
+    callbackLimit?: number,
   ) {
     this.callback = callback;
 

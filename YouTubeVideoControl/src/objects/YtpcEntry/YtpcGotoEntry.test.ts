@@ -4,7 +4,7 @@ import { ControlType } from './YouTubePlayerControllerEntry';
 import YtpcGotoEntry, { YtpcGotoState } from './YtpcGotoEntry';
 
 describe('YtpcGotoEntry', () => {
-  it('performs the correct action', () => {
+  it('goto', () => {
     const entry = YtpcGotoEntry.fromState({
       atTime: 17,
       controlType: ControlType.Goto,

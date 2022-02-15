@@ -60,6 +60,10 @@ class YtpcVolumeEntry extends YouTubePlayerControllerEntry {
     return result;
   }
 
+  public static fromState(state: YtpcVolumeState): YtpcVolumeEntry {
+    return new YtpcVolumeEntry(state.atTime, state.volume, state.lerpSeconds);
+  }
+
   public static fromString(str: string): YtpcVolumeEntry | null {
     const rsNum = String.raw`-?\d+(?:\.\d*)?`;
     const regex = new RegExp([

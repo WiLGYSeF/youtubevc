@@ -38,6 +38,10 @@ class YtpcPlaybackRateEntry extends YouTubePlayerControllerEntry {
     return `x${this.playbackRate}`;
   }
 
+  public static fromState(state: YtpcPlaybackRateState): YtpcPlaybackRateEntry {
+    return new YtpcPlaybackRateEntry(state.atTime, state.playbackRate);
+  }
+
   public static fromString(str: string): YtpcPlaybackRateEntry | null {
     const regex = new RegExp([
       String.raw`^At (?<timestamp>${YouTubePlayerControllerEntry.REGEXSTR_TIMESTAMP}),`,
