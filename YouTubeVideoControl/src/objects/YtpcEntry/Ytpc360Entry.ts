@@ -2,7 +2,6 @@ import { YouTubePlayer } from 'youtube-player/dist/types';
 
 import Coroutine, { MSEC_PER_SEC } from 'utils/coroutine';
 import lerp from 'utils/lerp';
-import { mget } from 'utils/regexp-match-group';
 import { timestampToSeconds } from 'utils/timestr';
 import YouTubePlayerControllerEntry, { ControlType, YtpcEntryState } from './YouTubePlayerControllerEntry';
 
@@ -98,34 +97,38 @@ class Ytpc360Entry extends YouTubePlayerControllerEntry {
     return result;
   }
 
+  public static fromState(state: Ytpc360State): Ytpc360Entry {
+    return new Ytpc360Entry(state.atTime, state.sphereProps, state.lerpSeconds);
+  }
+
   public static fromString(str: string): Ytpc360Entry | null {
     const rsNum = String.raw`-?\d+(?:\.\d*)?`;
     const regex = new RegExp([
       String.raw`^At (?<timestamp>${YouTubePlayerControllerEntry.REGEXSTR_TIMESTAMP}),`,
       String.raw` ${Ytpc360Entry.ACTION_STR}`,
-      String.raw` yaw (?<yaw>${rsNum})`,
-      String.raw`, pitch (?<pitch>${rsNum})`,
-      String.raw`, roll (?<roll>${rsNum})`,
-      String.raw`, fov (?<fov>${rsNum})`,
+      String.raw`(?: yaw (?<yaw>${rsNum}))?`,
+      String.raw`(?:,? pitch (?<pitch>${rsNum}))?`,
+      String.raw`(?:,? roll (?<roll>${rsNum}))?`,
+      String.raw`(?:,? fov (?<fov>${rsNum}))?`,
       String.raw`(?: during the next (?<lerp>${rsNum}) seconds)?`,
       String.raw`$`,
     ].join(''));
 
     const match = str.match(regex);
-    if (!match) {
+    if (!match || !match.groups) {
       return null;
     }
 
     try {
       return new Ytpc360Entry(
-        timestampToSeconds(mget(match, 'timestamp')),
+        timestampToSeconds(match.groups.timestamp),
         {
-          yaw: Number(mget(match, 'yaw')),
-          pitch: Number(mget(match, 'pitch')),
-          roll: Number(mget(match, 'roll')),
-          fov: Number(mget(match, 'fov')),
+          yaw: Number(match.groups.yaw ?? this.YAW_DEFAULT),
+          pitch: Number(match.groups.pitch ?? this.PITCH_DEFAULT),
+          roll: Number(match.groups.roll ?? this.ROLL_DEFAULT),
+          fov: Number(match.groups.fov ?? this.FOV_DEFAULT),
         },
-        Number(match.groups ? match.groups.lerp ?? -1 : -1),
+        Number(match.groups.lerp ?? -1),
       );
     } catch {
       return null;

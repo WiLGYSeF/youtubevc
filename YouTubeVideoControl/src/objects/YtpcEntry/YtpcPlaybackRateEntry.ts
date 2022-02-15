@@ -1,6 +1,5 @@
 import { YouTubePlayer } from 'youtube-player/dist/types';
 
-import { mget } from 'utils/regexp-match-group';
 import { timestampToSeconds } from 'utils/timestr';
 import YouTubePlayerControllerEntry, { ControlType, YtpcEntryState } from './YouTubePlayerControllerEntry';
 
@@ -51,14 +50,14 @@ class YtpcPlaybackRateEntry extends YouTubePlayerControllerEntry {
     ].join(''));
 
     const match = str.match(regex);
-    if (!match) {
+    if (!match || !match.groups) {
       return null;
     }
 
     try {
       return new YtpcPlaybackRateEntry(
-        timestampToSeconds(mget(match, 'timestamp')),
-        Number(mget(match, 'rate')),
+        timestampToSeconds(match.groups.timestamp),
+        Number(match.groups.rate),
       );
     } catch {
       return null;

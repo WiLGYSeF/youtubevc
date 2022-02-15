@@ -1,7 +1,6 @@
 import { YouTubePlayer } from 'youtube-player/dist/types';
 
 import Coroutine, { MSEC_PER_SEC } from 'utils/coroutine';
-import { mget } from 'utils/regexp-match-group';
 import { secondsToTimestring, timestampToSeconds, timestringToSeconds } from 'utils/timestr';
 import YouTubePlayerControllerEntry, { ControlType, YtpcEntryState } from './YouTubePlayerControllerEntry';
 
@@ -29,7 +28,7 @@ class YtpcPauseEntry extends YouTubePlayerControllerEntry {
 
     const pauseTime = this.pauseTime * MSEC_PER_SEC;
     const routine = new Coroutine((timestamp: number) => {
-      if (timestamp - routine.startTime > pauseTime) {
+      if (timestamp - routine.startTime >= pauseTime) {
         ytPlayer.playVideo();
         routine.stop();
       }
@@ -48,6 +47,10 @@ class YtpcPauseEntry extends YouTubePlayerControllerEntry {
     return secondsToTimestring(this.pauseTime);
   }
 
+  public static fromState(state: YtpcPauseState): YtpcPauseEntry {
+    return new YtpcPauseEntry(state.atTime, state.pauseTime);
+  }
+
   public static fromString(str: string): YtpcPauseEntry | null {
     const regex = new RegExp([
       String.raw`^At (?<timestamp>${YouTubePlayerControllerEntry.REGEXSTR_TIMESTAMP}),`,
@@ -57,14 +60,14 @@ class YtpcPauseEntry extends YouTubePlayerControllerEntry {
     ].join(''));
 
     const match = str.match(regex);
-    if (!match) {
+    if (!match || !match.groups) {
       return null;
     }
 
     try {
       return new YtpcPauseEntry(
-        timestampToSeconds(mget(match, 'timestamp')),
-        timestringToSeconds(mget(match, 'timestring')),
+        timestampToSeconds(match.groups.timestamp),
+        timestringToSeconds(match.groups.timestring),
       );
     } catch {
       return null;

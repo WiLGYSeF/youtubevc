@@ -1,7 +1,6 @@
 import { YouTubePlayer } from 'youtube-player/dist/types';
 
 import { secondsToTimestamp, timestampToSeconds } from 'utils/timestr';
-import { mget } from 'utils/regexp-match-group';
 import YouTubePlayerControllerEntry, { ControlType, YtpcEntryState } from './YouTubePlayerControllerEntry';
 
 export interface YtpcGotoState extends YtpcEntryState {
@@ -51,14 +50,14 @@ class YtpcGotoEntry extends YouTubePlayerControllerEntry {
     ].join(''));
 
     const match = str.match(regex);
-    if (!match) {
+    if (!match || !match.groups) {
       return null;
     }
 
     try {
       return new YtpcGotoEntry(
-        timestampToSeconds(mget(match, 'timestamp')),
-        timestampToSeconds(mget(match, 'goto')),
+        timestampToSeconds(match.groups.timestamp),
+        timestampToSeconds(match.groups.goto),
       );
     } catch {
       return null;
