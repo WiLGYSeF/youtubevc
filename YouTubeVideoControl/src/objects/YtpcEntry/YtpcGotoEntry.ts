@@ -22,7 +22,7 @@ class YtpcGotoEntry extends YouTubePlayerControllerEntry {
     return YtpcGotoEntry.ACTION_STR;
   }
 
-  public performAction(ytPlayer: YouTubePlayer, currentTime: number): void {
+  public performAction(ytPlayer: YouTubePlayer): void {
     ytPlayer.seekTo(this.gotoTime, true);
   }
 

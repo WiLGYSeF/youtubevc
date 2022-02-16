@@ -8,34 +8,31 @@ import YtpcVolumeEntry, { YtpcVolumeState } from './YtpcVolumeEntry';
 
 class EntryBuilder {
   static buildEntry(state: YtpcEntryState): YouTubePlayerControllerEntry {
+    let entry: YouTubePlayerControllerEntry;
     switch (state.controlType) {
-      case ControlType.Goto: {
-        const yest: YtpcGotoState = state as YtpcGotoState;
-        return new YtpcGotoEntry(state.atTime, yest.gotoTime);
-      }
-      case ControlType.Loop: {
-        const yest: YtpcLoopState = state as YtpcLoopState;
-        return new YtpcLoopEntry(state.atTime, yest.loopBackTo, yest.loopCount);
-      }
-      case ControlType.Pause: {
-        const yest: YtpcPauseState = state as YtpcPauseState;
-        return new YtpcPauseEntry(state.atTime, yest.pauseTime);
-      }
-      case ControlType.PlaybackRate: {
-        const yest: YtpcPlaybackRateState = state as YtpcPlaybackRateState;
-        return new YtpcPlaybackRateEntry(state.atTime, yest.playbackRate);
-      }
-      case ControlType.ThreeSixty: {
-        const yest: Ytpc360State = state as Ytpc360State;
-        return new Ytpc360Entry(state.atTime, yest.sphereProps, yest.lerpSeconds);
-      }
-      case ControlType.Volume: {
-        const yest: YtpcVolumeState = state as YtpcVolumeState;
-        return new YtpcVolumeEntry(state.atTime, yest.volume, yest.lerpSeconds);
-      }
+      case ControlType.Goto:
+        entry = YtpcGotoEntry.fromState(state as YtpcGotoState);
+        break;
+      case ControlType.Loop:
+        entry = YtpcLoopEntry.fromState(state as YtpcLoopState);
+        break;
+      case ControlType.Pause:
+        entry = YtpcPauseEntry.fromState(state as YtpcPauseState);
+        break;
+      case ControlType.PlaybackRate:
+        entry = YtpcPlaybackRateEntry.fromState(state as YtpcPlaybackRateState);
+        break;
+      case ControlType.ThreeSixty:
+        entry = Ytpc360Entry.fromState(state as Ytpc360State);
+        break;
+      case ControlType.Volume:
+        entry = YtpcVolumeEntry.fromState(state as YtpcVolumeState);
+        break;
       default:
         throw new Error('unknown entry type');
     }
+
+    return entry;
   }
 
   static fromString(str: string): YouTubePlayerControllerEntry | null {

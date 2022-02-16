@@ -31,13 +31,13 @@ export function secondsToTimeParts(seconds: number): TimeParts {
   const minutes = sec.dividedToIntegerBy(60);
   sec = sec.mod(60);
 
-  const toNum = (x: Decimal, isNeg: boolean) => (isNeg ? x.neg().toNumber() : x.toNumber());
+  const toNum = (x: Decimal) => (isNeg ? x.neg().toNumber() : x.toNumber());
 
   return {
-    seconds: toNum(sec, isNeg),
-    minutes: toNum(minutes, isNeg),
-    hours: toNum(hours, isNeg),
-    days: toNum(days, isNeg),
+    seconds: toNum(sec),
+    minutes: toNum(minutes),
+    hours: toNum(hours),
+    days: toNum(days),
   };
 }
 

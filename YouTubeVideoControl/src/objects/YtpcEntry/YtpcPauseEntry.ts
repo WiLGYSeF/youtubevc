@@ -23,7 +23,7 @@ class YtpcPauseEntry extends YouTubePlayerControllerEntry {
     return YtpcPauseEntry.ACTION_STR;
   }
 
-  public performAction(ytPlayer: YouTubePlayer, currentTime: number): void {
+  public performAction(ytPlayer: YouTubePlayer): void {
     ytPlayer.pauseVideo();
 
     const pauseTime = this.pauseTime * MSEC_PER_SEC;

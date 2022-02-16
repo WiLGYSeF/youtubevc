@@ -49,7 +49,7 @@ describe('YtpcVolumeEntry', () => {
     // find the coroutine instance from the mocked call
     const routine = startMock.mock.instances[0] as unknown as Coroutine;
     // pretend half the time has passed
-    routine.callback(entry.lerpSeconds / 2 * 1000);
+    routine.callback((entry.lerpSeconds / 2) * 1000);
 
     const lastCallVolume = setVolume.mock.calls[0][0];
     expect(Math.round(lastCallVolume))

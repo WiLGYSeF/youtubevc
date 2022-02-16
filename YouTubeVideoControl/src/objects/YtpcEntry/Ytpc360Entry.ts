@@ -56,7 +56,7 @@ class Ytpc360Entry extends YouTubePlayerControllerEntry {
     return Ytpc360Entry.ACTION_STR;
   }
 
-  public performAction(ytPlayer: YouTubePlayer360, currentTime: number): void {
+  public performAction(ytPlayer: YouTubePlayer360): void {
     if (this.lerpSeconds > 0) {
       const props = ytPlayer.getSphericalProperties();
       if (Object.keys(props).length) {

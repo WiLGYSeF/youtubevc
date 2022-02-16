@@ -22,7 +22,7 @@ class YtpcPlaybackRateEntry extends YouTubePlayerControllerEntry {
     return YtpcPlaybackRateEntry.ACTION_STR;
   }
 
-  public performAction(ytPlayer: YouTubePlayer, currentTime: number): void {
+  public performAction(ytPlayer: YouTubePlayer): void {
     ytPlayer.setPlaybackRate(this.playbackRate);
   }
 

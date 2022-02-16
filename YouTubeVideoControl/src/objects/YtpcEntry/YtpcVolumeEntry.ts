@@ -27,7 +27,7 @@ class YtpcVolumeEntry extends YouTubePlayerControllerEntry {
     return YtpcVolumeEntry.ACTION_STR;
   }
 
-  public performAction(ytPlayer: YouTubePlayer, currentTime: number): void {
+  public performAction(ytPlayer: YouTubePlayer): void {
     if (this.lerpSeconds > 0) {
       const vol = ytPlayer.getVolume();
       const lerpMs = this.lerpSeconds * MSEC_PER_SEC;
