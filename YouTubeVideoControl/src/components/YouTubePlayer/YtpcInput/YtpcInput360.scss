@@ -1,5 +1,5 @@
 .three-sixty {
-  input[type="number"] {
+  input:not([type]), input[type="text"] {
     width: 40px;
   }
 }

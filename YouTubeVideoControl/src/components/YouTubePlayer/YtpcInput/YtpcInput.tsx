@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { YouTubePlayer } from 'youtube-player/dist/types';
 
-import TimestampInput from 'components/common/TimestampInput';
+import TimestampInput from 'components/common/TimestampInput/TimestampInput';
 import { ControlType, YtpcEntryState } from 'objects/YtpcEntry/YouTubePlayerControllerEntry';
 import YtpcAdd from '../YtpcAdd';
 import YtpcControlSelect from './YtpcControlSelect';

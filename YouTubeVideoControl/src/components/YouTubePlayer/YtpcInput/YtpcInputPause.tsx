@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 
-import TimestampInput from 'components/common/TimestampInput';
+import TimestampInput from 'components/common/TimestampInput/TimestampInput';
 import { YtpcPauseState } from 'objects/YtpcEntry/YtpcPauseEntry';
 import useStatePropBacked from 'utils/useStatePropBacked';
 import { YtpcControlInput } from './YtpcControlInput';

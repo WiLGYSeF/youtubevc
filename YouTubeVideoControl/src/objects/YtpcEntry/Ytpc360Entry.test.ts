@@ -1,5 +1,3 @@
-import { YouTubePlayer } from 'youtube-player/dist/types';
-
 import { ControlType } from './YouTubePlayerControllerEntry';
 import Ytpc360Entry, { SphericalProperties, YouTubePlayer360, Ytpc360State } from './Ytpc360Entry';
 import Coroutine from '../../utils/coroutine';
@@ -30,7 +28,7 @@ describe('Ytpc360Entry', () => {
       setSphericalProperties,
     }));
 
-    entry.performAction(ytPlayer() as unknown as YouTubePlayer360, 0);
+    entry.performAction(ytPlayer() as unknown as YouTubePlayer360);
 
     expect(setSphericalProperties).lastCalledWith(entry.sphereProps);
   });
@@ -67,7 +65,7 @@ describe('Ytpc360Entry', () => {
       setSphericalProperties,
     }));
 
-    entry.performAction(ytPlayer() as unknown as YouTubePlayer360, 0);
+    entry.performAction(ytPlayer() as unknown as YouTubePlayer360);
 
     // find the coroutine instance from the mocked call
     const routine = startMock.mock.instances[0] as unknown as Coroutine;

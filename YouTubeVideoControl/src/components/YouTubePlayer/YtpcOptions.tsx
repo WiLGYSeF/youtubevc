@@ -1,6 +1,6 @@
 import React from 'react';
 
-import Checkbox from 'components/common/Checkbox';
+import Checkbox from 'components/common/Checkbox/Checkbox';
 
 import './YtpcOptions.scss';
 

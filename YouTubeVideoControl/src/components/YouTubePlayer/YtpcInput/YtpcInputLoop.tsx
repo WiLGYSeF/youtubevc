@@ -1,8 +1,8 @@
 import React, { useEffect } from 'react';
 
-import Checkbox from 'components/common/Checkbox';
-import NumberInput from 'components/common/NumberInput';
-import TimestampInput from 'components/common/TimestampInput';
+import Checkbox from 'components/common/Checkbox/Checkbox';
+import NumberInput from 'components/common/NumberInput/NumberInput';
+import TimestampInput from 'components/common/TimestampInput/TimestampInput';
 import { YtpcLoopState } from 'objects/YtpcEntry/YtpcLoopEntry';
 import useStatePropBacked from 'utils/useStatePropBacked';
 import { YtpcControlInput } from './YtpcControlInput';

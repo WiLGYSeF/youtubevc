@@ -1,5 +1,5 @@
 import EntryBuilder from './EntryBuilder';
-import YouTubePlayerControllerEntry, { ControlType, YtpcEntryState } from './YouTubePlayerControllerEntry';
+import { ControlType, YtpcEntryState } from './YouTubePlayerControllerEntry';
 import Ytpc360Entry from './Ytpc360Entry';
 import YtpcGotoEntry from './YtpcGotoEntry';
 import YtpcLoopEntry from './YtpcLoopEntry';

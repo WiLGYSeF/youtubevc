@@ -10,6 +10,9 @@ export default function coerceNumber(
   doClamp?: boolean,
 ): number {
   let num = value;
+  if (Number.isNaN(num)) {
+    return num;
+  }
 
   if (doClamp) {
     if (minValue !== undefined && maxValue === undefined) {

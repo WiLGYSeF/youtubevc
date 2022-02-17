@@ -21,7 +21,7 @@ describe('YtpcPauseEntry', () => {
       playVideo,
     }));
 
-    entry.performAction(ytPlayer() as unknown as YouTubePlayer, 0);
+    entry.performAction(ytPlayer() as unknown as YouTubePlayer);
 
     // find the coroutine instance from the mocked call
     const routine = startMock.mock.instances[0] as unknown as Coroutine;

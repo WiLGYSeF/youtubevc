@@ -1,7 +1,7 @@
 import React, { ChangeEvent, useEffect } from 'react';
 
-import Checkbox from 'components/common/Checkbox';
-import NumberInput from 'components/common/NumberInput';
+import Checkbox from 'components/common/Checkbox/Checkbox';
+import NumberInput from 'components/common/NumberInput/NumberInput';
 import { YtpcVolumeState } from 'objects/YtpcEntry/YtpcVolumeEntry';
 import useStatePropBacked from 'utils/useStatePropBacked';
 import { YtpcControlInput } from './YtpcControlInput';

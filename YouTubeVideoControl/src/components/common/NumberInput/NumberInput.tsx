@@ -18,6 +18,9 @@ interface NumberInputProps {
   onChange(value: number): void;
 }
 
+const NUMBER_REGEX = /^-?\d*\.\d*$/;
+const NONDIGIT_REGEX = /[^\d.-]/g;
+
 function NumberInput(props: NumberInputProps) {
   const [number, setNumber] = useStatePropBacked(props.value);
   const [value, setValue] = useStatePropBacked(props.value.toString());
@@ -46,15 +49,17 @@ function NumberInput(props: NumberInputProps) {
   };
 
   return (
-    <label data-label-right={labelRight}>
+    <label data-testid="number-input" data-label-right={labelRight}>
       {!labelRight && eLabel}
       <input
-        type="number"
         min={props.minValue} max={props.maxValue} step={step ?? 'any'}
         value={value}
         onChange={(e: ChangeEvent<HTMLInputElement>) => {
+          const sanitized = e.target.value.replace(NONDIGIT_REGEX, '');
+          const val = Number(sanitized);
+
           const num = coerceNumber(
-            Number(e.target.value),
+            val,
             props.minValue,
             props.maxValue,
             step,
@@ -63,7 +68,7 @@ function NumberInput(props: NumberInputProps) {
 
           props.onChange(num);
           setNumber(num);
-          setValue(e.target.value);
+          setValue(sanitized);
         }}
         onBlur={doForceValue}
         onKeyUp={(e: KeyboardEvent<HTMLInputElement>) => {

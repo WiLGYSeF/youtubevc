@@ -18,7 +18,7 @@ describe('YtpcVolumeEntry', () => {
       setVolume,
     }));
 
-    entry.performAction(ytPlayer() as unknown as YouTubePlayer, 0);
+    entry.performAction(ytPlayer() as unknown as YouTubePlayer);
 
     expect(setVolume).toBeCalledTimes(1);
     expect(setVolume).lastCalledWith(entry.volume);
@@ -44,7 +44,7 @@ describe('YtpcVolumeEntry', () => {
       setVolume,
     }));
 
-    entry.performAction(ytPlayer() as unknown as YouTubePlayer, 0);
+    entry.performAction(ytPlayer() as unknown as YouTubePlayer);
 
     // find the coroutine instance from the mocked call
     const routine = startMock.mock.instances[0] as unknown as Coroutine;

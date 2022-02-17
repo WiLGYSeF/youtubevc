@@ -2,6 +2,7 @@ import coerceNumber from './coerceNumber';
 
 describe('coerceNumber', () => {
   it.each([
+    [NaN, 1, 10, NaN],
     [3, 1, 10, 3],
     [0, 1, 10, 1],
     [17, 1, 10, 10],
@@ -10,7 +11,11 @@ describe('coerceNumber', () => {
   ])(
     'coerce clamps %d between %d and %d',
     (x: number, min: number, max: number, expected: number) => {
-      expect(coerceNumber(x, min, max, undefined, true)).toBeCloseTo(expected);
+      if (!Number.isNaN(x)) {
+        expect(coerceNumber(x, min, max, undefined, true)).toBeCloseTo(expected);
+      } else {
+        expect(coerceNumber(x, min, max, undefined, true)).toEqual(NaN);
+      }
     },
   );
 

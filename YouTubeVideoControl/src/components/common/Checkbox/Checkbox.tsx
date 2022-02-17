@@ -1,4 +1,4 @@
-import React, { ChangeEvent } from 'react';
+import React, { ChangeEvent, useState } from 'react';
 
 import useStatePropBacked from 'utils/useStatePropBacked';
 
@@ -12,11 +12,15 @@ interface CheckboxProps {
   onChange(checked: boolean): void;
 }
 
+// exported for mocking
+export function getIdInternal(): string {
+  return `checkbox-${Math.random().toString(36).substring(2)}`;
+}
+
 function Checkbox(props: CheckboxProps) {
   const labelLeft = props.labelLeft ?? false;
   const [checked, setChecked] = useStatePropBacked(props.checked ?? false);
-
-  const inputIdInternal = `checkbox-${Math.random().toString(36).substring(2)}`;
+  const [inputIdInternal] = useState(getIdInternal());
 
   const eLabel = (<span>{props.label}</span>);
 

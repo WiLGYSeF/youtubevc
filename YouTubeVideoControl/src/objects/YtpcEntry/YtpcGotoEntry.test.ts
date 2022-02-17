@@ -16,7 +16,7 @@ describe('YtpcGotoEntry', () => {
       seekTo,
     }));
 
-    entry.performAction(ytPlayer() as unknown as YouTubePlayer, 0);
+    entry.performAction(ytPlayer() as unknown as YouTubePlayer);
 
     expect(seekTo).toBeCalledTimes(1);
     expect(seekTo).lastCalledWith(entry.gotoTime, true);

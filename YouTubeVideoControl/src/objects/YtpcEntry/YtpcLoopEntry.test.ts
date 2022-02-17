@@ -17,7 +17,7 @@ describe('YtpcLoopEntry', () => {
       seekTo,
     }));
 
-    entry.performAction(ytPlayer() as unknown as YouTubePlayer, 0);
+    entry.performAction(ytPlayer() as unknown as YouTubePlayer);
 
     expect(seekTo).toBeCalledTimes(1);
     expect(seekTo).lastCalledWith(entry.loopBackTo, true);
@@ -37,7 +37,7 @@ describe('YtpcLoopEntry', () => {
     }));
 
     for (let i = 0; i < entry.loopCount + 2; i += 1) {
-      entry.performAction(ytPlayer() as unknown as YouTubePlayer, 0);
+      entry.performAction(ytPlayer() as unknown as YouTubePlayer);
     }
 
     expect(seekTo).toBeCalledTimes(entry.loopCount);

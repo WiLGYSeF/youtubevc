@@ -1,0 +1,37 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`NumberInput renders label 1`] = `
+<label
+  data-label-right={false}
+  data-testid="number-input"
+>
+  <span>
+    test label
+  </span>
+  <input
+    onBlur={[Function]}
+    onChange={[Function]}
+    onKeyUp={[Function]}
+    step={1}
+    value="0"
+  />
+</label>
+`;
+
+exports[`NumberInput renders label on right 1`] = `
+<label
+  data-label-right={true}
+  data-testid="number-input"
+>
+  <input
+    onBlur={[Function]}
+    onChange={[Function]}
+    onKeyUp={[Function]}
+    step={1}
+    value="0"
+  />
+  <span>
+    test label
+  </span>
+</label>
+`;

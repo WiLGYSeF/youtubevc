@@ -16,7 +16,7 @@ describe('YtpcPlaybackRateEntry', () => {
       setPlaybackRate,
     }));
 
-    entry.performAction(ytPlayer() as unknown as YouTubePlayer, 0);
+    entry.performAction(ytPlayer() as unknown as YouTubePlayer);
 
     expect(setPlaybackRate).toBeCalledTimes(1);
     expect(setPlaybackRate).lastCalledWith(entry.playbackRate);

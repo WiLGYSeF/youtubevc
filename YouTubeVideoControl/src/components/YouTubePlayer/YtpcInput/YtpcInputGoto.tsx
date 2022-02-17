@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 
-import TimestampInput from 'components/common/TimestampInput';
+import TimestampInput from 'components/common/TimestampInput/TimestampInput';
 import { YtpcGotoState } from 'objects/YtpcEntry/YtpcGotoEntry';
 import { secondsToTimestamp } from 'utils/timestr';
 import useStatePropBacked from 'utils/useStatePropBacked';

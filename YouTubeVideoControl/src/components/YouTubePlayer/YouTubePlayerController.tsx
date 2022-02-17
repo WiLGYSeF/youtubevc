@@ -93,7 +93,7 @@ function YouTubePlayerController(props: YouTubePlayerControllerProps) {
   const [is360Video, setIs360Video] = useState(false);
   const [entryState, setEntryState] = useState<YtpcEntryState>({
     atTime: 0,
-    controlType: ControlType.Goto
+    controlType: ControlType.Goto,
   });
   const [useLoopShuffle, setLoopShuffle] = useStatePropBacked(props.loopShuffle);
   const [useLoopCountForWeights, setUseLoopCountForWeights] = useStatePropBacked(props.shuffleWeight);
@@ -200,7 +200,8 @@ function YouTubePlayerController(props: YouTubePlayerControllerProps) {
         <div>
           <YtpcClear clearEntries={() => {
             setEntries([]);
-          }} />
+          }}
+          />
           <YtpcImport addEntry={addEntry} setEntries={setEntries} />
           <YtpcExport
             filename={`youtubevc-${getVideoIdByUrl(props.ytPlayer?.getVideoUrl() ?? '')}.txt`}
