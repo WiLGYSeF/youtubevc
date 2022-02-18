@@ -79,7 +79,9 @@ describe('NumberInput', () => {
       const input = container.getElementsByTagName('input')[0];
 
       expect(input.value).toEqual(testValue.toString());
+
       userEvent.clear(input);
+      testFn.mockClear();
 
       for (let i = 0; i < inputStr.length; i += 1) {
         userEvent.keyboard(inputStr[i]);
@@ -91,8 +93,7 @@ describe('NumberInput', () => {
       expect(input.value).toEqual(expectedStr);
       expect(testValue).toBe(expected[expected.length - 1]);
 
-      // remove 0 called during init
-      expect(testFn.mock.calls.map((x) => x[0]).slice(1)).toEqual(expected);
+      expect(testFn.mock.calls.map((x) => x[0])).toEqual(expected);
     },
   );
 

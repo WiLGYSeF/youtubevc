@@ -1,0 +1,21 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`TimestampInput renders with string input 1`] = `
+<span
+  className="timestamp"
+>
+  <input
+    onBlur={[Function]}
+    onChange={[Function]}
+    onFocus={[Function]}
+    onKeyUp={[Function]}
+    placeholder="00:00"
+    style={
+      Object {
+        "width": "5ch",
+      }
+    }
+    value="27:51"
+  />
+</span>
+`;

@@ -4,11 +4,6 @@ import { render } from '@testing-library/react';
 
 import Checkbox from './Checkbox';
 
-function mockGetIdInternal(): jest.SpyInstance {
-  return jest.spyOn(Checkbox.prototype, 'getIdInternal')
-    .mockImplementation(() => 'checkbox-test');
-}
-
 describe('Checkbox', () => {
   let getIdInternalMock: jest.SpyInstance;
 

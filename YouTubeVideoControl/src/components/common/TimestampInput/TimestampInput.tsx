@@ -42,16 +42,31 @@ function TimestampInput(props: TimestampInputProps) {
   const [isFocused, setFocused] = useState(false);
 
   useEffect(() => {
-    if (!isFocused) {
-      setInput(getInput());
-      setTime(getTime());
+    const updatedInput = getInput();
+    const updatedTime = getTime();
+
+    if (props.setInput) {
+      props.setInput(updatedInput);
     }
-  }, [value, isFocused]);
+    setInput(updatedInput);
+    props.onChange(updatedTime);
+    setTime(updatedTime);
+  }, [value]);
+
+  useEffect(() => {
+    if (!isFocused) {
+      const newInput = secondsToTimestamp(time);
+      if (props.setInput) {
+        props.setInput(newInput);
+      }
+      setInput(newInput);
+    }
+  }, [isFocused]);
 
   const onInputChange = (e: ChangeEvent<HTMLInputElement>) => {
     const val = e.target.value;
 
-    if (/^(\d?\d?:){0,3}\d?\d?(\.\d*)?$/.test(val)) {
+    if (/^(\d{0,2}:){0,3}\d{0,2}(\.\d*)?$/.test(val)) {
       if (props.setInput) {
         props.setInput(val);
       }

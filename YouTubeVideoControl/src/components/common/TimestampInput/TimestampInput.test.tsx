@@ -1,0 +1,93 @@
+import React from 'react';
+import renderer from 'react-test-renderer';
+import { fireEvent, render } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
+
+import TimestampInput from './TimestampInput';
+
+describe('TimestampInput', () => {
+  it('renders with string input', () => {
+    const component = renderer.create(<TimestampInput
+      value="27:51"
+      onChange={() => {}}
+    />);
+    const tree = component.toJSON();
+    expect(tree).toMatchSnapshot();
+  });
+
+  it('renders with number input', () => {
+    const { container } = render(<TimestampInput
+      value={3607}
+      onChange={() => {}}
+    />);
+
+    const input = container.getElementsByTagName('input')[0];
+    expect(input.value).toEqual('01:00:07');
+  });
+
+  it.each([
+    ['1:39', [1, 1, 60 + 3, 60 + 39], ['1', '1:', '1:3', '1:39', '01:39']],
+    ['0:71', [0, 0, 7, 71], ['0', '0:', '0:7', '0:71', '01:11']],
+  ])(
+    'inputs "%s"',
+    (inputStr: string, expected: number[], expectedStr: string[]) => {
+      let testValue = 0;
+      let testInput = '';
+      const testChangeFn = jest.fn();
+      const testInputFn = jest.fn();
+
+      const { container } = render(<TimestampInput
+        value={0}
+        onChange={(value: number) => {
+          testValue = value;
+          testChangeFn(value);
+        }}
+        setInput={(value: string) => {
+          testInput = value;
+          testInputFn(value);
+        }}
+      />);
+
+      const input = container.getElementsByTagName('input')[0];
+
+      userEvent.clear(input);
+
+      testChangeFn.mockClear();
+      testInputFn.mockClear();
+
+      for (let i = 0; i < inputStr.length; i += 1) {
+        userEvent.keyboard(inputStr[i]);
+        expect(testValue).toEqual(expected[i]);
+      }
+
+      fireEvent.blur(input);
+
+      expect(testChangeFn.mock.calls.map((x) => x[0])).toEqual(expected);
+      expect(testInputFn.mock.calls.map((x) => x[0])).toEqual(expectedStr);
+    },
+  );
+
+  it('forces update on enter', () => {
+    const testFn = jest.fn();
+
+    const { container } = render(<TimestampInput
+      value="0:71"
+      onChange={() => {}}
+      setInput={testFn}
+    />);
+
+    const input = container.getElementsByTagName('input')[0];
+
+    expect(input.value).toEqual('01:11');
+
+    userEvent.clear(input);
+    userEvent.type(input, '00:03{enter}');
+    expect(input.value).toEqual('00:03');
+
+    userEvent.clear(input);
+    testFn.mockClear();
+    userEvent.type(input, '15{enter}');
+    expect(input.value).toEqual('00:15');
+    expect(testFn.mock.calls.map((x) => x[0])).toEqual(['1', '15', '00:15']);
+  });
+});
