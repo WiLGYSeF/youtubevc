@@ -1,0 +1,77 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`YtpcEntryList renders entries 1`] = `
+<div
+  className="entry-list"
+>
+  <div
+    className="entry"
+  >
+    <span>
+      At 00:00, go to 00:00
+    </span>
+    <div
+      className="buttons"
+    >
+      <div
+        className="edit"
+        onClick={[Function]}
+      >
+        e
+      </div>
+      <div
+        className="delete"
+        onClick={[Function]}
+      >
+        x
+      </div>
+    </div>
+  </div>
+  <div
+    className="entry"
+  >
+    <span>
+      At 00:05, go to 00:00
+    </span>
+    <div
+      className="buttons"
+    >
+      <div
+        className="edit"
+        onClick={[Function]}
+      >
+        e
+      </div>
+      <div
+        className="delete"
+        onClick={[Function]}
+      >
+        x
+      </div>
+    </div>
+  </div>
+  <div
+    className="entry"
+  >
+    <span>
+      At 00:08, go to 00:00
+    </span>
+    <div
+      className="buttons"
+    >
+      <div
+        className="edit"
+        onClick={[Function]}
+      >
+        e
+      </div>
+      <div
+        className="delete"
+        onClick={[Function]}
+      >
+        x
+      </div>
+    </div>
+  </div>
+</div>
+`;

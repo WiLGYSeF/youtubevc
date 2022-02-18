@@ -8,7 +8,7 @@ import './YtpcEntryList.scss';
 
 interface YtpcEntryListProps {
   entries: YouTubePlayerControllerEntry[];
-  barIndex: number;
+  barIndex?: number;
   deleteEntry(entry: YouTubePlayerControllerEntry): void;
   editEntry(entry: YouTubePlayerControllerEntry): void;
 }
@@ -23,12 +23,14 @@ function YtpcEntryList(props: YtpcEntryListProps) {
     />
   ));
 
-  elements.splice(
-    props.barIndex,
-    0, (
-      <YtpcEntryBar key="entrybar" />
-    ),
-  );
+  if (props.barIndex !== undefined) {
+    elements.splice(
+      props.barIndex,
+      0, (
+        <YtpcEntryBar key="entrybar" />
+      ),
+    );
+  }
 
   return (
     <div className="entry-list">
