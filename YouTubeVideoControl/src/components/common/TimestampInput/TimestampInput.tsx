@@ -28,10 +28,9 @@ function getWidth(str: string): string {
 
 function TimestampInput(props: TimestampInputProps) {
   const value = props.value ?? '';
-  const getInput = () => (typeof value === 'number'
-    ? secondsToTimestamp(value)
-    : value
-  );
+  const getInput = () => (secondsToTimestamp(typeof value === 'number'
+    ? value
+    : strToSeconds(value)));
   const getTime = () => (typeof value === 'number'
     ? value
     : strToSeconds(value)
@@ -39,7 +38,12 @@ function TimestampInput(props: TimestampInputProps) {
 
   const [input, setInput] = useState(getInput());
   const [time, setTime] = useState(getTime());
-  const [isFocused, setFocused] = useState(false);
+
+  useEffect(() => {
+    if (props.setInput) {
+      props.setInput(input);
+    }
+  }, []);
 
   useEffect(() => {
     const updatedInput = getInput();
@@ -52,16 +56,6 @@ function TimestampInput(props: TimestampInputProps) {
     props.onChange(updatedTime);
     setTime(updatedTime);
   }, [value]);
-
-  useEffect(() => {
-    if (!isFocused) {
-      const newInput = secondsToTimestamp(time);
-      if (props.setInput) {
-        props.setInput(newInput);
-      }
-      setInput(newInput);
-    }
-  }, [isFocused]);
 
   const onInputChange = (e: ChangeEvent<HTMLInputElement>) => {
     const val = e.target.value;
@@ -81,6 +75,11 @@ function TimestampInput(props: TimestampInputProps) {
         props.onChange(-1);
         setTime(-1);
       }
+    } else {
+      if (props.setInput) {
+        props.setInput(input);
+      }
+      props.onChange(time);
     }
   };
 
@@ -101,8 +100,7 @@ function TimestampInput(props: TimestampInputProps) {
         value={input}
         placeholder={TIME_PLACEHOLDER}
         onChange={onInputChange}
-        onFocus={() => setFocused(true)}
-        onBlur={() => setFocused(false)}
+        onBlur={updateInput}
         onKeyUp={(e: KeyboardEvent<HTMLInputElement>) => {
           if (e.key === 'Enter') {
             updateInput();

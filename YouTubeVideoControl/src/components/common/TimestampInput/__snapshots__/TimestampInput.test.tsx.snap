@@ -7,7 +7,6 @@ exports[`TimestampInput renders with string input 1`] = `
   <input
     onBlur={[Function]}
     onChange={[Function]}
-    onFocus={[Function]}
     onKeyUp={[Function]}
     placeholder="00:00"
     style={
