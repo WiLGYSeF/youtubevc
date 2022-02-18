@@ -92,7 +92,7 @@ describe('Checkbox', () => {
 
   test('updates value on props change', () => {
     let checked = false;
-    const { container } = render(<Checkbox
+    const { container, rerender } = render(<Checkbox
       label="test label"
       checked={checked}
       onChange={() => {}}
@@ -101,7 +101,14 @@ describe('Checkbox', () => {
     const checkbox = container.getElementsByTagName('input')[0];
 
     expect(checkbox.checked).toBeFalsy();
+
     checked = true;
+    rerender(<Checkbox
+      label="test label"
+      checked={checked}
+      onChange={() => {}}
+    />);
+
     expect(checkbox.checked).toBeTruthy();
   });
 });
