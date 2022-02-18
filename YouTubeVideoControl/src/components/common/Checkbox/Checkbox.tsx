@@ -12,15 +12,10 @@ interface CheckboxProps {
   onChange(checked: boolean): void;
 }
 
-// exported for mocking
-export function getIdInternal(): string {
-  return `checkbox-${Math.random().toString(36).substring(2)}`;
-}
-
 function Checkbox(props: CheckboxProps) {
   const labelLeft = props.labelLeft ?? false;
   const [checked, setChecked] = useStatePropBacked(props.checked ?? false);
-  const [inputIdInternal] = useState(getIdInternal());
+  const [inputIdInternal] = useState<string>(Checkbox.prototype.getIdInternal());
 
   const eLabel = (<span>{props.label}</span>);
 
@@ -41,5 +36,8 @@ function Checkbox(props: CheckboxProps) {
     </label>
   );
 }
+
+// defined here to be able to mock in tests
+Checkbox.prototype.getIdInternal = (): string => `checkbox-${Math.random().toString(36).substring(2)}`;
 
 export default Checkbox;

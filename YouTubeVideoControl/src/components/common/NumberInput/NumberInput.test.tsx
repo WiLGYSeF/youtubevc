@@ -33,6 +33,7 @@ describe('NumberInput', () => {
     ['1.23', undefined, undefined, null, true, false, [1, 1, 1.2, 1.23], '1.23'],
     ['-37', undefined, undefined, null, true, false, [NaN, -3, -37], '-37'],
     ['1az', undefined, undefined, null, true, false, [1, 1, 1], '1'],
+    ['1.2.3', undefined, undefined, null, true, false, [1, 1, 1.2, 1.2, 1.23], '1.23'],
 
     // clamp tests
     ['123', 100, 120, null, true, false, [100, 100, 120], '123'],

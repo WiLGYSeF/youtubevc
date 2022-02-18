@@ -3,7 +3,6 @@
 exports[`NumberInput renders label 1`] = `
 <label
   data-label-right={false}
-  data-testid="number-input"
 >
   <span>
     test label
@@ -21,7 +20,6 @@ exports[`NumberInput renders label 1`] = `
 exports[`NumberInput renders label on right 1`] = `
 <label
   data-label-right={true}
-  data-testid="number-input"
 >
   <input
     onBlur={[Function]}
