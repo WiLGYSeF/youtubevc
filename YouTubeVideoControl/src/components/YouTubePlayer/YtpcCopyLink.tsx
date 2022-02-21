@@ -8,8 +8,8 @@ interface YtpcCopyLinkProps {
   entries: YouTubePlayerControllerEntry[];
 }
 
-// const BASE_URL = 'https://www.youtubevc.com';
-const BASE_URL = 'http://localhost:3000';
+// export const BASE_URL = 'https://www.youtubevc.com';
+export const BASE_URL = 'http://localhost:3000';
 
 function getUrl(videoId: string, entries: YouTubePlayerControllerEntry[]): string {
   return `${BASE_URL}/watch?v=${videoId}&entries=${encodeURI(JSON.stringify(entries))}`;
@@ -22,7 +22,7 @@ function YtpcCopyLink(props: YtpcCopyLinkProps) {
         type="button"
         onClick={() => {
           if (props.videoId) {
-            copy(getUrl(props.videoId, props.entries));
+            YtpcCopyLink.prototype.copy(getUrl(props.videoId, props.entries));
           }
         }}
       >
@@ -31,5 +31,10 @@ function YtpcCopyLink(props: YtpcCopyLinkProps) {
     </div>
   );
 }
+
+// defined here to be able to mock in tests
+YtpcCopyLink.prototype.copy = (str: string): void => {
+  copy(str);
+};
 
 export default YtpcCopyLink;
