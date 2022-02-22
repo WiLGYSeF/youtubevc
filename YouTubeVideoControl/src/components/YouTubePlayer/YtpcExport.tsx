@@ -15,7 +15,7 @@ interface YtpcExportProps {
   exportType?: ExportType;
 }
 
-const LINE_ENDING = '\r\n';
+export const LINE_ENDING = '\r\n';
 
 function YtpcExport(props: YtpcExportProps) {
   const saveFile = () => {
@@ -34,7 +34,7 @@ function YtpcExport(props: YtpcExportProps) {
     }
 
     const blob = new Blob([data], { type: 'text/plain;charset=utf-8' });
-    saveAs(blob, props.filename);
+    YtpcExport.prototype.saveAs(blob, props.filename);
   };
 
   return (
@@ -45,5 +45,10 @@ function YtpcExport(props: YtpcExportProps) {
     </div>
   );
 }
+
+// defined here to be able to mock in tests
+YtpcExport.prototype.saveAs = (blob: Blob, filename: string) => {
+  saveAs(blob, filename);
+};
 
 export default YtpcExport;

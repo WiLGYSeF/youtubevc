@@ -25,7 +25,7 @@ describe('YtpcCopyLink', () => {
     button.click();
 
     expect(copyMock).toHaveBeenCalledWith(
-      `${BASE_URL}/watch?v=${videoId}&entries=${encodeURI(JSON.stringify(entries))}`
+      `${BASE_URL}/watch?v=${videoId}&entries=${encodeURI(JSON.stringify(entries))}`,
     );
 
     copyMock.mockRestore();
