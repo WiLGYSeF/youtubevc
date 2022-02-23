@@ -3,25 +3,8 @@ import renderer from 'react-test-renderer';
 import { render } from '@testing-library/react';
 
 import YtpcGotoEntry from 'objects/YtpcEntry/YtpcGotoEntry';
+import { getFiberNodeName } from 'utils/test/fiberNode';
 import YtpcEntryList from './YtpcEntryList';
-
-function getFiberNode(node: Node): any {
-  const fiberKey = Object.keys(node).find((k) => k.startsWith('__reactFiber$'));
-  if (!fiberKey) {
-    return null;
-  }
-  return (node as any)[fiberKey];
-}
-
-function getFiberNodeName(node: Node): string | null {
-  const fiber = getFiberNode(node);
-  if (!fiber) {
-    return null;
-  }
-
-  const component = fiber.return.elementType as Function;
-  return component.name;
-}
 
 describe('YtpcEntryList', () => {
   it('renders entries', () => {
@@ -33,7 +16,7 @@ describe('YtpcEntryList', () => {
 
     const component = renderer.create(<YtpcEntryList
       entries={entries}
-      deleteEntry={() => { }}
+      deleteEntry={() => {}}
       editEntry={() => {}}
     />);
     const tree = component.toJSON();
@@ -56,8 +39,8 @@ describe('YtpcEntryList', () => {
       const { container } = render(<YtpcEntryList
         entries={entries}
         barIndex={barIndex}
-        deleteEntry={() => { }}
-        editEntry={() => { }}
+        deleteEntry={() => {}}
+        editEntry={() => {}}
       />);
 
       const children = container.getElementsByClassName('entry-list')[0].childNodes;
