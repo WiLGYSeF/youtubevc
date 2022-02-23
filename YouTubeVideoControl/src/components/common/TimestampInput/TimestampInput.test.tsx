@@ -39,7 +39,6 @@ describe('TimestampInput', () => {
     'inputs "%s"',
     (inputStr: string, expected: number[], expectedStr: string[]) => {
       let testValue = 0;
-      let testInput = '';
       const testChangeFn = jest.fn();
       const testInputFn = jest.fn();
 
@@ -50,7 +49,6 @@ describe('TimestampInput', () => {
           testChangeFn(value);
         }}
         setInput={(value: string) => {
-          testInput = value;
           testInputFn(value);
         }}
       />);

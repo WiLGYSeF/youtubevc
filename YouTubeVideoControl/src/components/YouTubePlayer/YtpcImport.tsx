@@ -1,7 +1,7 @@
 import React, { ChangeEvent } from 'react';
 
 import EntryBuilder from 'objects/YtpcEntry/EntryBuilder';
-import YouTubePlayerControllerEntry, { ControlType, YtpcEntryState } from 'objects/YtpcEntry/YouTubePlayerControllerEntry';
+import YouTubePlayerControllerEntry, { YtpcEntryState } from 'objects/YtpcEntry/YouTubePlayerControllerEntry';
 import trimstr from 'utils/trimstr';
 
 interface ImportResult {
@@ -97,10 +97,6 @@ function YtpcImport(props: YtpcImportProps) {
 
       if (props.onLoad) {
         props.onLoad(result.success);
-      }
-
-      if (!result.success) {
-        throw new Error('could not import file');
       }
     };
     reader.onerror = () => {
