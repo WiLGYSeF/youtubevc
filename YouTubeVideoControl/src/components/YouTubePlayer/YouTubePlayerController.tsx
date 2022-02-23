@@ -29,7 +29,7 @@ const EVENT_ONSTATECHANGE = 'onStateChange';
 
 const TIME_DIFF_MAX = 0.1;
 
-function addEntry(entries: YouTubePlayerControllerEntry[], entry: YouTubePlayerControllerEntry): void {
+export function addEntry(entries: YouTubePlayerControllerEntry[], entry: YouTubePlayerControllerEntry): void {
   const existingEntryIndex = entries.findIndex(
     (e) => e.atTime === entry.atTime && e.controlType === entry.controlType,
   );

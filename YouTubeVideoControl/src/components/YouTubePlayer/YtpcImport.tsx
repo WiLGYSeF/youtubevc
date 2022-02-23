@@ -13,6 +13,7 @@ interface ImportResult {
 interface YtpcImportProps {
   addEntry(entries: YouTubePlayerControllerEntry[], entry: YouTubePlayerControllerEntry): void;
   setEntries(entries: YouTubePlayerControllerEntry[]): void;
+  onLoad?(success: boolean): void;
 }
 
 function tryImportJson(
@@ -92,7 +93,13 @@ function YtpcImport(props: YtpcImportProps) {
 
       if (result.success) {
         props.setEntries(result.entries);
-      } else {
+      }
+
+      if (props.onLoad) {
+        props.onLoad(result.success);
+      }
+
+      if (!result.success) {
         throw new Error('could not import file');
       }
     };
