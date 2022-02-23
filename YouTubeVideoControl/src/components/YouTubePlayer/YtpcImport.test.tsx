@@ -14,7 +14,7 @@ const IMPORT_POLL_TICK = 10;
 async function pollUntil(condition: () => boolean, timeout: number, tick: number): Promise<boolean> {
   let conditionMet = condition();
   for (let total = 0; total < timeout && !conditionMet; total += tick) {
-    await new Promise(resolve => setTimeout(resolve, tick));
+    await new Promise((resolve) => setTimeout(resolve, tick));
     conditionMet = condition();
   }
   return conditionMet;
@@ -24,7 +24,7 @@ describe('YtpcImport', () => {
   it('imports entries from JSON', async () => {
     const addEntryMock = jest.fn(addEntry);
     const setEntriesMock = jest.fn();
-    
+
     let loaded = false;
     const onLoadMock = jest.fn((success: boolean) => loaded = true);
 
@@ -58,7 +58,7 @@ describe('YtpcImport', () => {
     await pollUntil(
       () => loaded,
       IMPORT_POLL_TIMEOUT,
-      IMPORT_POLL_TICK
+      IMPORT_POLL_TICK,
     );
 
     expect(onLoadMock.mock.calls[0][0]).toBeTruthy();
@@ -111,7 +111,7 @@ At 00:30, pause for 1s
     await pollUntil(
       () => loaded,
       IMPORT_POLL_TIMEOUT,
-      IMPORT_POLL_TICK
+      IMPORT_POLL_TICK,
     );
 
     expect(onLoadMock.mock.calls[0][0]).toBeTruthy();
@@ -161,9 +161,8 @@ invalid
     await pollUntil(
       () => loaded,
       IMPORT_POLL_TIMEOUT,
-      IMPORT_POLL_TICK
+      IMPORT_POLL_TICK,
     );
-
 
     expect(onLoadMock.mock.calls[0][0]).toBeFalsy();
 

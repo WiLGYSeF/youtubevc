@@ -6,6 +6,7 @@ import YouTubePlayerControllerEntry from 'objects/YtpcEntry/YouTubePlayerControl
 interface YtpcCopyLinkProps {
   videoId: string | null,
   entries: YouTubePlayerControllerEntry[];
+  onCopy?(url: string): boolean;
 }
 
 // export const BASE_URL = 'https://www.youtubevc.com';
@@ -22,7 +23,10 @@ function YtpcCopyLink(props: YtpcCopyLinkProps) {
         type="button"
         onClick={() => {
           if (props.videoId) {
-            YtpcCopyLink.prototype.copy(getUrl(props.videoId, props.entries));
+            const url = getUrl(props.videoId, props.entries);
+            if (!props.onCopy || props.onCopy(url)) {
+              YtpcCopyLink.prototype.copy(url);
+            }
           }
         }}
       >

@@ -202,13 +202,32 @@ function YouTubePlayerController(props: YouTubePlayerControllerProps) {
             setEntries([]);
           }}
           />
-          <YtpcImport addEntry={addEntry} setEntries={setEntries} />
+          <YtpcImport
+            addEntry={addEntry}
+            setEntries={setEntries}
+            onLoad={(success: boolean) => {
+              if (!success) {
+                console.error('file import failed');
+                alert('File import failed!');
+              }
+            }}
+          />
           <YtpcExport
             filename={`youtubevc-${getVideoIdByUrl(props.ytPlayer?.getVideoUrl() ?? '')}.txt`}
             entries={entries}
             exportType={ExportType.Text}
           />
-          <YtpcCopyLink videoId={getVideoIdByUrl(props.ytPlayer?.getVideoUrl() ?? '')} entries={entries} />
+          <YtpcCopyLink
+            videoId={getVideoIdByUrl(props.ytPlayer?.getVideoUrl() ?? '')}
+            entries={entries}
+            onCopy={() => {
+              // timeout used to show popup *after* link copied to clipboard
+              setTimeout(() => {
+                alert('Copied URL to clipboard');
+              }, 0);
+              return true;
+            }}
+          />
         </div>
       </div>
       <div className="options">
