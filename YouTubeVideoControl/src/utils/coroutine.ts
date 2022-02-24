@@ -91,7 +91,6 @@ class Coroutine {
         this.pauseTime += performance.now() - this.pauseStart;
         this.pauseStart = -1;
         break;
-      
     }
 
     requestAnimationFrame(this.doCallback.bind(this));

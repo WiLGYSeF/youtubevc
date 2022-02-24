@@ -79,7 +79,7 @@ describe('coroutine', () => {
     routine.stop();
 
     expect(func).toBeCalledTimes(total);
-    
+
     expect(routine.lastCallbackTimestamp).toEqual(7);
     expect(routine.callbackCount).toEqual(total);
     raf.mockRestore();
