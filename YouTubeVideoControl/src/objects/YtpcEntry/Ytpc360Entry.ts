@@ -69,7 +69,7 @@ class Ytpc360Entry extends YouTubePlayerControllerEntry {
         const lerpMs = this.lerpSeconds * MSEC_PER_SEC;
 
         this.routine = new Coroutine((timestamp: number) => {
-          const t = (timestamp - this.routine!.startTime) / lerpMs;
+          const t = (timestamp - this.routine!.startTimestamp) / lerpMs;
           ytPlayer.setSphericalProperties({
             yaw: lerp(p.yaw, this.sphereProps.yaw, t),
             pitch: lerp(p.pitch, this.sphereProps.pitch, t),

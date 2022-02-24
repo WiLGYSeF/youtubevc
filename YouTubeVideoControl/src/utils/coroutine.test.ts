@@ -28,13 +28,13 @@ describe('coroutine', () => {
     doCallback(routine, total);
 
     expect(func).toBeCalledTimes(total);
-    expect(routine.startTime).toBe(start);
-    expect(routine.lastCallbackTime).toBe(total - 1);
+    expect(routine.startTimestamp).toBe(start);
+    expect(routine.lastCallbackTimestamp).toBe(total - 1);
     expect(routine.callbackCount).toBe(total);
     raf.mockRestore();
   });
 
-  it('runs callback to timeout', () => {
+  it('runs until timeout', () => {
     const raf = mockRequestAnimationFrame();
 
     const start = 0;
@@ -51,13 +51,13 @@ describe('coroutine', () => {
     routine.stop();
 
     expect(func).toBeCalledTimes(timeout);
-    expect(routine.startTime).toBe(start);
-    expect(routine.lastCallbackTime).toBe(timeout - 1);
+    expect(routine.startTimestamp).toBe(start);
+    expect(routine.lastCallbackTimestamp).toBe(timeout - 1);
     expect(routine.callbackCount).toBe(timeout);
     raf.mockRestore();
   });
 
-  it('runs callback at interval', () => {
+  it('runs at interval', () => {
     const raf = mockRequestAnimationFrame();
 
     const start = 1;
@@ -75,13 +75,13 @@ describe('coroutine', () => {
 
     expect(func).toBeCalledTimes(total);
     expect(routine.running).toBeFalsy();
-    expect(routine.startTime).toBe(start);
-    expect(routine.lastCallbackTime).toBe(7);
+    expect(routine.startTimestamp).toBe(start);
+    expect(routine.lastCallbackTimestamp).toBe(7);
     expect(routine.callbackCount).toBe(total);
     raf.mockRestore();
   });
 
-  it('runs callback until limit', () => {
+  it('runs until limit', () => {
     const raf = mockRequestAnimationFrame();
 
     const start = 0;
@@ -97,8 +97,8 @@ describe('coroutine', () => {
     routine.stop();
 
     expect(func).toBeCalledTimes(total);
-    expect(routine.startTime).toBe(start);
-    expect(routine.lastCallbackTime).toBe(total - 1);
+    expect(routine.startTimestamp).toBe(start);
+    expect(routine.lastCallbackTimestamp).toBe(total - 1);
     expect(routine.callbackCount).toBe(total);
     raf.mockRestore();
   });
@@ -119,8 +119,8 @@ describe('coroutine', () => {
     }
     routine.stop();
 
-    expect(routine.startTime).toBe(start);
-    expect(routine.lastCallbackTime).toBe(start);
+    expect(routine.startTimestamp).toBe(start);
+    expect(routine.lastCallbackTimestamp).toBe(start);
     expect(routine.callbackCount).toBe(1);
     raf.mockRestore();
   });

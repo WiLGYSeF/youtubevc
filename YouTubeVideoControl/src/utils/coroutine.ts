@@ -7,11 +7,11 @@ class Coroutine {
   public interval: number;
   public callbackLimit: number;
 
-  private _running: boolean;
   private stopped: boolean;
-
+  private _running: boolean;
+  private _startTimestamp: number;
   private _startTime: number;
-  private _lastCallbackTime: number;
+  private _lastCallbackTimestamp: number;
   private _callbackCount: number;
 
   constructor(
@@ -27,10 +27,10 @@ class Coroutine {
     this.callbackLimit = callbackLimit ?? -1;
 
     this.stopped = false;
-
     this._running = false;
-    this._startTime = -1;
-    this._lastCallbackTime = -1;
+    this._startTimestamp = -1;
+    this._startTime = performance.now();
+    this._lastCallbackTimestamp = -1;
     this._callbackCount = 0;
   }
 
@@ -38,12 +38,16 @@ class Coroutine {
     return this._running;
   }
 
+  get startTimestamp() {
+    return this._startTimestamp;
+  }
+
   get startTime() {
     return this._startTime;
   }
 
-  get lastCallbackTime() {
-    return this._lastCallbackTime;
+  get lastCallbackTimestamp() {
+    return this._lastCallbackTimestamp;
   }
 
   get callbackCount() {
@@ -51,7 +55,7 @@ class Coroutine {
   }
 
   get runningTime() {
-    return this._lastCallbackTime - this._startTime;
+    return this._lastCallbackTimestamp - this._startTimestamp;
   }
 
   start(): void {
@@ -65,12 +69,12 @@ class Coroutine {
   }
 
   private doCallback(timestamp: number): void {
-    if (this._startTime < 0) {
-      this._startTime = timestamp;
+    if (this._startTimestamp < 0) {
+      this._startTimestamp = timestamp;
     }
 
     if (
-      (this.timeout >= 0 && timestamp - this.startTime >= this.timeout)
+      (this.timeout >= 0 && timestamp - this.startTimestamp >= this.timeout)
       || (this.callbackLimit >= 0 && this._callbackCount >= this.callbackLimit)
     ) {
       this.stop();
@@ -80,13 +84,13 @@ class Coroutine {
       !this.stopped
       && (
         this.interval < 0
-        || this._lastCallbackTime < 0
-        || timestamp - this._lastCallbackTime >= this.interval
+        || this._lastCallbackTimestamp < 0
+        || timestamp - this._lastCallbackTimestamp >= this.interval
       )
     ) {
       this.callback(timestamp);
       this._callbackCount += 1;
-      this._lastCallbackTime = timestamp;
+      this._lastCallbackTimestamp = timestamp;
 
       if (!this.stopped) {
         requestAnimationFrame(this.doCallback.bind(this));

@@ -38,7 +38,7 @@ class YtpcVolumeEntry extends YouTubePlayerControllerEntry {
       const lerpMs = this.lerpSeconds * MSEC_PER_SEC;
 
       this.routine = new Coroutine((timestamp: number) => {
-        ytPlayer.setVolume(lerp(vol, this.volume, (timestamp - this.routine!.startTime) / lerpMs));
+        ytPlayer.setVolume(lerp(vol, this.volume, (timestamp - this.routine!.startTimestamp) / lerpMs));
       }, lerpMs);
       this.routine.start();
     } else {
