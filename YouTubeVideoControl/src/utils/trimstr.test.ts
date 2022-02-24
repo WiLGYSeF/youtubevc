@@ -10,7 +10,7 @@ describe('trimstr', () => {
   ])(
     'trims "%s" with "%s"',
     (str: string, char: string, expected: string) => {
-      expect(trimstr(str, char)).toBe(expected);
+      expect(trimstr(str, char)).toEqual(expected);
     },
   );
 
@@ -23,7 +23,7 @@ describe('trimstr', () => {
   ])(
     'trims "%s" with chars %j',
     (str: string, char: string[], expected: string) => {
-      expect(trimstr(str, ...char)).toBe(expected);
+      expect(trimstr(str, ...char)).toEqual(expected);
     },
   );
 
@@ -33,7 +33,7 @@ describe('trimstr', () => {
   ])(
     'only trims "%s" with char inputs',
     (str: string, char: string, expected: string) => {
-      expect(trimstr(str, char)).toBe(expected);
+      expect(trimstr(str, char)).toEqual(expected);
     },
   );
 });

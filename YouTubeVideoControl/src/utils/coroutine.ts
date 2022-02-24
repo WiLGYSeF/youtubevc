@@ -1,5 +1,12 @@
 export const MSEC_PER_SEC = 1000;
 
+enum CoroutineState {
+  Unstarted,
+  Running,
+  Stopped,
+  Paused,
+}
+
 class Coroutine {
   public callback: (timestamp: number) => void;
 
@@ -7,11 +14,14 @@ class Coroutine {
   public interval: number;
   public callbackLimit: number;
 
-  private _running: boolean;
-  private stopped: boolean;
+  private state: CoroutineState;
 
+  private _startTimestamp: number;
   private _startTime: number;
-  private _lastCallbackTime: number;
+  private pauseStart: number;
+  private pauseTime: number;
+
+  private _lastCallbackTimestamp: number;
   private _callbackCount: number;
 
   constructor(
@@ -26,24 +36,39 @@ class Coroutine {
     this.interval = interval ?? -1;
     this.callbackLimit = callbackLimit ?? -1;
 
-    this.stopped = false;
+    this.state = CoroutineState.Unstarted;
 
-    this._running = false;
+    this._startTimestamp = -1;
     this._startTime = -1;
-    this._lastCallbackTime = -1;
+    this.pauseStart = -1;
+    this.pauseTime = 0;
+
+    this._lastCallbackTimestamp = -1;
     this._callbackCount = 0;
   }
 
   get running() {
-    return this._running;
+    return this.state === CoroutineState.Running;
+  }
+
+  get stopped() {
+    return this.state === CoroutineState.Stopped;
+  }
+
+  get paused() {
+    return this.state === CoroutineState.Paused;
+  }
+
+  get startTimestamp() {
+    return this._startTimestamp;
   }
 
   get startTime() {
     return this._startTime;
   }
 
-  get lastCallbackTime() {
-    return this._lastCallbackTime;
+  get lastCallbackTimestamp() {
+    return this._lastCallbackTimestamp;
   }
 
   get callbackCount() {
@@ -51,44 +76,61 @@ class Coroutine {
   }
 
   get runningTime() {
-    return this._lastCallbackTime - this._startTime;
+    return performance.now() - this._startTime - this.pauseTime;
   }
 
   start(): void {
+    switch (this.state) {
+      case CoroutineState.Running:
+        return;
+      case CoroutineState.Unstarted:
+      case CoroutineState.Stopped:
+        this._startTime = performance.now();
+        break;
+      case CoroutineState.Paused:
+        this.pauseTime += performance.now() - this.pauseStart;
+        this.pauseStart = -1;
+        break;
+    }
+
     requestAnimationFrame(this.doCallback.bind(this));
-    this._running = true;
+    this.state = CoroutineState.Running;
   }
 
   stop(): void {
-    this.stopped = true;
-    this._running = false;
+    this.state = CoroutineState.Stopped;
+  }
+
+  pause(): void {
+    this.state = CoroutineState.Paused;
+    this.pauseStart = performance.now();
   }
 
   private doCallback(timestamp: number): void {
-    if (this._startTime < 0) {
-      this._startTime = timestamp;
+    if (this._startTimestamp < 0) {
+      this._startTimestamp = timestamp;
     }
 
     if (
-      (this.timeout >= 0 && timestamp - this.startTime >= this.timeout)
+      (this.timeout >= 0 && timestamp - this.startTimestamp >= this.timeout)
       || (this.callbackLimit >= 0 && this._callbackCount >= this.callbackLimit)
     ) {
       this.stop();
     }
 
     if (
-      !this.stopped
+      this.running
       && (
         this.interval < 0
-        || this._lastCallbackTime < 0
-        || timestamp - this._lastCallbackTime >= this.interval
+        || this._lastCallbackTimestamp < 0
+        || timestamp - this._lastCallbackTimestamp >= this.interval
       )
     ) {
       this.callback(timestamp);
       this._callbackCount += 1;
-      this._lastCallbackTime = timestamp;
+      this._lastCallbackTimestamp = timestamp;
 
-      if (!this.stopped) {
+      if (this.running) {
         requestAnimationFrame(this.doCallback.bind(this));
       }
     }

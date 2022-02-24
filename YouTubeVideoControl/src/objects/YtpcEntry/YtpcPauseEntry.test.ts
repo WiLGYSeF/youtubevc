@@ -55,7 +55,7 @@ describe('YtpcPauseEntry', () => {
       if (expected) {
         expect(result?.getState()).toStrictEqual(expected);
       } else {
-        expect(result).toBe(expected);
+        expect(result).toEqual(expected);
       }
     },
   );
@@ -73,7 +73,7 @@ describe('YtpcPauseEntry', () => {
     'creates string from %j',
     (state: YtpcPauseState, expected: string | null) => {
       if (expected) {
-        expect(YtpcPauseEntry.fromState(state).toString()).toBe(expected);
+        expect(YtpcPauseEntry.fromState(state).toString()).toEqual(expected);
       } else {
         expect(() => YtpcPauseEntry.fromState(state)).toThrow();
       }

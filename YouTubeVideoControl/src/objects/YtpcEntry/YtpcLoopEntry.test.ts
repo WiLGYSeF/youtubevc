@@ -71,7 +71,7 @@ describe('YtpcLoopEntry', () => {
       if (expected) {
         expect(result?.getState()).toStrictEqual(expected);
       } else {
-        expect(result).toBe(expected);
+        expect(result).toEqual(expected);
       }
     },
   );
@@ -117,7 +117,7 @@ describe('YtpcLoopEntry', () => {
     'creates string from %j',
     (state: YtpcLoopState, expected: string | null) => {
       if (expected) {
-        expect(YtpcLoopEntry.fromState(state).toString()).toBe(expected);
+        expect(YtpcLoopEntry.fromState(state).toString()).toEqual(expected);
       } else {
         expect(() => YtpcLoopEntry.fromState(state)).toThrow();
       }

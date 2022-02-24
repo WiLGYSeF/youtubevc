@@ -91,7 +91,7 @@ describe('NumberInput', () => {
       fireEvent.blur(input);
 
       expect(input.value).toEqual(expectedStr);
-      expect(testValue).toBe(expected[expected.length - 1]);
+      expect(testValue).toEqual(expected[expected.length - 1]);
 
       expect(testFn.mock.calls.map((x) => x[0])).toEqual(expected);
     },

@@ -33,7 +33,7 @@ class YtpcPauseEntry extends YouTubePlayerControllerEntry {
 
     const pauseTime = this.pauseTime * MSEC_PER_SEC;
     this.routine = new Coroutine((timestamp: number) => {
-      if (timestamp - this.routine!.startTime >= pauseTime) {
+      if (timestamp - this.routine!.startTimestamp >= pauseTime) {
         ytPlayer.playVideo();
         this.routine!.stop();
       }

@@ -41,7 +41,7 @@ describe('YtpcPlaybackRateEntry', () => {
       if (expected) {
         expect(result?.getState()).toStrictEqual(expected);
       } else {
-        expect(result).toBe(expected);
+        expect(result).toEqual(expected);
       }
     },
   );
@@ -59,7 +59,7 @@ describe('YtpcPlaybackRateEntry', () => {
     'creates string from %j',
     (state: YtpcPlaybackRateState, expected: string) => {
       if (expected) {
-        expect(YtpcPlaybackRateEntry.fromState(state).toString()).toBe(expected);
+        expect(YtpcPlaybackRateEntry.fromState(state).toString()).toEqual(expected);
       } else {
         expect(() => YtpcPlaybackRateEntry.fromState(state)).toThrow();
       }

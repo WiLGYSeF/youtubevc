@@ -1,4 +1,7 @@
 import Coroutine from './coroutine';
+import sleep from './sleep';
+
+const TIMEDIFF_THRESHOLD = 20;
 
 describe('coroutine', () => {
   const mockRequestAnimationFrame = () => jest.spyOn(window, 'requestAnimationFrame')
@@ -20,21 +23,24 @@ describe('coroutine', () => {
     const routine = new Coroutine(func);
 
     routine.start();
+    expect(performance.now() - routine.startTime).toBeLessThan(TIMEDIFF_THRESHOLD);
+
     for (let time = start; time < total; time += 1) {
+      expect(routine.running).toBeTruthy();
       doCallback(routine, time);
-      expect(routine.runningTime).toEqual(time - start);
     }
     routine.stop();
     doCallback(routine, total);
 
     expect(func).toBeCalledTimes(total);
-    expect(routine.startTime).toBe(start);
-    expect(routine.lastCallbackTime).toBe(total - 1);
-    expect(routine.callbackCount).toBe(total);
+    expect(routine.running).toBeFalsy();
+    expect(routine.startTimestamp).toEqual(start);
+    expect(routine.lastCallbackTimestamp).toEqual(total - 1);
+    expect(routine.callbackCount).toEqual(total);
     raf.mockRestore();
   });
 
-  it('runs callback to timeout', () => {
+  it('runs until timeout', () => {
     const raf = mockRequestAnimationFrame();
 
     const start = 0;
@@ -46,18 +52,18 @@ describe('coroutine', () => {
     routine.start();
     for (let time = start; time < timeout + 3; time += 1) {
       expect(routine.running).toEqual(time <= timeout);
+      expect(routine.stopped).toEqual(time > timeout);
       doCallback(routine, time);
     }
     routine.stop();
 
     expect(func).toBeCalledTimes(timeout);
-    expect(routine.startTime).toBe(start);
-    expect(routine.lastCallbackTime).toBe(timeout - 1);
-    expect(routine.callbackCount).toBe(timeout);
+    expect(routine.lastCallbackTimestamp).toEqual(timeout - 1);
+    expect(routine.callbackCount).toEqual(timeout);
     raf.mockRestore();
   });
 
-  it('runs callback at interval', () => {
+  it('runs at interval', () => {
     const raf = mockRequestAnimationFrame();
 
     const start = 1;
@@ -68,20 +74,18 @@ describe('coroutine', () => {
 
     routine.start();
     for (let time = start; time < 10; time += 1) {
-      expect(routine.running).toBeTruthy();
       doCallback(routine, time);
     }
     routine.stop();
 
     expect(func).toBeCalledTimes(total);
-    expect(routine.running).toBeFalsy();
-    expect(routine.startTime).toBe(start);
-    expect(routine.lastCallbackTime).toBe(7);
-    expect(routine.callbackCount).toBe(total);
+
+    expect(routine.lastCallbackTimestamp).toEqual(7);
+    expect(routine.callbackCount).toEqual(total);
     raf.mockRestore();
   });
 
-  it('runs callback until limit', () => {
+  it('runs until limit', () => {
     const raf = mockRequestAnimationFrame();
 
     const start = 0;
@@ -97,13 +101,12 @@ describe('coroutine', () => {
     routine.stop();
 
     expect(func).toBeCalledTimes(total);
-    expect(routine.startTime).toBe(start);
-    expect(routine.lastCallbackTime).toBe(total - 1);
-    expect(routine.callbackCount).toBe(total);
+    expect(routine.lastCallbackTimestamp).toEqual(total - 1);
+    expect(routine.callbackCount).toEqual(total);
     raf.mockRestore();
   });
 
-  it('stops when stop is called in callback', () => {
+  it('stops when stopped in callback', () => {
     const raf = mockRequestAnimationFrame();
 
     const start = 0;
@@ -119,9 +122,40 @@ describe('coroutine', () => {
     }
     routine.stop();
 
-    expect(routine.startTime).toBe(start);
-    expect(routine.lastCallbackTime).toBe(start);
-    expect(routine.callbackCount).toBe(1);
+    expect(routine.startTimestamp).toEqual(start);
+    expect(routine.lastCallbackTimestamp).toEqual(start);
+    expect(routine.callbackCount).toEqual(1);
+    raf.mockRestore();
+  });
+
+  it('pauses and resumes', async () => {
+    const raf = mockRequestAnimationFrame();
+
+    const routine = new Coroutine(() => {});
+
+    const wait = 50;
+
+    routine.start();
+    const initialStart = routine.startTime;
+    doCallback(routine, 0);
+    routine.start();
+
+    await sleep(wait);
+    routine.pause();
+    expect(routine.paused).toBeTruthy();
+    doCallback(routine, wait);
+
+    await sleep(wait);
+    routine.start();
+    doCallback(routine, wait * 2);
+
+    await sleep(wait);
+    routine.stop();
+    doCallback(routine, wait * 3);
+
+    expect(routine.startTime).toEqual(initialStart);
+    expect(routine.runningTime - wait * 2).toBeLessThan(TIMEDIFF_THRESHOLD * 2);
+    expect(routine.callbackCount).toEqual(2);
     raf.mockRestore();
   });
 });
