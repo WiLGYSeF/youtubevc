@@ -36,7 +36,7 @@ describe('YtpcGotoEntry', () => {
       if (expected) {
         expect(result?.getState()).toStrictEqual(expected);
       } else {
-        expect(result).toBe(expected);
+        expect(result).toEqual(expected);
       }
     },
   );
@@ -53,7 +53,7 @@ describe('YtpcGotoEntry', () => {
   ])(
     'creates string from %j',
     (state: YtpcGotoState, expected: string) => {
-      expect(YtpcGotoEntry.fromState(state).toString()).toBe(expected);
+      expect(YtpcGotoEntry.fromState(state).toString()).toEqual(expected);
     },
   );
 });

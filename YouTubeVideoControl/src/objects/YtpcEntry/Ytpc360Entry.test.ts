@@ -125,7 +125,7 @@ describe('Ytpc360Entry', () => {
       if (expected) {
         expect(result?.getState()).toStrictEqual(expected);
       } else {
-        expect(result).toBe(expected);
+        expect(result).toEqual(expected);
       }
     },
   );
@@ -163,7 +163,7 @@ describe('Ytpc360Entry', () => {
     'creates string from %j',
     (state: Ytpc360State, expected: string) => {
       if (expected) {
-        expect(Ytpc360Entry.fromState(state).toString()).toBe(expected);
+        expect(Ytpc360Entry.fromState(state).toString()).toEqual(expected);
       } else {
         expect(() => Ytpc360Entry.fromState(state)).toThrow();
       }

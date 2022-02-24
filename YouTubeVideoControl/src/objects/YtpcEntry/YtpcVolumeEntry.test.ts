@@ -78,7 +78,7 @@ describe('YtpcVolumeEntry', () => {
       if (expected) {
         expect(result?.getState()).toStrictEqual(expected);
       } else {
-        expect(result).toBe(expected);
+        expect(result).toEqual(expected);
       }
     },
   );
@@ -106,7 +106,7 @@ describe('YtpcVolumeEntry', () => {
     'creates string from %j',
     (state: YtpcVolumeState, expected: string) => {
       if (expected) {
-        expect(YtpcVolumeEntry.fromState(state).toString()).toBe(expected);
+        expect(YtpcVolumeEntry.fromState(state).toString()).toEqual(expected);
       } else {
         expect(() => YtpcVolumeEntry.fromState(state)).toThrow();
       }
