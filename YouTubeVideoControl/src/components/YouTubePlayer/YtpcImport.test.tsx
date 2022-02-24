@@ -5,6 +5,7 @@ import userEvent from '@testing-library/user-event';
 import { ControlType } from 'objects/YtpcEntry/YouTubePlayerControllerEntry';
 import YtpcGotoEntry from 'objects/YtpcEntry/YtpcGotoEntry';
 import YtpcPauseEntry from 'objects/YtpcEntry/YtpcPauseEntry';
+import sleep from 'utils/sleep';
 import YtpcImport from './YtpcImport';
 import { addEntry } from './YouTubePlayerController';
 
@@ -15,7 +16,7 @@ async function pollUntil(condition: () => boolean, timeout: number, tick: number
   let conditionMet = condition();
   for (let total = 0; total < timeout && !conditionMet; total += tick) {
     // eslint-disable-next-line no-await-in-loop
-    await new Promise((resolve) => setTimeout(resolve, tick));
+    await sleep(tick);
     conditionMet = condition();
   }
   return conditionMet;

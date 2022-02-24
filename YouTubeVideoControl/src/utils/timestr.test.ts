@@ -116,8 +116,8 @@ describe('timestr', () => {
   ])(
     'converts %d seconds to timestamp and timestring',
     (seconds: number, expectedTimestamp: string, expectedTimestring: string) => {
-      expect(secondsToTimestamp(seconds)).toBe(expectedTimestamp);
-      expect(secondsToTimestring(seconds)).toBe(expectedTimestring);
+      expect(secondsToTimestamp(seconds)).toEqual(expectedTimestamp);
+      expect(secondsToTimestring(seconds)).toEqual(expectedTimestring);
     },
   );
 
@@ -158,9 +158,9 @@ describe('timestr', () => {
       if (throws) {
         expect(() => timestampToSeconds(timestamp, hardMatch)).toThrow();
       } else {
-        expect(timestampToSeconds(timestamp, hardMatch)).toBe(expected);
+        expect(timestampToSeconds(timestamp, hardMatch)).toEqual(expected);
         if (!hardMatch) {
-          expect(timestampToSeconds(timestamp)).toBe(expected);
+          expect(timestampToSeconds(timestamp)).toEqual(expected);
         }
       }
     },
@@ -184,7 +184,7 @@ describe('timestr', () => {
       if (throws) {
         expect(() => timestringToSeconds(timestring)).toThrow();
       } else {
-        expect(timestringToSeconds(timestring)).toBe(expected);
+        expect(timestringToSeconds(timestring)).toEqual(expected);
       }
     },
   );
