@@ -5,10 +5,10 @@ const TIMEDIFF_THRESHOLD = 20;
 
 describe('coroutine', () => {
   const mockRequestAnimationFrame = () => jest.spyOn(window, 'requestAnimationFrame')
-    .mockImplementation(() => 0);
+    .mockImplementation();
 
   const doCallback = (routine: Coroutine, timestamp: number): void => {
-    // dot notation is not used because doCallback is private and causes an error in typescript
+    // dot notation is not used because this is private
     // eslint-disable-next-line @typescript-eslint/dot-notation
     routine['doCallback'](timestamp);
   };

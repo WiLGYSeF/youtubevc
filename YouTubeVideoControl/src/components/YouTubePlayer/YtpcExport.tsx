@@ -23,13 +23,13 @@ function YtpcExport(props: YtpcExportProps) {
     let data = '';
 
     switch (exportType) {
-      case ExportType.Json:
-      default:
-        data = JSON.stringify(props.entries, null, 2);
-        break;
       case ExportType.Text:
         data = props.entries.map((e) => e.toStringStateless()).join(LINE_ENDING)
           + LINE_ENDING;
+        break;
+      case ExportType.Json:
+      default:
+        data = JSON.stringify(props.entries, null, 2);
         break;
     }
 

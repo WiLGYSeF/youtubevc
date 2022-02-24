@@ -83,13 +83,14 @@ class Coroutine {
     switch (this.state) {
       case CoroutineState.Running:
         return;
-      case CoroutineState.Unstarted:
-      case CoroutineState.Stopped:
-        this._startTime = performance.now();
-        break;
       case CoroutineState.Paused:
         this.pauseTime += performance.now() - this.pauseStart;
         this.pauseStart = -1;
+        break;
+      case CoroutineState.Unstarted:
+      case CoroutineState.Stopped:
+      default:
+        this._startTime = performance.now();
         break;
     }
 

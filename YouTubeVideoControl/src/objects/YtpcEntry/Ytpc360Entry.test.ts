@@ -169,4 +169,46 @@ describe('Ytpc360Entry', () => {
       }
     },
   );
+
+  it('restores state', () => {
+    const startMock = jest.spyOn(Coroutine.prototype, 'start').mockImplementation(() => {});
+
+    const spherePropStart: SphericalProperties = {
+      yaw: 0,
+      pitch: 0,
+      roll: 0,
+      fov: 100,
+    };
+    const spherePropEnd: SphericalProperties = {
+      yaw: 214,
+      pitch: 23,
+      roll: -61,
+      fov: 90,
+    };
+
+    const entry = Ytpc360Entry.fromState({
+      atTime: 101,
+      controlType: ControlType.ThreeSixty,
+      sphereProps: spherePropEnd,
+      lerpSeconds: 3,
+    });
+
+    const getSphericalProperties = jest.fn(() => ({
+      ...spherePropStart,
+    })) as jest.MockedFunction<YouTubePlayer360['getSphericalProperties']>;
+    const setSphericalProperties = jest.fn() as jest.MockedFunction<YouTubePlayer360['setSphericalProperties']>;
+    const ytPlayer = jest.fn(() => ({
+      getSphericalProperties,
+      setSphericalProperties,
+    }));
+
+    entry.performAction(ytPlayer() as unknown as YouTubePlayer360);
+    entry.restoreState();
+
+    // find the coroutine instance from the mocked call
+    const routine = startMock.mock.instances[0] as unknown as Coroutine;
+
+    expect(routine.stopped).toBeTruthy();
+    startMock.mockRestore();
+  });
 });

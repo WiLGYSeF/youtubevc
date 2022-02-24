@@ -12,7 +12,9 @@ const PLAYBACK_RATE_DEFAULT = 1;
 
 function YtpcInputPlaybackRate(props: YtpcInputPlaybackRateProps) {
   const pstate = props.state as YtpcPlaybackRateState;
-  const [playbackRate, setPlaybackRate] = useStatePropBacked(pstate?.playbackRate ?? PLAYBACK_RATE_DEFAULT);
+  const [playbackRate, setPlaybackRate] = useStatePropBacked(
+    pstate?.playbackRate ?? PLAYBACK_RATE_DEFAULT,
+  );
   const playbackRates = props.playbackRates ?? [PLAYBACK_RATE_DEFAULT];
 
   useEffect(() => {

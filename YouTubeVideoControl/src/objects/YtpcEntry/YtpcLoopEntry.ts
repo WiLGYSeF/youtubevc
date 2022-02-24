@@ -33,6 +33,10 @@ class YtpcLoopEntry extends YouTubePlayerControllerEntry {
     return YtpcLoopEntry.ACTION_STR;
   }
 
+  public get loopNumber(): number {
+    return this.loopNum;
+  }
+
   public performAction(ytPlayer: YouTubePlayer): void {
     if (this.loopCount >= 0 && this.loopNum >= this.loopCount) {
       return;

@@ -93,7 +93,7 @@ describe('YtpcLoopEntry', () => {
         loopBackTo: 24,
         loopCount: 5,
       },
-      'At 01:03, loop back to 00:24 5 times',
+      'At 01:03, loop back to 00:24 5 times (5 loops left)',
     ],
     [
       {
@@ -102,7 +102,7 @@ describe('YtpcLoopEntry', () => {
         loopBackTo: 24,
         loopCount: 1,
       },
-      'At 01:03, loop back to 00:24 1 time',
+      'At 01:03, loop back to 00:24 1 time (1 loop left)',
     ],
     [
       {
@@ -123,4 +123,44 @@ describe('YtpcLoopEntry', () => {
       }
     },
   );
+
+  it('decrements loops left', () => {
+    const entry = YtpcLoopEntry.fromState({
+      atTime: 60 + 3,
+      controlType: ControlType.Loop,
+      loopBackTo: 24,
+      loopCount: 2,
+    });
+
+    expect(entry.toString()).toEqual('At 01:03, loop back to 00:24 2 times (2 loops left)');
+
+    // dot notation is not used because this is private
+    // eslint-disable-next-line @typescript-eslint/dot-notation
+    entry['loopNum'] += 1;
+    expect(entry.toString()).toEqual('At 01:03, loop back to 00:24 2 times (1 loop left)');
+
+    // dot notation is not used because this is private
+    // eslint-disable-next-line @typescript-eslint/dot-notation
+    entry['loopNum'] += 1;
+    expect(entry.toString()).toEqual('At 01:03, loop back to 00:24 2 times (0 loops left)');
+  });
+
+  it('restores state', () => {
+    const entry = YtpcLoopEntry.fromState({
+      atTime: 60 + 3,
+      controlType: ControlType.Loop,
+      loopBackTo: 24,
+      loopCount: 2,
+    });
+
+    expect(entry.loopNumber).toEqual(0);
+
+    // dot notation is not used because this is private
+    // eslint-disable-next-line @typescript-eslint/dot-notation
+    entry['loopNum'] += 1;
+    expect(entry.loopNumber).toEqual(1);
+
+    entry.restoreState();
+    expect(entry.loopNumber).toEqual(0);
+  });
 });

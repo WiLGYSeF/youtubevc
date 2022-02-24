@@ -25,8 +25,8 @@ describe('YtpcPauseEntry', () => {
 
     // find the coroutine instance from the mocked call
     const routine = startMock.mock.instances[0] as unknown as Coroutine;
-    routine.callback(entry.pauseTime * 1000 - 10);
 
+    routine.callback(entry.pauseTime * 1000 - 10);
     expect(pauseVideo).toBeCalledTimes(1);
     expect(playVideo).toBeCalledTimes(0);
 
@@ -79,4 +79,35 @@ describe('YtpcPauseEntry', () => {
       }
     },
   );
+
+  it('restores state', () => {
+    const startMock = jest.spyOn(Coroutine.prototype, 'start').mockImplementation(() => {});
+
+    const entry = YtpcPauseEntry.fromState({
+      atTime: 101,
+      controlType: ControlType.Pause,
+      pauseTime: 5,
+    });
+
+    const pauseVideo = jest.fn() as jest.MockedFunction<YouTubePlayer['pauseVideo']>;
+    const playVideo = jest.fn() as jest.MockedFunction<YouTubePlayer['playVideo']>;
+    const ytPlayer = jest.fn(() => ({
+      pauseVideo,
+      playVideo,
+    }));
+
+    entry.performAction(ytPlayer() as unknown as YouTubePlayer);
+
+    // find the coroutine instance from the mocked call
+    const routine = startMock.mock.instances[0] as unknown as Coroutine;
+
+    routine.callback(entry.pauseTime * 1000 - 10);
+    expect(pauseVideo).toBeCalledTimes(1);
+    expect(playVideo).toBeCalledTimes(0);
+
+    entry.restoreState();
+    expect(routine.stopped).toBeTruthy();
+
+    startMock.mockRestore();
+  });
 });

@@ -112,4 +112,34 @@ describe('YtpcVolumeEntry', () => {
       }
     },
   );
+
+  it('restores state', () => {
+    const startMock = jest.spyOn(Coroutine.prototype, 'start').mockImplementation(() => {});
+
+    const volumeStart = 100;
+    const volumeEnd = 50;
+
+    const entry = YtpcVolumeEntry.fromState({
+      atTime: 101,
+      controlType: ControlType.Volume,
+      volume: volumeEnd,
+      lerpSeconds: 3,
+    });
+
+    const getVolume = jest.fn(() => volumeStart) as jest.MockedFunction<YouTubePlayer['getVolume']>;
+    const setVolume = jest.fn() as jest.MockedFunction<YouTubePlayer['setVolume']>;
+    const ytPlayer = jest.fn(() => ({
+      getVolume,
+      setVolume,
+    }));
+
+    entry.performAction(ytPlayer() as unknown as YouTubePlayer);
+    entry.restoreState();
+
+    // find the coroutine instance from the mocked call
+    const routine = startMock.mock.instances[0] as unknown as Coroutine;
+
+    expect(routine.stopped).toBeTruthy();
+    startMock.mockRestore();
+  });
 });

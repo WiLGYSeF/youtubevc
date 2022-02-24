@@ -41,11 +41,17 @@ export function addEntry(entries: YouTubePlayerControllerEntry[], entry: YouTube
   }
 
   entries.sort(
-    (a: YouTubePlayerControllerEntry, b: YouTubePlayerControllerEntry): number => a.atTime - b.atTime,
+    (
+      a: YouTubePlayerControllerEntry,
+      b: YouTubePlayerControllerEntry,
+    ): number => a.atTime - b.atTime,
   );
 }
 
-function getRandomLoopEntry(entries: YouTubePlayerControllerEntry[], useLoopCountForWeights: boolean): YtpcLoopEntry {
+function getRandomLoopEntry(
+  entries: YouTubePlayerControllerEntry[],
+  useLoopCountForWeights: boolean,
+): YtpcLoopEntry {
   const loopEntries = entries.filter((e) => e.controlType === ControlType.Loop) as YtpcLoopEntry[];
   const loopWeights: number[] = [];
 
@@ -53,7 +59,9 @@ function getRandomLoopEntry(entries: YouTubePlayerControllerEntry[], useLoopCoun
   let totalWeight = 0;
 
   if (useLoopCountForWeights) {
-    for (let i = 0; i < loopEntries.length; highestWeight = Math.max(highestWeight, loopEntries[i].loopCount, i += 1));
+    for (let i = 0; i < loopEntries.length; i += 1) {
+      highestWeight = Math.max(highestWeight, loopEntries[i].loopCount);
+    }
   }
 
   for (const entry of loopEntries) {
@@ -68,7 +76,10 @@ function getRandomLoopEntry(entries: YouTubePlayerControllerEntry[], useLoopCoun
 
   let random = Math.floor(Math.random() * (totalWeight + 1));
   let selected = 0;
-  for (; selected < loopEntries.length && random - loopWeights[selected] > 0; random -= loopWeights[selected], selected += 1);
+
+  for (; selected < loopEntries.length && random - loopWeights[selected] > 0; selected += 1) {
+    random -= loopWeights[selected];
+  }
   return loopEntries[selected];
 }
 

@@ -12,7 +12,11 @@ import { addEntry } from './YouTubePlayerController';
 const IMPORT_POLL_TIMEOUT = 3000;
 const IMPORT_POLL_TICK = 10;
 
-async function pollUntil(condition: () => boolean, timeout: number, tick: number): Promise<boolean> {
+async function pollUntil(
+  condition: () => boolean,
+  timeout: number,
+  tick: number,
+): Promise<boolean> {
   let conditionMet = condition();
   for (let total = 0; total < timeout && !conditionMet; total += tick) {
     // eslint-disable-next-line no-await-in-loop
@@ -28,7 +32,10 @@ describe('YtpcImport', () => {
     const setEntriesMock = jest.fn();
 
     let loaded = false;
-    const onLoadMock = jest.fn((success: boolean) => loaded = true);
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const onLoadMock = jest.fn((success: boolean) => {
+      loaded = true;
+    });
 
     const { container } = render(<YtpcImport
       addEntry={addEntryMock}
@@ -92,7 +99,10 @@ describe('YtpcImport', () => {
     const setEntriesMock = jest.fn();
 
     let loaded = false;
-    const onLoadMock = jest.fn((success: boolean) => loaded = true);
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const onLoadMock = jest.fn((success: boolean) => {
+      loaded = true;
+    });
 
     const { container } = render(<YtpcImport
       addEntry={addEntryMock}
@@ -145,7 +155,10 @@ At 00:30, pause for 1s
     const setEntriesMock = jest.fn();
 
     let loaded = false;
-    const onLoadMock = jest.fn((success: boolean) => loaded = true);
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const onLoadMock = jest.fn((success: boolean) => {
+      loaded = true;
+    });
 
     const { container } = render(<YtpcImport
       addEntry={addEntryMock}

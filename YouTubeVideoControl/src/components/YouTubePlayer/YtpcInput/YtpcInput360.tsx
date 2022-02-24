@@ -13,8 +13,12 @@ const LERP_TIME_DEFAULT = 0;
 function YtpcInput360(props: YtpcControlInput) {
   const pstate = props.state as Ytpc360State;
   const [yaw, setYaw] = useStatePropBacked(pstate?.sphereProps?.yaw ?? Ytpc360Entry.YAW_DEFAULT);
-  const [pitch, setPitch] = useStatePropBacked(pstate?.sphereProps?.pitch ?? Ytpc360Entry.PITCH_DEFAULT);
-  const [roll, setRoll] = useStatePropBacked(pstate?.sphereProps?.roll ?? Ytpc360Entry.ROLL_DEFAULT);
+  const [pitch, setPitch] = useStatePropBacked(
+    pstate?.sphereProps?.pitch ?? Ytpc360Entry.PITCH_DEFAULT,
+  );
+  const [roll, setRoll] = useStatePropBacked(
+    pstate?.sphereProps?.roll ?? Ytpc360Entry.ROLL_DEFAULT,
+  );
   const [fov, setFov] = useStatePropBacked(pstate?.sphereProps?.fov ?? Ytpc360Entry.FOV_DEFAULT);
 
   const [lerpSet, setLerp] = useStatePropBacked((pstate?.lerpSeconds ?? -1) >= 0);
