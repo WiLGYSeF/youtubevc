@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useReducer } from 'react';
 
 import YouTubePlayerControllerEntry from 'objects/YtpcEntry/YouTubePlayerControllerEntry';
 
@@ -10,7 +10,19 @@ interface YtpcEntryProps {
   editEntry(entry: YouTubePlayerControllerEntry): void;
 }
 
+const UPDATE_INTERVAL = 100;
+
 function YtpcEntry(props: YtpcEntryProps) {
+  const [, forceUpdate] = useReducer((x) => x + 1, 0);
+
+  useEffect(() => {
+    // TODO: replace with something better
+    const timeout = setTimeout(forceUpdate, UPDATE_INTERVAL);
+    return () => {
+      clearTimeout(timeout);
+    };
+  });
+
   return (
     <div className="entry">
       <span>{`${props.entry}`}</span>

@@ -7,6 +7,7 @@ class Coroutine {
   public interval: number;
   public callbackLimit: number;
 
+  private _running: boolean;
   private stopped: boolean;
 
   private _startTime: number;
@@ -27,9 +28,14 @@ class Coroutine {
 
     this.stopped = false;
 
+    this._running = false;
     this._startTime = -1;
     this._lastCallbackTime = -1;
     this._callbackCount = 0;
+  }
+
+  get running() {
+    return this._running;
   }
 
   get startTime() {
@@ -44,12 +50,18 @@ class Coroutine {
     return this._callbackCount;
   }
 
+  get runningTime() {
+    return this._lastCallbackTime - this._startTime;
+  }
+
   start(): void {
     requestAnimationFrame(this.doCallback.bind(this));
+    this._running = true;
   }
 
   stop(): void {
     this.stopped = true;
+    this._running = false;
   }
 
   private doCallback(timestamp: number): void {
@@ -58,14 +70,19 @@ class Coroutine {
     }
 
     if (
-      (this.timeout < 0 || timestamp - this.startTime < this.timeout)
+      (this.timeout >= 0 && timestamp - this.startTime >= this.timeout)
+      || (this.callbackLimit >= 0 && this._callbackCount >= this.callbackLimit)
+    ) {
+      this.stop();
+    }
+
+    if (
+      !this.stopped
       && (
         this.interval < 0
         || this._lastCallbackTime < 0
         || timestamp - this._lastCallbackTime >= this.interval
       )
-      && (this.callbackLimit < 0 || this._callbackCount < this.callbackLimit)
-      && !this.stopped
     ) {
       this.callback(timestamp);
       this._callbackCount += 1;

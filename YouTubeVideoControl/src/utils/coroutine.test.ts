@@ -22,6 +22,7 @@ describe('coroutine', () => {
     routine.start();
     for (let time = start; time < total; time += 1) {
       doCallback(routine, time);
+      expect(routine.runningTime).toEqual(time - start);
     }
     routine.stop();
     doCallback(routine, total);
@@ -44,6 +45,7 @@ describe('coroutine', () => {
 
     routine.start();
     for (let time = start; time < timeout + 3; time += 1) {
+      expect(routine.running).toEqual(time <= timeout);
       doCallback(routine, time);
     }
     routine.stop();
@@ -66,11 +68,13 @@ describe('coroutine', () => {
 
     routine.start();
     for (let time = start; time < 10; time += 1) {
+      expect(routine.running).toBeTruthy();
       doCallback(routine, time);
     }
     routine.stop();
 
     expect(func).toBeCalledTimes(total);
+    expect(routine.running).toBeFalsy();
     expect(routine.startTime).toBe(start);
     expect(routine.lastCallbackTime).toBe(7);
     expect(routine.callbackCount).toBe(total);

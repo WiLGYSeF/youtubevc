@@ -28,7 +28,7 @@ function YtpcExport(props: YtpcExportProps) {
         data = JSON.stringify(props.entries, null, 2);
         break;
       case ExportType.Text:
-        data = props.entries.map((e) => e.toString()).join(LINE_ENDING)
+        data = props.entries.map((e) => e.toStringStateless()).join(LINE_ENDING)
           + LINE_ENDING;
         break;
     }
