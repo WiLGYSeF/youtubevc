@@ -14,6 +14,7 @@ const IMPORT_POLL_TICK = 10;
 async function pollUntil(condition: () => boolean, timeout: number, tick: number): Promise<boolean> {
   let conditionMet = condition();
   for (let total = 0; total < timeout && !conditionMet; total += tick) {
+    // eslint-disable-next-line no-await-in-loop
     await new Promise((resolve) => setTimeout(resolve, tick));
     conditionMet = condition();
   }

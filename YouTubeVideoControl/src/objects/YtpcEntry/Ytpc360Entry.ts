@@ -2,7 +2,8 @@ import { YouTubePlayer } from 'youtube-player/dist/types';
 
 import Coroutine, { MSEC_PER_SEC } from 'utils/coroutine';
 import lerp from 'utils/lerp';
-import { timestampToSeconds } from 'utils/timestr';
+import round from 'utils/round';
+import { secondsToTimestring, timestampToSeconds } from 'utils/timestr';
 import YouTubePlayerControllerEntry, { ControlType, YtpcEntryState } from './YouTubePlayerControllerEntry';
 
 export interface SphericalProperties {
@@ -45,11 +46,15 @@ class Ytpc360Entry extends YouTubePlayerControllerEntry {
   public sphereProps: SphericalProperties;
   public lerpSeconds: number;
 
+  private routine: Coroutine | null;
+
   constructor(atTime: number, sphereProps: SphericalProperties, lerpSeconds?: number) {
     super(ControlType.ThreeSixty, atTime);
 
     this.sphereProps = sphereProps;
     this.lerpSeconds = lerpSeconds ?? -1;
+
+    this.routine = null;
   }
 
   public get actionStr(): string {
@@ -63,8 +68,8 @@ class Ytpc360Entry extends YouTubePlayerControllerEntry {
         const p = props as SphericalProperties;
         const lerpMs = this.lerpSeconds * MSEC_PER_SEC;
 
-        const routine = new Coroutine((timestamp: number) => {
-          const t = (timestamp - routine.startTime) / lerpMs;
+        this.routine = new Coroutine((timestamp: number) => {
+          const t = (timestamp - this.routine!.startTime) / lerpMs;
           ytPlayer.setSphericalProperties({
             yaw: lerp(p.yaw, this.sphereProps.yaw, t),
             pitch: lerp(p.pitch, this.sphereProps.pitch, t),
@@ -72,7 +77,7 @@ class Ytpc360Entry extends YouTubePlayerControllerEntry {
             fov: lerp(p.fov, this.sphereProps.fov, t),
           });
         }, lerpMs);
-        routine.start();
+        this.routine.start();
       }
     } else {
       ytPlayer.setSphericalProperties(this.sphereProps);
@@ -87,11 +92,19 @@ class Ytpc360Entry extends YouTubePlayerControllerEntry {
     };
   }
 
-  public getControlStr(): string {
+  public restoreState(): void {
+    this.routine?.stop();
+  }
+
+  public getControlStr(stateless: boolean = false): string {
     let result = `yaw ${this.sphereProps.yaw}, pitch ${this.sphereProps.pitch}, roll ${this.sphereProps.roll}, fov ${this.sphereProps.fov}`;
 
     if (this.lerpSeconds > 0) {
       result += ` during the next ${this.lerpSeconds} seconds`;
+    }
+
+    if (!stateless && this.lerpSeconds > 0 && this.routine?.running) {
+      result += ` (${secondsToTimestring(round(this.lerpSeconds - this.routine.runningTime / 1000, 1))} left)`;
     }
 
     return result;

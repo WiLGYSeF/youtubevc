@@ -50,12 +50,23 @@ class YtpcLoopEntry extends YouTubePlayerControllerEntry {
     };
   }
 
-  public getControlStr(): string {
-    return `${secondsToTimestamp(this.loopBackTo)} ${
+  public restoreState(): void {
+    this.loopNum = 0;
+  }
+
+  public getControlStr(stateless: boolean = false): string {
+    let result = `${secondsToTimestamp(this.loopBackTo)} ${
       this.loopCount >= 0
         ? `${this.loopCount} time${this.loopCount !== 1 ? 's' : ''}`
         : 'forever'
     }`;
+
+    if (!stateless && this.loopCount > 0) {
+      const remain = this.loopCount - this.loopNum;
+      result += ` (${remain} loop${remain !== 1 ? 's' : ''} left)`;
+    }
+
+    return result;
   }
 
   public static fromState(state: YtpcLoopState): YtpcLoopEntry {

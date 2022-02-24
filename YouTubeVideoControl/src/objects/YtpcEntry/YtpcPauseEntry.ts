@@ -1,6 +1,7 @@
 import { YouTubePlayer } from 'youtube-player/dist/types';
 
 import Coroutine, { MSEC_PER_SEC } from 'utils/coroutine';
+import round from 'utils/round';
 import { secondsToTimestring, timestampToSeconds, timestringToSeconds } from 'utils/timestr';
 import YouTubePlayerControllerEntry, { ControlType, YtpcEntryState } from './YouTubePlayerControllerEntry';
 
@@ -13,10 +14,14 @@ class YtpcPauseEntry extends YouTubePlayerControllerEntry {
 
   public pauseTime: number;
 
+  private routine: Coroutine | null;
+
   constructor(atTime: number, pauseTime: number) {
     super(ControlType.Pause, atTime);
 
     this.pauseTime = pauseTime;
+
+    this.routine = null;
   }
 
   public get actionStr(): string {
@@ -27,13 +32,13 @@ class YtpcPauseEntry extends YouTubePlayerControllerEntry {
     ytPlayer.pauseVideo();
 
     const pauseTime = this.pauseTime * MSEC_PER_SEC;
-    const routine = new Coroutine((timestamp: number) => {
-      if (timestamp - routine.startTime >= pauseTime) {
+    this.routine = new Coroutine((timestamp: number) => {
+      if (timestamp - this.routine!.startTime >= pauseTime) {
         ytPlayer.playVideo();
-        routine.stop();
+        this.routine!.stop();
       }
     });
-    routine.start();
+    this.routine.start();
   }
 
   public getState(): YtpcPauseState {
@@ -43,8 +48,18 @@ class YtpcPauseEntry extends YouTubePlayerControllerEntry {
     };
   }
 
-  public getControlStr(): string {
-    return secondsToTimestring(this.pauseTime);
+  public restoreState(): void {
+    this.routine?.stop();
+  }
+
+  public getControlStr(stateless: boolean = false): string {
+    let result = secondsToTimestring(this.pauseTime);
+
+    if (!stateless && this.routine?.running) {
+      result += ` (${secondsToTimestring(round(this.pauseTime - this.routine.runningTime / 1000, 1))} left)`;
+    }
+
+    return result;
   }
 
   public static fromState(state: YtpcPauseState): YtpcPauseEntry {

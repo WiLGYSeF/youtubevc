@@ -2,7 +2,8 @@ import { YouTubePlayer } from 'youtube-player/dist/types';
 
 import Coroutine, { MSEC_PER_SEC } from 'utils/coroutine';
 import lerp from 'utils/lerp';
-import { timestampToSeconds } from 'utils/timestr';
+import round from 'utils/round';
+import { secondsToTimestring, timestampToSeconds } from 'utils/timestr';
 import YouTubePlayerControllerEntry, { ControlType, YtpcEntryState } from './YouTubePlayerControllerEntry';
 
 export interface YtpcVolumeState extends YtpcEntryState {
@@ -16,11 +17,15 @@ class YtpcVolumeEntry extends YouTubePlayerControllerEntry {
   public volume: number;
   public lerpSeconds: number;
 
+  private routine: Coroutine | null;
+
   constructor(atTime: number, volume: number, lerpSeconds?: number) {
     super(ControlType.Volume, atTime);
 
     this.volume = volume;
     this.lerpSeconds = lerpSeconds ?? -1;
+
+    this.routine = null;
   }
 
   public get actionStr(): string {
@@ -32,10 +37,10 @@ class YtpcVolumeEntry extends YouTubePlayerControllerEntry {
       const vol = ytPlayer.getVolume();
       const lerpMs = this.lerpSeconds * MSEC_PER_SEC;
 
-      const routine = new Coroutine((timestamp: number) => {
-        ytPlayer.setVolume(lerp(vol, this.volume, (timestamp - routine.startTime) / lerpMs));
+      this.routine = new Coroutine((timestamp: number) => {
+        ytPlayer.setVolume(lerp(vol, this.volume, (timestamp - this.routine!.startTime) / lerpMs));
       }, lerpMs);
-      routine.start();
+      this.routine.start();
     } else {
       ytPlayer.setVolume(this.volume);
     }
@@ -49,11 +54,19 @@ class YtpcVolumeEntry extends YouTubePlayerControllerEntry {
     };
   }
 
-  public getControlStr(): string {
+  public restoreState(): void {
+    this.routine?.stop();
+  }
+
+  public getControlStr(stateless: boolean = false): string {
     let result = `${this.volume}`;
 
     if (this.lerpSeconds > 0) {
       result += ` during the next ${this.lerpSeconds} seconds`;
+    }
+
+    if (!stateless && this.lerpSeconds > 0 && this.routine?.running) {
+      result += ` (${secondsToTimestring(round(this.lerpSeconds - this.routine.runningTime / 1000, 1))} left)`;
     }
 
     return result;
