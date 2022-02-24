@@ -55,7 +55,7 @@ class Coroutine {
   }
 
   get runningTime() {
-    return this._lastCallbackTimestamp - this._startTimestamp;
+    return performance.now() - this._startTime;
   }
 
   start(): void {
