@@ -154,7 +154,7 @@ describe('coroutine', () => {
     doCallback(routine, wait * 3);
 
     expect(routine.startTime).toEqual(initialStart);
-    expect(routine.runningTime - wait * 2).toBeLessThan(TIMEDIFF_THRESHOLD * 2);
+    expect(routine.runningTime - wait * 2).toBeLessThan(TIMEDIFF_THRESHOLD * 3);
     expect(routine.callbackCount).toEqual(2);
     raf.mockRestore();
   });

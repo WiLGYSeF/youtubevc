@@ -107,6 +107,7 @@ describe('YtpcPauseEntry', () => {
 
     entry.restoreState();
     expect(routine.stopped).toBeTruthy();
+    expect(playVideo).toBeCalledTimes(1);
 
     startMock.mockRestore();
   });

@@ -77,6 +77,9 @@ class Ytpc360Entry extends YouTubePlayerControllerEntry {
             fov: lerp(p.fov, this.sphereProps.fov, t),
           });
         }, lerpMs);
+        this.routine.stopEmitter.on(() => {
+          ytPlayer.setSphericalProperties(this.sphereProps);
+        });
         this.routine.start();
       }
     } else {

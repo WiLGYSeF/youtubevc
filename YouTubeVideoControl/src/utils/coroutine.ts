@@ -1,3 +1,6 @@
+import EventEmitter from './EventEmitter/EventEmitter';
+import EventEmitterHandlerSpecific from './EventEmitter/EventEmitterHandlerSpecific';
+
 export const MSEC_PER_SEC = 1000;
 
 enum CoroutineState {
@@ -7,6 +10,8 @@ enum CoroutineState {
   Paused,
 }
 
+const EVENT_STOP = 'stop';
+
 class Coroutine {
   public callback: (timestamp: number) => void;
 
@@ -15,6 +20,9 @@ class Coroutine {
   public callbackLimit: number;
 
   private state: CoroutineState;
+
+  private emitter: EventEmitter<void>;
+  private _stopEmitter: EventEmitterHandlerSpecific<void>;
 
   private _startTimestamp: number;
   private _startTime: number;
@@ -38,6 +46,9 @@ class Coroutine {
 
     this.state = CoroutineState.Unstarted;
 
+    this.emitter = new EventEmitter();
+    this._stopEmitter = new EventEmitterHandlerSpecific(this.emitter, EVENT_STOP);
+
     this._startTimestamp = -1;
     this._startTime = -1;
     this.pauseStart = -1;
@@ -57,6 +68,10 @@ class Coroutine {
 
   get paused() {
     return this.state === CoroutineState.Paused;
+  }
+
+  get stopEmitter() {
+    return this._stopEmitter;
   }
 
   get startTimestamp() {
@@ -99,7 +114,10 @@ class Coroutine {
   }
 
   stop(): void {
-    this.state = CoroutineState.Stopped;
+    if (!this.stopped) {
+      this.state = CoroutineState.Stopped;
+      this.emitter.emit(EVENT_STOP);
+    }
   }
 
   pause(): void {

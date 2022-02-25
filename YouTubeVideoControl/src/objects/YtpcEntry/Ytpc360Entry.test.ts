@@ -83,6 +83,50 @@ describe('Ytpc360Entry', () => {
     startMock.mockRestore();
   });
 
+  it('ensures spherical properties are set at end of routine', () => {
+    const startMock = jest.spyOn(Coroutine.prototype, 'start').mockImplementation(() => { });
+
+    const spherePropStart: SphericalProperties = {
+      yaw: 0,
+      pitch: 0,
+      roll: 0,
+      fov: 100,
+    };
+    const spherePropEnd: SphericalProperties = {
+      yaw: 214,
+      pitch: 23,
+      roll: -61,
+      fov: 90,
+    };
+
+    const entry = Ytpc360Entry.fromState({
+      atTime: 101,
+      controlType: ControlType.ThreeSixty,
+      sphereProps: spherePropEnd,
+      lerpSeconds: 3,
+    });
+
+    const getSphericalProperties = jest.fn(() => ({
+      ...spherePropStart,
+    })) as jest.MockedFunction<YouTubePlayer360['getSphericalProperties']>;
+    const setSphericalProperties = jest.fn() as jest.MockedFunction<YouTubePlayer360['setSphericalProperties']>;
+    const ytPlayer = jest.fn(() => ({
+      getSphericalProperties,
+      setSphericalProperties,
+    }));
+
+    entry.performAction(ytPlayer() as unknown as YouTubePlayer360);
+
+    // find the coroutine instance from the mocked call
+    const routine = startMock.mock.instances[0] as unknown as Coroutine;
+    routine.callback(entry.lerpSeconds * 1000 - 10);
+    routine.stop();
+
+    expect(setSphericalProperties).toHaveBeenLastCalledWith(entry.sphereProps);
+
+    startMock.mockRestore();
+  });
+
   it.each([
     ['At 9:45, set 360° view to yaw 1, pitch 2, roll 3, fov 90', {
       atTime: 9 * 60 + 45,
