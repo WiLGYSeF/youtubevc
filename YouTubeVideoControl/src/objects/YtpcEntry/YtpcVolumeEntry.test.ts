@@ -1,8 +1,40 @@
 import { YouTubePlayer } from 'youtube-player/dist/types';
 
+import Coroutine from 'utils/coroutine';
 import { ControlType } from './YouTubePlayerControllerEntry';
 import YtpcVolumeEntry, { YtpcVolumeState } from './YtpcVolumeEntry';
-import Coroutine from '../../utils/coroutine';
+
+function mockVolume(
+  volumeStart: number,
+  fn: (
+    mocks: {
+      getVolume: jest.Mock,
+      setVolume: jest.Mock,
+      ytPlayer: jest.Mock,
+    },
+    getRoutine: () => Coroutine,
+  ) => void
+): void {
+  const startMock = jest.spyOn(Coroutine.prototype, 'start').mockImplementation(() => {});
+
+  const getVolume = jest.fn(() => volumeStart);
+  const setVolume = jest.fn();
+
+  fn(
+    {
+      getVolume,
+      setVolume,
+      ytPlayer: jest.fn(() => ({
+        getVolume,
+        setVolume,
+      })),
+    },
+    // find the coroutine instance from the mocked call
+    () => startMock.mock.instances[0] as unknown as Coroutine,
+  );
+
+  startMock.mockRestore();
+}
 
 describe('YtpcVolumeEntry', () => {
   it('sets the volume', () => {
@@ -13,20 +45,15 @@ describe('YtpcVolumeEntry', () => {
       lerpSeconds: -1,
     });
 
-    const setVolume = jest.fn() as jest.MockedFunction<YouTubePlayer['setVolume']>;
-    const ytPlayer = jest.fn(() => ({
-      setVolume,
-    }));
+    mockVolume(100, ({ setVolume, ytPlayer }) => {
+      entry.performAction(ytPlayer() as unknown as YouTubePlayer);
 
-    entry.performAction(ytPlayer() as unknown as YouTubePlayer);
-
-    expect(setVolume).toBeCalledTimes(1);
-    expect(setVolume).lastCalledWith(entry.volume);
+      expect(setVolume).toBeCalledTimes(1);
+      expect(setVolume).lastCalledWith(entry.volume);
+    });
   });
 
   it('sets the volume over time', () => {
-    const startMock = jest.spyOn(Coroutine.prototype, 'start').mockImplementation(() => {});
-
     const volumeStart = 100;
     const volumeEnd = 50;
 
@@ -37,30 +64,20 @@ describe('YtpcVolumeEntry', () => {
       lerpSeconds: 3,
     });
 
-    const getVolume = jest.fn(() => volumeStart) as jest.MockedFunction<YouTubePlayer['getVolume']>;
-    const setVolume = jest.fn() as jest.MockedFunction<YouTubePlayer['setVolume']>;
-    const ytPlayer = jest.fn(() => ({
-      getVolume,
-      setVolume,
-    }));
+    mockVolume(volumeStart, ({ setVolume, ytPlayer }, getRoutine) => {
+      entry.performAction(ytPlayer() as unknown as YouTubePlayer);
 
-    entry.performAction(ytPlayer() as unknown as YouTubePlayer);
+      const routine = getRoutine();
+      // pretend half the time has passed
+      routine.callback((entry.lerpSeconds / 2) * 1000);
 
-    // find the coroutine instance from the mocked call
-    const routine = startMock.mock.instances[0] as unknown as Coroutine;
-    // pretend half the time has passed
-    routine.callback((entry.lerpSeconds / 2) * 1000);
-
-    const lastCallVolume = setVolume.mock.calls[0][0];
-    expect(Math.round(lastCallVolume))
-      .toBeCloseTo(Math.round((volumeStart + volumeEnd) / 2));
-
-    startMock.mockRestore();
+      const lastCallVolume = setVolume.mock.calls[0][0];
+      expect(Math.round(lastCallVolume))
+        .toBeCloseTo(Math.round((volumeStart + volumeEnd) / 2));
+    });
   });
 
   it('ensures volume is set at end of routine', () => {
-    const startMock = jest.spyOn(Coroutine.prototype, 'start').mockImplementation(() => { });
-
     const volumeStart = 100;
     const volumeEnd = 50;
 
@@ -71,23 +88,15 @@ describe('YtpcVolumeEntry', () => {
       lerpSeconds: 3,
     });
 
-    const getVolume = jest.fn(() => volumeStart) as jest.MockedFunction<YouTubePlayer['getVolume']>;
-    const setVolume = jest.fn() as jest.MockedFunction<YouTubePlayer['setVolume']>;
-    const ytPlayer = jest.fn(() => ({
-      getVolume,
-      setVolume,
-    }));
+    mockVolume(volumeStart, ({ setVolume, ytPlayer }, getRoutine) => {
+      entry.performAction(ytPlayer() as unknown as YouTubePlayer);
 
-    entry.performAction(ytPlayer() as unknown as YouTubePlayer);
+      const routine = getRoutine();
+      routine.callback(entry.lerpSeconds * 1000 - 10);
+      routine.stop();
 
-    // find the coroutine instance from the mocked call
-    const routine = startMock.mock.instances[0] as unknown as Coroutine;
-    routine.callback(entry.lerpSeconds * 1000 - 10);
-    routine.stop();
-
-    expect(setVolume).toHaveBeenLastCalledWith(entry.volume);
-
-    startMock.mockRestore();
+      expect(setVolume).toHaveBeenLastCalledWith(entry.volume);
+    });
   });
 
   it.each([
@@ -147,8 +156,6 @@ describe('YtpcVolumeEntry', () => {
   );
 
   it('restores state', () => {
-    const startMock = jest.spyOn(Coroutine.prototype, 'start').mockImplementation(() => {});
-
     const volumeStart = 100;
     const volumeEnd = 50;
 
@@ -159,20 +166,12 @@ describe('YtpcVolumeEntry', () => {
       lerpSeconds: 3,
     });
 
-    const getVolume = jest.fn(() => volumeStart) as jest.MockedFunction<YouTubePlayer['getVolume']>;
-    const setVolume = jest.fn() as jest.MockedFunction<YouTubePlayer['setVolume']>;
-    const ytPlayer = jest.fn(() => ({
-      getVolume,
-      setVolume,
-    }));
+    mockVolume(volumeStart, ({ setVolume, ytPlayer }, getRoutine) => {
+      entry.performAction(ytPlayer() as unknown as YouTubePlayer);
+      entry.restoreState();
 
-    entry.performAction(ytPlayer() as unknown as YouTubePlayer);
-    entry.restoreState();
-
-    // find the coroutine instance from the mocked call
-    const routine = startMock.mock.instances[0] as unknown as Coroutine;
-
-    expect(routine.stopped).toBeTruthy();
-    startMock.mockRestore();
+      const routine = getRoutine();
+      expect(routine.stopped).toBeTruthy();
+    });
   });
 });

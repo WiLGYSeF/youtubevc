@@ -4,36 +4,58 @@ import Coroutine from 'utils/coroutine';
 import { ControlType } from './YouTubePlayerControllerEntry';
 import YtpcPauseEntry, { YtpcPauseState } from './YtpcPauseEntry';
 
+function mockPause(
+  fn: (
+    mocks: {
+      pauseVideo: jest.Mock,
+      playVideo: jest.Mock,
+      ytPlayer: jest.Mock,
+    },
+    getRoutine: () => Coroutine,
+  ) => void
+): void {
+  const startMock = jest.spyOn(Coroutine.prototype, 'start').mockImplementation(() => { });
+
+  const pauseVideo = jest.fn();
+  const playVideo = jest.fn();
+
+  fn(
+    {
+      pauseVideo,
+      playVideo,
+      ytPlayer: jest.fn(() => ({
+        pauseVideo,
+        playVideo,
+      })),
+    },
+    // find the coroutine instance from the mocked call
+    () => startMock.mock.instances[0] as unknown as Coroutine,
+  );
+
+  startMock.mockRestore();
+}
+
 describe('YtpcPauseEntry', () => {
   it('pauses video', () => {
-    const startMock = jest.spyOn(Coroutine.prototype, 'start').mockImplementation(() => {});
-
     const entry = YtpcPauseEntry.fromState({
       atTime: 101,
       controlType: ControlType.Pause,
       pauseTime: 5,
     });
 
-    const pauseVideo = jest.fn() as jest.MockedFunction<YouTubePlayer['pauseVideo']>;
-    const playVideo = jest.fn() as jest.MockedFunction<YouTubePlayer['playVideo']>;
-    const ytPlayer = jest.fn(() => ({
-      pauseVideo,
-      playVideo,
-    }));
+    mockPause(({ pauseVideo, playVideo, ytPlayer }, getRoutine) => {
+      entry.performAction(ytPlayer() as unknown as YouTubePlayer);
 
-    entry.performAction(ytPlayer() as unknown as YouTubePlayer);
+      const routine = getRoutine();
 
-    // find the coroutine instance from the mocked call
-    const routine = startMock.mock.instances[0] as unknown as Coroutine;
+      routine.callback(entry.pauseTime * 1000 - 10);
+      expect(pauseVideo).toBeCalledTimes(1);
+      expect(playVideo).toBeCalledTimes(0);
 
-    routine.callback(entry.pauseTime * 1000 - 10);
-    expect(pauseVideo).toBeCalledTimes(1);
-    expect(playVideo).toBeCalledTimes(0);
-
-    routine.callback(entry.pauseTime * 1000);
-    expect(pauseVideo).toBeCalledTimes(1);
-    expect(playVideo).toBeCalledTimes(1);
-    startMock.mockRestore();
+      routine.callback(entry.pauseTime * 1000);
+      expect(pauseVideo).toBeCalledTimes(1);
+      expect(playVideo).toBeCalledTimes(1);
+    });
   });
 
   it.each([
@@ -81,34 +103,24 @@ describe('YtpcPauseEntry', () => {
   );
 
   it('restores state', () => {
-    const startMock = jest.spyOn(Coroutine.prototype, 'start').mockImplementation(() => {});
-
     const entry = YtpcPauseEntry.fromState({
       atTime: 101,
       controlType: ControlType.Pause,
       pauseTime: 5,
     });
 
-    const pauseVideo = jest.fn() as jest.MockedFunction<YouTubePlayer['pauseVideo']>;
-    const playVideo = jest.fn() as jest.MockedFunction<YouTubePlayer['playVideo']>;
-    const ytPlayer = jest.fn(() => ({
-      pauseVideo,
-      playVideo,
-    }));
+    mockPause(({ pauseVideo, playVideo, ytPlayer }, getRoutine) => {
+      entry.performAction(ytPlayer() as unknown as YouTubePlayer);
 
-    entry.performAction(ytPlayer() as unknown as YouTubePlayer);
+      const routine = getRoutine();
 
-    // find the coroutine instance from the mocked call
-    const routine = startMock.mock.instances[0] as unknown as Coroutine;
+      routine.callback(entry.pauseTime * 1000 - 10);
+      expect(pauseVideo).toBeCalledTimes(1);
+      expect(playVideo).toBeCalledTimes(0);
 
-    routine.callback(entry.pauseTime * 1000 - 10);
-    expect(pauseVideo).toBeCalledTimes(1);
-    expect(playVideo).toBeCalledTimes(0);
-
-    entry.restoreState();
-    expect(routine.stopped).toBeTruthy();
-    expect(playVideo).toBeCalledTimes(1);
-
-    startMock.mockRestore();
+      entry.restoreState();
+      expect(routine.stopped).toBeTruthy();
+      expect(playVideo).toBeCalledTimes(1);
+    });
   });
 });
