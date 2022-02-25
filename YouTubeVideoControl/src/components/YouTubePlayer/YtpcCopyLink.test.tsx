@@ -2,7 +2,7 @@ import React from 'react';
 import { render } from '@testing-library/react';
 
 import YtpcGotoEntry from 'objects/YtpcEntry/YtpcGotoEntry';
-import YtpcCopyLink, { BASE_URL } from './YtpcCopyLink';
+import YtpcCopyLink from './YtpcCopyLink';
 
 describe('YtpcCopyLink', () => {
   it('copies link to clipboard', () => {
@@ -24,7 +24,7 @@ describe('YtpcCopyLink', () => {
     const button = container.getElementsByTagName('button')[0];
     button.click();
 
-    const expected = `${BASE_URL}/watch?v=${videoId}&entries=${encodeURI(JSON.stringify(entries))}`;
+    const expected = `${process.env.REACT_APP_BASE_URL}/watch?v=${videoId}&entries=${encodeURI(JSON.stringify(entries))}`;
     expect(copyMock).toHaveBeenCalledWith(expected);
 
     copyMock.mockRestore();
@@ -74,7 +74,7 @@ describe('YtpcCopyLink', () => {
     const button = container.getElementsByTagName('button')[0];
     button.click();
 
-    const expected = `${BASE_URL}/watch?v=${videoId}&entries=${encodeURI(JSON.stringify(entries))}`;
+    const expected = `${process.env.REACT_APP_BASE_URL}/watch?v=${videoId}&entries=${encodeURI(JSON.stringify(entries))}`;
     expect(copyMock).toHaveBeenCalledWith(expected);
     expect(onCopy).toHaveBeenCalledWith(expected);
 
@@ -102,9 +102,7 @@ describe('YtpcCopyLink', () => {
     const button = container.getElementsByTagName('button')[0];
     button.click();
 
-    const expected = `${BASE_URL}/watch?v=${videoId}&entries=${encodeURI(JSON.stringify(entries))}`;
     expect(copyMock).toHaveBeenCalledTimes(0);
-    expect(onCopy).toHaveBeenCalledWith(expected);
 
     copyMock.mockRestore();
   });

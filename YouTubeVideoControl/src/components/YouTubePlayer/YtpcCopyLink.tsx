@@ -9,11 +9,8 @@ interface YtpcCopyLinkProps {
   onCopy?(url: string): boolean;
 }
 
-// export const BASE_URL = 'https://www.youtubevc.com';
-export const BASE_URL = 'http://localhost:3000';
-
 function getUrl(videoId: string, entries: YouTubePlayerControllerEntry[]): string {
-  return `${BASE_URL}/watch?v=${videoId}&entries=${encodeURI(JSON.stringify(entries))}`;
+  return `${process.env.REACT_APP_BASE_URL}/watch?v=${videoId}&entries=${encodeURI(JSON.stringify(entries))}`;
 }
 
 function YtpcCopyLink(props: YtpcCopyLinkProps) {
