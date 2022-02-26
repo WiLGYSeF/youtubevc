@@ -8,6 +8,7 @@ import { YouTubePlayer360 } from 'objects/YtpcEntry/Ytpc360Entry';
 import YtpcLoopEntry from 'objects/YtpcEntry/YtpcLoopEntry';
 import Coroutine from 'utils/coroutine';
 import useStatePropBacked from 'utils/useStatePropBacked';
+import { getVideoIdByUrl, playerHas360Video } from 'utils/youtube';
 import YtpcClear from './YtpcClear';
 import YtpcCopyLink from './YtpcCopyLink';
 import YtpcEntryList from './YtpcEntryList';
@@ -29,7 +30,10 @@ const EVENT_ONSTATECHANGE = 'onStateChange';
 
 const TIME_DIFF_MAX = 0.1;
 
-export function addEntry(entries: YouTubePlayerControllerEntry[], entry: YouTubePlayerControllerEntry): void {
+export function addEntry(
+  entries: YouTubePlayerControllerEntry[],
+  entry: YouTubePlayerControllerEntry,
+): void {
   const existingEntryIndex = entries.findIndex(
     (e) => e.atTime === entry.atTime && e.controlType === entry.controlType,
   );
@@ -48,11 +52,15 @@ export function addEntry(entries: YouTubePlayerControllerEntry[], entry: YouTube
   );
 }
 
-function getRandomLoopEntry(
+export function filterLoopEntries(entries: YouTubePlayerControllerEntry[]): YtpcLoopEntry[] {
+  return entries.filter((e) => e.controlType === ControlType.Loop) as YtpcLoopEntry[];
+}
+
+export function getRandomLoopEntry(
   entries: YouTubePlayerControllerEntry[],
   useLoopCountForWeights: boolean,
 ): YtpcLoopEntry {
-  const loopEntries = entries.filter((e) => e.controlType === ControlType.Loop) as YtpcLoopEntry[];
+  const loopEntries = filterLoopEntries(entries);
   const loopWeights: number[] = [];
 
   let highestWeight = 0;
@@ -83,32 +91,19 @@ function getRandomLoopEntry(
   return loopEntries[selected];
 }
 
-function getVideoIdByUrl(url: string): string | null {
-  try {
-    const urlObj = new URL(url);
-    return urlObj.searchParams.get('v');
-  } catch {
-    return null;
-  }
-}
-
-function playerHas360Video(player: YouTubePlayer360): boolean {
-  return Object.keys(player.getSphericalProperties()).length > 0;
-}
-
 function YouTubePlayerController(props: YouTubePlayerControllerProps) {
-  const [entries, setEntries] = useState<YouTubePlayerControllerEntry[]>([
-    new YtpcLoopEntry(5, 1, 2),
-  ]);
+  const [entries, setEntries] = useState<YouTubePlayerControllerEntry[]>([]);
   const [barIndex, setBarIndex] = useState(0);
   const [is360Video, setIs360Video] = useState(false);
-  const [entryState, setEntryState] = useState<YtpcEntryState>({
+  const [defaultState, setDefaultState] = useState<YtpcEntryState>({
     atTime: 0,
     controlType: ControlType.Goto,
   });
-  const [defaultState, setDefaultState] = useState<YtpcEntryState>(entryState);
+  const [entryState, setEntryState] = useState<YtpcEntryState>(defaultState);
   const [useLoopShuffle, setLoopShuffle] = useStatePropBacked(props.loopShuffle);
-  const [useLoopCountForWeights, setUseLoopCountForWeights] = useStatePropBacked(props.shuffleWeight);
+  const [useLoopCountForWeights, setUseLoopCountForWeights] = useStatePropBacked(
+    props.shuffleWeight,
+  );
 
   useEffect(() => {
     const onStateChange = (e: CustomEvent) => {
@@ -186,36 +181,42 @@ function YouTubePlayerController(props: YouTubePlayerControllerProps) {
   return (
     <div className="yt-controller">
       <div className="controls">
-        <YtpcInput
-          ytPlayer={props.ytPlayer}
-          is360Video={is360Video}
-          defaultState={defaultState}
-          setDefaultState={setDefaultState}
-          entryState={entryState}
-          setEntryState={setEntryState}
-          createEntry={(state: YtpcEntryState) => {
-            const newEntries = [...entries];
-            addEntry(newEntries, EntryBuilder.buildEntry(state));
-            setEntries(newEntries);
-          }}
-        />
+        <div className="input">
+          <YtpcInput
+            ytPlayer={props.ytPlayer}
+            is360Video={is360Video}
+            defaultState={defaultState}
+            setDefaultState={setDefaultState}
+            entryState={entryState}
+            setEntryState={setEntryState}
+            createEntry={(state: YtpcEntryState) => {
+              const newEntries = [...entries];
+              addEntry(newEntries, EntryBuilder.buildEntry(state));
+              setEntries(newEntries);
+            }}
+          />
+        </div>
 
-        <YtpcEntryList
-          entries={entries}
-          barIndex={barIndex}
-          deleteEntry={(entry: YouTubePlayerControllerEntry): void => {
-            setEntries([...entries.filter((e) => e !== entry)]);
-          }}
-          editEntry={(entry: YouTubePlayerControllerEntry) => {
-            setDefaultState(entry.getState());
-          }}
-        />
+        <span className="entry-list">
+          <YtpcEntryList
+            entries={entries}
+            barIndex={barIndex}
+            deleteEntry={(entry: YouTubePlayerControllerEntry): void => {
+              setEntries([...entries.filter((e) => e !== entry)]);
+            }}
+            editEntry={(entry: YouTubePlayerControllerEntry) => {
+              setDefaultState(entry.getState());
+            }}
+          />
+        </span>
 
         <div>
-          <YtpcClear clearEntries={() => {
-            setEntries([]);
-          }}
-          />
+          <span className="clear">
+            <YtpcClear clearEntries={() => {
+              setEntries([]);
+            }}
+            />
+          </span>
           <YtpcImport
             addEntry={addEntry}
             setEntries={setEntries}

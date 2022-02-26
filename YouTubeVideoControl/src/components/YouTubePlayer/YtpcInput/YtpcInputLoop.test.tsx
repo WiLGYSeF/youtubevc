@@ -4,14 +4,16 @@ import userEvent from '@testing-library/user-event';
 
 import { ControlType } from 'objects/YtpcEntry/YouTubePlayerControllerEntry';
 import { YtpcLoopState } from 'objects/YtpcEntry/YtpcLoopEntry';
+import { secondsToTimestamp } from 'utils/timestr';
 import YtpcInputLoop from './YtpcInputLoop';
-import { secondsToTimestamp } from '../../../utils/timestr';
 
-export function getInputs(container: HTMLElement): ({
-  loopBackTo: HTMLInputElement,
-  forever: HTMLInputElement,
-  loopCount: HTMLInputElement,
-}) {
+export interface YtpcInputLoopInputs {
+  loopBackTo: HTMLInputElement;
+  forever: HTMLInputElement;
+  loopCount: HTMLInputElement;
+}
+
+export function getInputs(container: HTMLElement): YtpcInputLoopInputs {
   return {
     loopBackTo: container.querySelector('.loop-back-to')!.getElementsByTagName('input')[0],
     forever: container.querySelector('.forever')!.getElementsByTagName('input')[0],

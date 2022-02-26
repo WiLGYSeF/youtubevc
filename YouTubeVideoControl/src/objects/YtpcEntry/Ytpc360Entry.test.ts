@@ -82,22 +82,25 @@ describe('Ytpc360Entry', () => {
       lerpSeconds: 3,
     });
 
-    mockSphericalProps(spherePropStart, ({ getSphericalProperties, setSphericalProperties, ytPlayer }, getRoutine) => {
-      entry.performAction(ytPlayer() as unknown as YouTubePlayer360);
+    mockSphericalProps(
+      spherePropStart,
+      ({ getSphericalProperties, setSphericalProperties, ytPlayer }, getRoutine) => {
+        entry.performAction(ytPlayer() as unknown as YouTubePlayer360);
 
-      const routine = getRoutine();
-      // pretend half the time has passed
-      routine.callback((entry.lerpSeconds / 2) * 1000);
+        const routine = getRoutine();
+        // pretend half the time has passed
+        routine.callback((entry.lerpSeconds / 2) * 1000);
 
-      expect(getSphericalProperties).toBeCalledTimes(1);
+        expect(getSphericalProperties).toBeCalledTimes(1);
 
-      const lastCallSphereProps = setSphericalProperties.mock.calls[0][0];
-      for (const key of Object.keys(entry.sphereProps) as (keyof SphericalProperties)[]) {
-        const expected = Math.round((spherePropStart[key] + spherePropEnd[key]) / 2);
-        expect(Math.round(lastCallSphereProps[key])).toBeGreaterThanOrEqual(expected - 1);
-        expect(Math.round(lastCallSphereProps[key])).toBeLessThanOrEqual(expected + 1);
-      }
-    });
+        const lastCallSphereProps = setSphericalProperties.mock.calls[0][0];
+        for (const key of Object.keys(entry.sphereProps) as (keyof SphericalProperties)[]) {
+          const expected = Math.round((spherePropStart[key] + spherePropEnd[key]) / 2);
+          expect(Math.round(lastCallSphereProps[key])).toBeGreaterThanOrEqual(expected - 1);
+          expect(Math.round(lastCallSphereProps[key])).toBeLessThanOrEqual(expected + 1);
+        }
+      },
+    );
   });
 
   it('ensures spherical properties are set at end of routine', () => {

@@ -5,9 +5,11 @@ import userEvent from '@testing-library/user-event';
 import { ControlType } from 'objects/YtpcEntry/YouTubePlayerControllerEntry';
 import YtpcControlSelect, { getControlTypes } from './YtpcControlSelect';
 
-export function getInputs(container: HTMLElement): ({
-  select: HTMLSelectElement,
-}) {
+export interface YtpcControlSelectInputs {
+  select: HTMLSelectElement;
+}
+
+export function getInputs(container: HTMLElement): YtpcControlSelectInputs {
   return {
     select: container.getElementsByTagName('select')[0],
   };
@@ -25,7 +27,7 @@ describe('YtpcControlSelect', () => {
     const options = Array.from(select.getElementsByTagName('option'));
 
     expect(options.map((opt) => opt.value)).toEqual(
-      getControlTypes().map(([type, _]) => type),
+      getControlTypes().map(([type]) => type),
     );
   });
 

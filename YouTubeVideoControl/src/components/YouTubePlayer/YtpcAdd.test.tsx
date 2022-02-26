@@ -4,9 +4,11 @@ import userEvent from '@testing-library/user-event';
 
 import YtpcAdd from './YtpcAdd';
 
-export function getInputs(container: HTMLElement): ({
-  add: HTMLElement,
-}) {
+export interface YtpcAddInputs {
+  add: HTMLElement;
+}
+
+export function getInputs(container: HTMLElement): YtpcAddInputs {
   return {
     add: container.querySelector('.add')!,
   };

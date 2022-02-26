@@ -72,6 +72,7 @@ function TimestampInput(props: TimestampInputProps) {
         props.onChange(seconds);
         setTime(seconds);
       } catch (exc) {
+        // TODO: remove try-catch?
         props.onChange(-1);
         setTime(-1);
       }

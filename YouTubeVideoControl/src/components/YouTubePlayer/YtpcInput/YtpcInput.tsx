@@ -24,15 +24,11 @@ interface YtpcInputProps {
 
 function YtpcInput(props: YtpcInputProps) {
   const component = controlTypeToComponent(props.defaultState.controlType);
-
   const [controlInput, setControlInput] = useState(() => component);
 
-  const createComponent = (input: YtpcControlInput) => {
-    return React.createElement(controlInput, input);
-  };
+  const createComponent = (input: YtpcControlInput) => React.createElement(controlInput, input);
 
   useEffect(() => {
-    const component = controlTypeToComponent(props.defaultState.controlType);
     setControlInput(() => component);
   }, [props.defaultState.controlType]);
 

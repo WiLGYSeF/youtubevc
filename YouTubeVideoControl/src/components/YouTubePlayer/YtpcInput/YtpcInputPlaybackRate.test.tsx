@@ -5,10 +5,13 @@ import userEvent from '@testing-library/user-event';
 import { ControlType } from 'objects/YtpcEntry/YouTubePlayerControllerEntry';
 import { YtpcPlaybackRateState } from 'objects/YtpcEntry/YtpcPlaybackRateEntry';
 import YtpcInputPlaybackRate from './YtpcInputPlaybackRate';
+import { PLAYBACK_RATES } from '../../../utils/youtube';
 
-export function getInputs(container: HTMLElement): ({
-  playbackRate: HTMLSelectElement,
-}) {
+export interface YtpcInputPlaybackRateInputs {
+  playbackRate: HTMLSelectElement;
+}
+
+export function getInputs(container: HTMLElement): YtpcInputPlaybackRateInputs {
   return {
     playbackRate: container.querySelector('.playback-rate')!.getElementsByTagName('select')[0],
   };
@@ -27,7 +30,7 @@ describe('YtpcInputPlaybackRate', () => {
       defaultState={state}
       entryState={state}
       setEntryState={setEntryState}
-      playbackRates={[0.25, 0.5, 1, 1.25, 1.5, 2]}
+      playbackRates={PLAYBACK_RATES}
     />);
 
     const { playbackRate } = getInputs(container);
@@ -49,13 +52,12 @@ describe('YtpcInputPlaybackRate', () => {
       playbackRate: 1,
     };
     const setEntryState = jest.fn();
-    const playbackRates = [0.25, 0.5, 0.75, 1, 1.25, 1.5, 1.75, 2];
 
     const { container, rerender } = render(<YtpcInputPlaybackRate
       defaultState={state}
       entryState={state}
       setEntryState={setEntryState}
-      playbackRates={playbackRates}
+      playbackRates={PLAYBACK_RATES}
     />);
 
     const { playbackRate } = getInputs(container);
@@ -72,7 +74,7 @@ describe('YtpcInputPlaybackRate', () => {
       defaultState={state}
       entryState={state}
       setEntryState={setEntryState}
-      playbackRates={playbackRates}
+      playbackRates={PLAYBACK_RATES}
     />);
 
     expect(playbackRate.value).toEqual(state.playbackRate.toString());

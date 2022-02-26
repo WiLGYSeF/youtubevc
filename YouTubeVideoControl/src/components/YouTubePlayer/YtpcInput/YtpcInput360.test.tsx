@@ -6,14 +6,16 @@ import { ControlType } from 'objects/YtpcEntry/YouTubePlayerControllerEntry';
 import { Ytpc360State } from 'objects/YtpcEntry/Ytpc360Entry';
 import YtpcInput360, { LERP_TIME_DEFAULT } from './YtpcInput360';
 
-export function getInputs(container: HTMLElement): ({
-  yaw: HTMLInputElement,
-  pitch: HTMLInputElement,
-  roll: HTMLInputElement,
-  fov: HTMLInputElement,
-  lerp: HTMLInputElement,
-  lerpSeconds: HTMLInputElement,
-}) {
+export interface YtpcInput360Inputs {
+  yaw: HTMLInputElement;
+  pitch: HTMLInputElement;
+  roll: HTMLInputElement;
+  fov: HTMLInputElement;
+  lerp: HTMLInputElement;
+  lerpSeconds: HTMLInputElement;
+}
+
+export function getInputs(container: HTMLElement): YtpcInput360Inputs {
   return {
     yaw: container.querySelector('.yaw')!.getElementsByTagName('input')[0],
     pitch: container.querySelector('.pitch')!.getElementsByTagName('input')[0],

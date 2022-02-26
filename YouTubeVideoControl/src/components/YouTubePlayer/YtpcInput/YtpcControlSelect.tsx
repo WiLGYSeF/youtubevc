@@ -1,4 +1,4 @@
-import React, { ChangeEvent, useEffect } from 'react';
+import React, { ChangeEvent } from 'react';
 
 import { ControlType } from 'objects/YtpcEntry/YouTubePlayerControllerEntry';
 import Ytpc360Entry from 'objects/YtpcEntry/Ytpc360Entry';

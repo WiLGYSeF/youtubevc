@@ -24,7 +24,12 @@ function YtpcEntry(props: YtpcEntryProps) {
   });
 
   return (
-    <div className="entry">
+    <div
+      className="entry"
+      data-at-time={props.entry.atTime}
+      data-control-type={props.entry.controlType}
+      data-entry={JSON.stringify(props.entry)}
+    >
       <span>{`${props.entry}`}</span>
       <div className="buttons">
         <div

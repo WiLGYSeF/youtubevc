@@ -4,9 +4,11 @@ import userEvent from '@testing-library/user-event';
 
 import YtpcClear from './YtpcClear';
 
-export function getInputs(container: HTMLElement): ({
-  clear: HTMLElement,
-}) {
+export interface YtpcClearInputs {
+  clear: HTMLElement;
+}
+
+export function getInputs(container: HTMLElement): YtpcClearInputs {
   return {
     clear: container.querySelector('.clear')!,
   };

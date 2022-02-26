@@ -6,6 +6,10 @@ import YtpcGotoEntry from 'objects/YtpcEntry/YtpcGotoEntry';
 import { getFiberNodeName } from 'utils/test/fiberNode';
 import YtpcEntryList from './YtpcEntryList';
 
+export function getEntries(container: Element): Element[] {
+  return Array.from(container.querySelector('.entry-list')!.querySelectorAll('.entry'));
+}
+
 describe('YtpcEntryList', () => {
   it('renders entries', () => {
     const entries = [
@@ -43,7 +47,7 @@ describe('YtpcEntryList', () => {
         editEntry={() => {}}
       />);
 
-      const children = container.getElementsByClassName('entry-list')[0].childNodes;
+      const children = container.querySelector('.entry-list')!.childNodes;
       let idx = 0;
 
       for (; idx < barIndex; idx += 1) {

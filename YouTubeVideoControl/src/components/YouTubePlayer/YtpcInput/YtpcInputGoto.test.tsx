@@ -7,9 +7,11 @@ import { YtpcGotoState } from 'objects/YtpcEntry/YtpcGotoEntry';
 import { secondsToTimestamp } from 'utils/timestr';
 import YtpcInputGoto from './YtpcInputGoto';
 
-export function getInputs(container: HTMLElement): ({
-  gotoTime: HTMLInputElement,
-}) {
+export interface YtpcInputGotoInputs {
+  gotoTime: HTMLInputElement;
+}
+
+export function getInputs(container: HTMLElement): YtpcInputGotoInputs {
   return {
     gotoTime: container.getElementsByTagName('input')[0],
   };

@@ -12,7 +12,7 @@ export function getInputs(container: HTMLElement): ({
 }) {
   return {
     edit: container.querySelector('.edit')!,
-    eDelete: container.querySelector('.delete')!
+    eDelete: container.querySelector('.delete')!,
   };
 }
 

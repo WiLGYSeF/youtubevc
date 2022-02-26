@@ -7,9 +7,11 @@ import { YtpcPauseState } from 'objects/YtpcEntry/YtpcPauseEntry';
 import { secondsToTimestamp } from 'utils/timestr';
 import YtpcInputPause from './YtpcInputPause';
 
-export function getInputs(container: HTMLElement): ({
-  pauseTime: HTMLInputElement,
-}) {
+export interface YtpcInputPauseInputs {
+  pauseTime: HTMLInputElement;
+}
+
+export function getInputs(container: HTMLElement): YtpcInputPauseInputs {
   return {
     pauseTime: container.querySelector('.pause')!.getElementsByTagName('input')[0],
   };
