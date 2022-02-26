@@ -7,9 +7,9 @@ import YtpcGotoEntry from 'objects/YtpcEntry/YtpcGotoEntry';
 import YtpcLoopEntry from 'objects/YtpcEntry/YtpcLoopEntry';
 import { secondsToTimestamp } from 'utils/timestr';
 import { PLAYBACK_RATES } from 'utils/youtube';
+import { YouTubePlayer } from 'youtube-player/dist/types';
 import YouTubePlayerController, { addEntry, filterLoopEntries, getRandomLoopEntry } from './YouTubePlayerController';
 import { getInputs as inputGetInputs, getInputsByControl, YtpcInputInputs } from './YtpcInput/YtpcInput.test';
-import { YouTubePlayer } from 'youtube-player/dist/types';
 import { YtpcInputLoopInputs } from './YtpcInput/YtpcInputLoop.test';
 import { getInputs as clearGetInputs, YtpcClearInputs } from './YtpcClear.test';
 import { getInputs as entryGetInputs } from './YtpcEntry.test';
@@ -124,9 +124,9 @@ describe('YouTubePlayerController', () => {
   });
 
   describe('YouTubePlayerController', () => {
-    const getEntryObject = (entry: HTMLElement): YouTubePlayerControllerEntry => {
-      return JSON.parse(entry.dataset.entry!);
-    };
+    const getEntryObject = (
+      entry: HTMLElement,
+    ): YouTubePlayerControllerEntry => JSON.parse(entry.dataset.entry!);
 
     const ytPlayer = {
       addEventListener: jest.fn(),
@@ -139,7 +139,7 @@ describe('YouTubePlayerController', () => {
     it('adds entries', () => {
       const { container } = render(<YouTubePlayerController
         ytPlayer={ytPlayer}
-        entries={''}
+        entries=""
         loopShuffle={false}
         shuffleWeight={false}
       />);
@@ -154,7 +154,7 @@ describe('YouTubePlayerController', () => {
       const {
         loopBackTo,
         forever,
-        loopCount
+        loopCount,
       } = getInputsByControl(input.controlInput, ControlType.Loop) as YtpcInputLoopInputs;
 
       userEvent.clear(loopBackTo);
@@ -283,12 +283,12 @@ describe('YouTubePlayerController', () => {
       const { input } = getInputs(container);
 
       const entryList = container.querySelector('.entry-list')!;
-      let entries = getEntries(entryList) as HTMLElement[];
+      const entries = getEntries(entryList) as HTMLElement[];
 
       for (const test of tests) {
-        let eEntry = entries[test.index];
-        let entry = getEntryObject(eEntry);
-        let { edit } = entryGetInputs(eEntry);
+        const eEntry = entries[test.index];
+        const entry = getEntryObject(eEntry);
+        const { edit } = entryGetInputs(eEntry);
 
         userEvent.click(edit);
 
@@ -296,13 +296,14 @@ describe('YouTubePlayerController', () => {
         expect(input.controlSelect.select.value).toEqual(test.controlType);
 
         switch (test.controlType) {
-          case ControlType.Goto:
+          case ControlType.Goto: {
             const gotoEntry = entry as YtpcGotoEntry;
             const gotoInput = getInputsByControl(input.controlInput, ControlType.Goto) as YtpcInputGotoInputs;
 
             expect(gotoInput.gotoTime.value).toEqual(secondsToTimestamp(gotoEntry.gotoTime));
             break;
-          case ControlType.Loop:
+          }
+          case ControlType.Loop: {
             const loopEntry = entry as YtpcLoopEntry;
             const loopInput = getInputsByControl(input.controlInput, ControlType.Loop) as YtpcInputLoopInputs;
 
@@ -310,6 +311,9 @@ describe('YouTubePlayerController', () => {
             expect(loopInput.forever.checked).toEqual(loopEntry.loopCount < 0);
             expect(loopInput.loopCount.value).toEqual(loopEntry.loopCount.toString());
             break;
+          }
+          default:
+            throw new Error('not implemented');
         }
       }
     });

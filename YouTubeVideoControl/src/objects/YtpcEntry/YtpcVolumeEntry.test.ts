@@ -166,7 +166,7 @@ describe('YtpcVolumeEntry', () => {
       lerpSeconds: 3,
     });
 
-    mockVolume(volumeStart, ({ setVolume, ytPlayer }, getRoutine) => {
+    mockVolume(volumeStart, ({ ytPlayer }, getRoutine) => {
       entry.performAction(ytPlayer() as unknown as YouTubePlayer);
       entry.restoreState();
 

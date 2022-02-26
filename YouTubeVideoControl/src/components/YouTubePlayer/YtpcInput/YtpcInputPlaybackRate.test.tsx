@@ -4,8 +4,8 @@ import userEvent from '@testing-library/user-event';
 
 import { ControlType } from 'objects/YtpcEntry/YouTubePlayerControllerEntry';
 import { YtpcPlaybackRateState } from 'objects/YtpcEntry/YtpcPlaybackRateEntry';
+import { PLAYBACK_RATES } from 'utils/youtube';
 import YtpcInputPlaybackRate from './YtpcInputPlaybackRate';
-import { PLAYBACK_RATES } from '../../../utils/youtube';
 
 export interface YtpcInputPlaybackRateInputs {
   playbackRate: HTMLSelectElement;
