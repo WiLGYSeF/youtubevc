@@ -34,7 +34,7 @@ describe('YtpcGotoEntry', () => {
     (str: string, expected: YtpcGotoState | null) => {
       const result = YtpcGotoEntry.fromString(str);
       if (expected) {
-        expect(result?.getState()).toStrictEqual(expected);
+        expect(result?.getState()).toEqual(expected);
       } else {
         expect(result).toEqual(expected);
       }

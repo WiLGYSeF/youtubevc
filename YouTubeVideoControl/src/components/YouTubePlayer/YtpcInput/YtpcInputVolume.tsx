@@ -2,6 +2,7 @@ import React, { ChangeEvent, useEffect } from 'react';
 
 import Checkbox from 'components/common/Checkbox/Checkbox';
 import NumberInput from 'components/common/NumberInput/NumberInput';
+import { ControlType } from 'objects/YtpcEntry/YouTubePlayerControllerEntry';
 import { YtpcVolumeState } from 'objects/YtpcEntry/YtpcVolumeEntry';
 import useStatePropBacked from 'utils/useStatePropBacked';
 import { YtpcControlInput } from './YtpcControlInput';
@@ -12,57 +13,65 @@ const VOLUME_MIN = 0;
 const VOLUME_MAX = 100;
 const VOLUME_DEFAULT = 100;
 
-const LERP_TIME_DEFAULT = 0;
+export const LERP_TIME_DEFAULT = 3;
 
 function YtpcInputVolume(props: YtpcControlInput) {
-  const pstate = props.state as YtpcVolumeState;
-  const [volume, setVolume] = useStatePropBacked(pstate?.volume ?? VOLUME_DEFAULT);
-  const [lerpSet, setLerp] = useStatePropBacked((pstate?.lerpSeconds ?? -1) >= 0);
+  const pstate = props.defaultState as YtpcVolumeState;
+  const dVolume = pstate?.volume ?? VOLUME_DEFAULT;
+  const dLerpSeconds = pstate?.lerpSeconds ?? -1;
 
-  const lerpSeconds = pstate?.lerpSeconds ?? -1;
-  const [lerpTime, setLerpTime] = useStatePropBacked(lerpSeconds < 0
-    ? LERP_TIME_DEFAULT
-    : lerpSeconds);
+  const [volume, setVolume] = useStatePropBacked(dVolume);
+
+  const [lerpSet, setLerp] = useStatePropBacked((pstate?.lerpSeconds ?? -1) >= 0);
+  const [lerpSeconds, setLerpSeconds] = useStatePropBacked(dLerpSeconds >= 0
+    ? dLerpSeconds
+    : LERP_TIME_DEFAULT);
 
   useEffect(() => {
     const state: YtpcVolumeState = {
       atTime: pstate.atTime,
-      controlType: pstate.controlType,
+      controlType: ControlType.Volume,
       volume,
-      lerpSeconds: lerpSet ? lerpTime : -1,
+      lerpSeconds: lerpSet ? lerpSeconds : -1,
     };
     props.setEntryState(state);
-  }, [volume, lerpSet, lerpTime]);
+  }, [volume, lerpSet, lerpSeconds]);
 
   return (
-    <div className="volume">
-      <input
-        type="range"
-        min={VOLUME_MIN} max={VOLUME_MAX}
-        value={volume}
-        onChange={(e: ChangeEvent<HTMLInputElement>) => {
-          setVolume(Number(e.target.value));
-        }}
-      />
+    <div>
+      <span className="volume">
+        <input
+          type="range"
+          min={VOLUME_MIN} max={VOLUME_MAX}
+          value={dVolume}
+          onChange={(e: ChangeEvent<HTMLInputElement>) => {
+            setVolume(Number(e.target.value));
+          }}
+        />
+      </span>
       <span>{volume}</span>
-      <Checkbox
-        label="lerp"
-        checked={lerpSet}
-        onChange={setLerp}
-      />
-      {lerpSet && (
-        <span>
-          <span> for </span>
-          <NumberInput
-            label=" seconds"
-            labelRight
-            minValue={0} step={null}
-            value={lerpTime}
-            forceValue
-            onChange={setLerpTime}
-          />
-        </span>
-      )}
+      <span className="lerp">
+        <Checkbox
+          label="lerp"
+          defaultChecked={lerpSet}
+          onChange={setLerp}
+        />
+      </span>
+      <span
+        className="lerp-seconds" style={{
+          display: lerpSet ? '' : 'none',
+        }}
+      >
+        <span> for </span>
+        <NumberInput
+          label=" seconds"
+          labelRight
+          minValue={0} step={null}
+          defaultValue={dLerpSeconds >= 0 ? dLerpSeconds : LERP_TIME_DEFAULT}
+          forceValue
+          onChange={setLerpSeconds}
+        />
+      </span>
     </div>
   );
 }

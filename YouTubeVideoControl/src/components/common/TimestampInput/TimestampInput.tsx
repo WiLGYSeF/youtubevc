@@ -1,12 +1,13 @@
 import React, {
-  ChangeEvent, KeyboardEvent, useEffect, useState,
+  ChangeEvent, KeyboardEvent, useEffect,
 } from 'react';
 
 import { secondsToTimestamp, timestampToSeconds } from 'utils/timestr';
 import trimstr from 'utils/trimstr';
+import useStatePropBacked from 'utils/useStatePropBacked';
 
 interface TimestampInputProps {
-  value: number | string;
+  defaultValue: number | string;
   onChange(seconds: number): void;
   setInput?(input: string): void;
 }
@@ -19,7 +20,7 @@ function sanitizeTime(time: string): string {
 
 function strToSeconds(str: string): number {
   const sanitized = sanitizeTime(str);
-  return sanitized ? timestampToSeconds(sanitized) : 0;
+  return sanitized.length ? timestampToSeconds(sanitized) : 0;
 }
 
 function getWidth(str: string): string {
@@ -27,17 +28,18 @@ function getWidth(str: string): string {
 }
 
 function TimestampInput(props: TimestampInputProps) {
-  const value = props.value ?? '';
+  const value = props.defaultValue ?? '';
   const getInput = () => (secondsToTimestamp(typeof value === 'number'
     ? value
-    : strToSeconds(value)));
+    : strToSeconds(value)
+  ));
   const getTime = () => (typeof value === 'number'
     ? value
     : strToSeconds(value)
   );
 
-  const [input, setInput] = useState(getInput());
-  const [time, setTime] = useState(getTime());
+  const [input, setInput] = useStatePropBacked(getInput());
+  const [time, setTime] = useStatePropBacked(getTime());
 
   useEffect(() => {
     if (props.setInput) {
@@ -60,7 +62,7 @@ function TimestampInput(props: TimestampInputProps) {
   const onInputChange = (e: ChangeEvent<HTMLInputElement>) => {
     const val = e.target.value;
 
-    if (/^(\d{0,2}:){0,3}\d{0,2}(\.\d*)?$/.test(val)) {
+    if (/^(\d{0,2}:){0,3}\d{0,2}(\.\d{0,5})?$/.test(val)) {
       if (props.setInput) {
         props.setInput(val);
       }
@@ -71,7 +73,6 @@ function TimestampInput(props: TimestampInputProps) {
         props.onChange(seconds);
         setTime(seconds);
       } catch (exc) {
-        console.error(exc, val, sanitizeTime(val));
         props.onChange(-1);
         setTime(-1);
       }

@@ -7,6 +7,7 @@ import YtpcLoopEntry from 'objects/YtpcEntry/YtpcLoopEntry';
 import YtpcPauseEntry from 'objects/YtpcEntry/YtpcPauseEntry';
 import YtpcPlaybackRateEntry from 'objects/YtpcEntry/YtpcPlaybackRateEntry';
 import YtpcVolumeEntry from 'objects/YtpcEntry/YtpcVolumeEntry';
+import useStatePropBacked from 'utils/useStatePropBacked';
 import YtpcInputVolume from './YtpcInputVolume';
 import YtpcInputPlaybackRate from './YtpcInputPlaybackRate';
 import YtpcInputPause from './YtpcInputPause';
@@ -16,7 +17,7 @@ import YtpcInput360 from './YtpcInput360';
 
 interface ControlSelectProps {
   is360Video: boolean;
-  controlInputType: ControlType;
+  defaultControlType: ControlType;
   setControlInput(type: ControlType, component: (props: any) => JSX.Element): void;
 }
 
@@ -27,6 +28,8 @@ type Control = {
 };
 
 function YtpcControlSelect(props: ControlSelectProps) {
+  const [controlType, setControlType] = useStatePropBacked(props.defaultControlType);
+
   const controls = new Map<string, Control>([
     [ControlType.ThreeSixty, {
       // enabled: props.is360Video, // only set after video start playing, keep enabled for now
@@ -61,25 +64,20 @@ function YtpcControlSelect(props: ControlSelectProps) {
     }],
   ]);
 
-  const setControlInput = (type: ControlType) => {
-    const control = controls.get(type) as Control;
-    props.setControlInput(type, control.component);
-  };
-
-  useEffect(() => {
-    setControlInput(props.controlInputType);
-  }, [props.controlInputType]);
-
   return (
     <select
-      value={props.controlInputType}
+      value={controlType}
       onChange={(e: ChangeEvent<HTMLSelectElement>) => {
-        setControlInput(e.target.value as ControlType);
+        const type = e.target.value as ControlType;
+        const control = controls.get(type) as Control;
+
+        setControlType(type);
+        props.setControlInput(type, control.component);
       }}
     >
-      {Array.from(controls.entries()).map((c) => (
-        <option key={c[0]} value={c[0]} disabled={!c[1].enabled}>
-          {c[1].text}
+      {Array.from(controls.entries()).map(([type, entry]) => (
+        <option key={type} value={type} disabled={!entry.enabled}>
+          {entry.text}
         </option>
       ))}
     </select>

@@ -1,4 +1,4 @@
-import React, { ChangeEvent, KeyboardEvent } from 'react';
+import React, { ChangeEvent, KeyboardEvent, useState } from 'react';
 
 import coerceNumber from 'utils/coerceNumber';
 import useStatePropBacked from 'utils/useStatePropBacked';
@@ -10,7 +10,7 @@ interface NumberInputProps {
   minValue?: number;
   maxValue?: number;
   step?: number | null;
-  value: number;
+  defaultValue: number;
 
   clamp?: boolean;
   forceValue?: boolean;
@@ -18,12 +18,12 @@ interface NumberInputProps {
   onChange(value: number): void;
 }
 
-const NUMBER_REGEX = /^-?\d*\.?\d*$/;
-const NONDIGIT_REGEX = /[^\d.-]/g;
+const NUMBER_REGEX = /^-?\d*\.?\d{0,5}$/;
+const NONNUMBER_REGEX = /[^\d.-]/g;
 
 function NumberInput(props: NumberInputProps) {
-  const [number, setNumber] = useStatePropBacked(props.value);
-  const [value, setValue] = useStatePropBacked(props.value.toString());
+  const [number, setNumber] = useStatePropBacked(props.defaultValue);
+  const [value, setValue] = useStatePropBacked(props.defaultValue.toString());
 
   const labelRight = props.labelRight ?? false;
   const doClamp = props.clamp ?? true;
@@ -55,7 +55,7 @@ function NumberInput(props: NumberInputProps) {
         min={props.minValue} max={props.maxValue} step={step ?? 'any'}
         value={value}
         onChange={(e: ChangeEvent<HTMLInputElement>) => {
-          const sanitized = e.target.value.replace(NONDIGIT_REGEX, '');
+          const sanitized = e.target.value.replace(NONNUMBER_REGEX, '');
           let num = number;
 
           if (sanitized.match(NUMBER_REGEX)) {

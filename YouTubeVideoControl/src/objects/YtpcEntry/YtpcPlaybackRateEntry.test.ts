@@ -39,7 +39,7 @@ describe('YtpcPlaybackRateEntry', () => {
     (str: string, expected: YtpcPlaybackRateState | null) => {
       const result = YtpcPlaybackRateEntry.fromString(str);
       if (expected) {
-        expect(result?.getState()).toStrictEqual(expected);
+        expect(result?.getState()).toEqual(expected);
       } else {
         expect(result).toEqual(expected);
       }

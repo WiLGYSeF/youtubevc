@@ -83,8 +83,8 @@ describe('timestr', () => {
   ])(
     'converts %d seconds to timeparts',
     (seconds: number, expectedParts: TimeParts, expectedList: number[]) => {
-      expect(secondsToTimeParts(seconds)).toStrictEqual(expectedParts);
-      expect(secondsToTimePartList(seconds)).toStrictEqual(expectedList);
+      expect(secondsToTimeParts(seconds)).toEqual(expectedParts);
+      expect(secondsToTimePartList(seconds)).toEqual(expectedList);
     },
   );
 
@@ -98,7 +98,7 @@ describe('timestr', () => {
   ])(
     'converts %d fractional seconds to timeparts',
     (seconds: number, expected: TimeParts) => {
-      expect(secondsToTimeParts(seconds)).toStrictEqual(expected);
+      expect(secondsToTimeParts(seconds)).toEqual(expected);
     },
   );
 

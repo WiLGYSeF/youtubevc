@@ -9,7 +9,7 @@ describe('NumberInput', () => {
   it('renders label', () => {
     const component = renderer.create(<NumberInput
       label="test label"
-      value={0}
+      defaultValue={0}
       onChange={() => {}}
     />);
     const tree = component.toJSON();
@@ -20,7 +20,7 @@ describe('NumberInput', () => {
     const component = renderer.create(<NumberInput
       label="test label"
       labelRight
-      value={0}
+      defaultValue={0}
       onChange={() => {}}
     />);
     const tree = component.toJSON();
@@ -67,7 +67,7 @@ describe('NumberInput', () => {
         minValue={minValue}
         maxValue={maxValue}
         step={step}
-        value={testValue}
+        defaultValue={testValue}
         clamp={clamp}
         forceValue={forceValue}
         onChange={(value: number) => {
@@ -101,7 +101,7 @@ describe('NumberInput', () => {
     const { container } = render(<NumberInput
       minValue={1}
       maxValue={10}
-      value={15}
+      defaultValue={15}
       clamp
       forceValue
       onChange={() => {}}
@@ -118,5 +118,34 @@ describe('NumberInput', () => {
     userEvent.clear(input);
     userEvent.type(input, '15{enter}');
     expect(input.value).toEqual('10');
+  });
+
+  it('updates value on props change', () => {
+    let value = 5;
+
+    const { container, rerender } = render(<NumberInput
+      minValue={1}
+      maxValue={20}
+      defaultValue={value}
+      clamp
+      forceValue
+      onChange={() => { }}
+    />);
+
+    const input = container.getElementsByTagName('input')[0];
+
+    expect(input.value).toEqual(value.toString());
+
+    value = 17;
+    rerender(<NumberInput
+      minValue={1}
+      maxValue={20}
+      defaultValue={value}
+      clamp
+      forceValue
+      onChange={() => { }}
+    />);
+
+    expect(input.value).toEqual(value.toString());
   });
 });

@@ -1,5 +1,4 @@
 import React from 'react';
-import renderer from 'react-test-renderer';
 import { fireEvent, render } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
@@ -7,17 +6,18 @@ import TimestampInput from './TimestampInput';
 
 describe('TimestampInput', () => {
   it('renders with string input', () => {
-    const component = renderer.create(<TimestampInput
-      value="27:51"
+    const { container } = render(<TimestampInput
+      defaultValue="27:51"
       onChange={() => {}}
     />);
-    const tree = component.toJSON();
-    expect(tree).toMatchSnapshot();
+
+    const input = container.getElementsByTagName('input')[0];
+    expect(input.value).toEqual('27:51');
   });
 
   it('renders with number input', () => {
     const { container } = render(<TimestampInput
-      value={3607}
+      defaultValue={3607}
       onChange={() => {}}
     />);
 
@@ -43,7 +43,7 @@ describe('TimestampInput', () => {
       const testInputFn = jest.fn();
 
       const { container } = render(<TimestampInput
-        value={0}
+        defaultValue={0}
         onChange={(value: number) => {
           testValue = value;
           testChangeFn(value);
@@ -76,7 +76,7 @@ describe('TimestampInput', () => {
     const testFn = jest.fn();
 
     const { container } = render(<TimestampInput
-      value="0:71"
+      defaultValue="0:71"
       onChange={() => {}}
       setInput={testFn}
     />);
@@ -94,5 +94,26 @@ describe('TimestampInput', () => {
     userEvent.type(input, '15{enter}');
     expect(input.value).toEqual('00:15');
     expect(testFn.mock.calls.map((x) => x[0])).toEqual(['1', '15', '00:15']);
+  });
+
+  it('updates value on props change', () => {
+    let value = 5;
+
+    const { container, rerender } = render(<TimestampInput
+      defaultValue={value}
+      onChange={() => {}}
+    />);
+
+    const input = container.getElementsByTagName('input')[0];
+
+    expect(input.value).toEqual('00:05');
+
+    value = 17;
+    rerender(<TimestampInput
+      defaultValue={value}
+      onChange={() => {}}
+    />);
+
+    expect(input.value).toEqual('00:17');
   });
 });

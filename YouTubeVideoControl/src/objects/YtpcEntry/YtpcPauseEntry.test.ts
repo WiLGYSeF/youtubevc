@@ -12,7 +12,7 @@ function mockPause(
       ytPlayer: jest.Mock,
     },
     getRoutine: () => Coroutine,
-  ) => void
+  ) => void,
 ): void {
   const startMock = jest.spyOn(Coroutine.prototype, 'start').mockImplementation(() => { });
 
@@ -75,7 +75,7 @@ describe('YtpcPauseEntry', () => {
     (str: string, expected: YtpcPauseState | null) => {
       const result = YtpcPauseEntry.fromString(str);
       if (expected) {
-        expect(result?.getState()).toStrictEqual(expected);
+        expect(result?.getState()).toEqual(expected);
       } else {
         expect(result).toEqual(expected);
       }

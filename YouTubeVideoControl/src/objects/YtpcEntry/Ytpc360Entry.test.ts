@@ -11,7 +11,7 @@ function mockSphericalProps(
       ytPlayer: jest.Mock,
     },
     getRoutine: () => Coroutine,
-  ) => void
+  ) => void,
 ): void {
   const startMock = jest.spyOn(Coroutine.prototype, 'start').mockImplementation(() => { });
 
@@ -172,7 +172,7 @@ describe('Ytpc360Entry', () => {
     (str: string, expected: Ytpc360State | null) => {
       const result = Ytpc360Entry.fromString(str);
       if (expected) {
-        expect(result?.getState()).toStrictEqual(expected);
+        expect(result?.getState()).toEqual(expected);
       } else {
         expect(result).toEqual(expected);
       }

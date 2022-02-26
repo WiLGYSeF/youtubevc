@@ -8,13 +8,13 @@ interface CheckboxProps {
   label: string;
   labelLeft?: boolean;
 
-  checked?: boolean;
+  defaultChecked?: boolean;
   onChange(checked: boolean): void;
 }
 
 function Checkbox(props: CheckboxProps) {
   const labelLeft = props.labelLeft ?? false;
-  const [checked, setChecked] = useStatePropBacked(props.checked ?? false);
+  const [checked, setChecked] = useStatePropBacked(props.defaultChecked ?? false);
   const [inputIdInternal] = useState<string>(Checkbox.prototype.getIdInternal());
 
   const eLabel = (<span>{props.label}</span>);

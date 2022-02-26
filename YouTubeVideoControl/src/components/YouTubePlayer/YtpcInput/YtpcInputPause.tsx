@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 
 import TimestampInput from 'components/common/TimestampInput/TimestampInput';
+import { ControlType } from 'objects/YtpcEntry/YouTubePlayerControllerEntry';
 import { YtpcPauseState } from 'objects/YtpcEntry/YtpcPauseEntry';
 import useStatePropBacked from 'utils/useStatePropBacked';
 import { YtpcControlInput } from './YtpcControlInput';
@@ -10,13 +11,14 @@ import './YtpcInputPause.scss';
 const PAUSE_FOR_DEFAULT = 5;
 
 function YtpcInputPause(props: YtpcControlInput) {
-  const pstate = props.state as YtpcPauseState;
-  const [pauseFor, setPauseFor] = useStatePropBacked(pstate?.pauseTime ?? PAUSE_FOR_DEFAULT);
+  const pstate = props.defaultState as YtpcPauseState;
+  const dPauseTime = pstate?.pauseTime ?? PAUSE_FOR_DEFAULT;
+  const [pauseFor, setPauseFor] = useStatePropBacked(dPauseTime);
 
   useEffect(() => {
     const state: YtpcPauseState = {
       atTime: pstate.atTime,
-      controlType: pstate.controlType,
+      controlType: ControlType.Pause,
       pauseTime: pauseFor,
     };
     props.setEntryState(state);
@@ -25,7 +27,7 @@ function YtpcInputPause(props: YtpcControlInput) {
   return (
     <div className="pause">
       <TimestampInput
-        value={pstate.pauseTime}
+        defaultValue={dPauseTime}
         onChange={setPauseFor}
       />
     </div>

@@ -13,7 +13,7 @@ function mockVolume(
       ytPlayer: jest.Mock,
     },
     getRoutine: () => Coroutine,
-  ) => void
+  ) => void,
 ): void {
   const startMock = jest.spyOn(Coroutine.prototype, 'start').mockImplementation(() => {});
 
@@ -118,7 +118,7 @@ describe('YtpcVolumeEntry', () => {
     (str: string, expected: YtpcVolumeState | null) => {
       const result = YtpcVolumeEntry.fromString(str);
       if (expected) {
-        expect(result?.getState()).toStrictEqual(expected);
+        expect(result?.getState()).toEqual(expected);
       } else {
         expect(result).toEqual(expected);
       }

@@ -2,7 +2,8 @@ import React, { useState } from 'react';
 import { YouTubePlayer } from 'youtube-player/dist/types';
 
 import TimestampInput from 'components/common/TimestampInput/TimestampInput';
-import { ControlType, YtpcEntryState } from 'objects/YtpcEntry/YouTubePlayerControllerEntry';
+import { YtpcEntryState } from 'objects/YtpcEntry/YouTubePlayerControllerEntry';
+import round from 'utils/round';
 import YtpcAdd from '../YtpcAdd';
 import YtpcControlSelect from './YtpcControlSelect';
 import YtpcInputGoto from './YtpcInputGoto';
@@ -13,10 +14,11 @@ interface YtpcInputProps {
   ytPlayer?: YouTubePlayer;
   is360Video: boolean;
 
+  defaultState: YtpcEntryState;
   entryState: YtpcEntryState;
+  setEntryState(state: YtpcEntryState): void;
 
   createEntry(state: YtpcEntryState): void;
-  setEntryState(state: YtpcEntryState): void;
 }
 
 function YtpcInput(props: YtpcInputProps) {
@@ -33,27 +35,28 @@ function YtpcInput(props: YtpcInputProps) {
             if (props.ytPlayer) {
               const state = { ...props.entryState };
 
-              // round time to two decimal places
-              state.atTime = Math.floor(props.ytPlayer.getCurrentTime() * 100) / 100;
+              state.atTime = round(props.ytPlayer.getCurrentTime(), 2);
               props.setEntryState(state);
             }
           }}
         >
           *
         </span>
-        <TimestampInput
-          value={props.entryState.atTime}
-          onChange={(seconds: number) => {
-            const state = { ...props.entryState };
-            state.atTime = seconds;
-            props.setEntryState(state);
-          }}
-        />
+        <span className="at-time">
+          <TimestampInput
+            defaultValue={props.defaultState.atTime}
+            onChange={(seconds: number) => {
+              const state = { ...props.entryState };
+              state.atTime = seconds;
+              props.setEntryState(state);
+            }}
+          />
+        </span>
         <span>, </span>
         <YtpcControlSelect
           is360Video={props.is360Video}
-          controlInputType={props.entryState.controlType}
-          setControlInput={(type: ControlType, component: (props: any) => JSX.Element) => {
+          defaultControlType={props.defaultState.controlType}
+          setControlInput={(type, component) => {
             const state = { ...props.entryState };
             state.controlType = type;
 
@@ -62,7 +65,7 @@ function YtpcInput(props: YtpcInputProps) {
           }}
         />
         {React.createElement(controlInput, {
-          state: props.entryState,
+          defaultState: props.defaultState,
           setEntryState: props.setEntryState,
           playbackRates: props.ytPlayer?.getAvailablePlaybackRates(),
         })}

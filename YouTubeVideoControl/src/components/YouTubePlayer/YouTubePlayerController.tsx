@@ -106,6 +106,7 @@ function YouTubePlayerController(props: YouTubePlayerControllerProps) {
     atTime: 0,
     controlType: ControlType.Goto,
   });
+  const [defaultState, setDefaultState] = useState<YtpcEntryState>(entryState);
   const [useLoopShuffle, setLoopShuffle] = useStatePropBacked(props.loopShuffle);
   const [useLoopCountForWeights, setUseLoopCountForWeights] = useStatePropBacked(props.shuffleWeight);
 
@@ -188,13 +189,14 @@ function YouTubePlayerController(props: YouTubePlayerControllerProps) {
         <YtpcInput
           ytPlayer={props.ytPlayer}
           is360Video={is360Video}
+          defaultState={defaultState}
           entryState={entryState}
+          setEntryState={setEntryState}
           createEntry={(state: YtpcEntryState) => {
             const newEntries = [...entries];
             addEntry(newEntries, EntryBuilder.buildEntry(state));
             setEntries(newEntries);
           }}
-          setEntryState={setEntryState}
         />
 
         <YtpcEntryList
@@ -204,7 +206,7 @@ function YouTubePlayerController(props: YouTubePlayerControllerProps) {
             setEntries([...entries.filter((e) => e !== entry)]);
           }}
           editEntry={(entry: YouTubePlayerControllerEntry) => {
-            setEntryState(entry.getState());
+            setDefaultState(entry.getState());
           }}
         />
 

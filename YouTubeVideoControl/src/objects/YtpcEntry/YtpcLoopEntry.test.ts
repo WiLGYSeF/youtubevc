@@ -69,7 +69,7 @@ describe('YtpcLoopEntry', () => {
     (str: string, expected: YtpcLoopState | null) => {
       const result = YtpcLoopEntry.fromString(str);
       if (expected) {
-        expect(result?.getState()).toStrictEqual(expected);
+        expect(result?.getState()).toEqual(expected);
       } else {
         expect(result).toEqual(expected);
       }

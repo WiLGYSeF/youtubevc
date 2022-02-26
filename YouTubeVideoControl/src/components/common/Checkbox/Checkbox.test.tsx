@@ -16,7 +16,7 @@ describe('Checkbox', () => {
     getIdInternalMock.mockRestore();
   });
 
-  test('renders label', () => {
+  it('renders label', () => {
     const component = renderer.create(<Checkbox
       label="test label"
       onChange={() => {}}
@@ -25,7 +25,7 @@ describe('Checkbox', () => {
     expect(tree).toMatchSnapshot();
   });
 
-  test('renders label on left', () => {
+  it('renders label on left', () => {
     const component = renderer.create(<Checkbox
       label="test label"
       labelLeft
@@ -35,27 +35,27 @@ describe('Checkbox', () => {
     expect(tree).toMatchSnapshot();
   });
 
-  test('renders checked', () => {
+  it('renders checked', () => {
     const component = renderer.create(<Checkbox
       label="test label"
       onChange={() => { }}
-      checked
+      defaultChecked
     />);
     const tree = component.toJSON();
     expect(tree).toMatchSnapshot();
   });
 
-  test('renders unchecked', () => {
+  it('renders unchecked', () => {
     const component = renderer.create(<Checkbox
       label="test label"
       onChange={() => { }}
-      checked={false}
+      defaultChecked={false}
     />);
     const tree = component.toJSON();
     expect(tree).toMatchSnapshot();
   });
 
-  test('sends value on change', () => {
+  it('sends value on change', () => {
     let result = false;
     const testFn = jest.fn();
 
@@ -85,11 +85,11 @@ describe('Checkbox', () => {
     expect(testFn.mock.calls.map((x) => x[0])).toEqual([true, false]);
   });
 
-  test('updates value on props change', () => {
+  it('updates value on props change', () => {
     let checked = false;
     const { container, rerender } = render(<Checkbox
       label="test label"
-      checked={checked}
+      defaultChecked={checked}
       onChange={() => {}}
     />);
 
@@ -100,7 +100,7 @@ describe('Checkbox', () => {
     checked = true;
     rerender(<Checkbox
       label="test label"
-      checked={checked}
+      defaultChecked={checked}
       onChange={() => {}}
     />);
 
@@ -109,7 +109,7 @@ describe('Checkbox', () => {
 });
 
 describe('Checkbox getIdInternal', () => {
-  test('getIdInternal', () => {
+  it('getIdInternal', () => {
     expect(Checkbox.prototype.getIdInternal()).toMatch(/^checkbox-[A-Za-z0-9]+$/);
   });
 });
