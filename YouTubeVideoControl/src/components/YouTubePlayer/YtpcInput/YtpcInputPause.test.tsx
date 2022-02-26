@@ -7,7 +7,7 @@ import { YtpcPauseState } from 'objects/YtpcEntry/YtpcPauseEntry';
 import { secondsToTimestamp } from 'utils/timestr';
 import YtpcInputPause from './YtpcInputPause';
 
-function getInputs(container: HTMLElement): ({
+export function getInputs(container: HTMLElement): ({
   pauseTime: HTMLInputElement,
 }) {
   return {
@@ -26,6 +26,7 @@ describe('YtpcInputPause', () => {
 
     const { container } = render(<YtpcInputPause
       defaultState={state}
+      entryState={state}
       setEntryState={setEntryState}
     />);
 
@@ -52,6 +53,7 @@ describe('YtpcInputPause', () => {
 
     const { container, rerender } = render(<YtpcInputPause
       defaultState={state}
+      entryState={state}
       setEntryState={setEntryState}
     />);
 
@@ -67,6 +69,7 @@ describe('YtpcInputPause', () => {
 
     rerender(<YtpcInputPause
       defaultState={state}
+      entryState={state}
       setEntryState={setEntryState}
     />);
 

@@ -7,7 +7,7 @@ import { YtpcLoopState } from 'objects/YtpcEntry/YtpcLoopEntry';
 import YtpcInputLoop from './YtpcInputLoop';
 import { secondsToTimestamp } from '../../../utils/timestr';
 
-function getInputs(container: HTMLElement): ({
+export function getInputs(container: HTMLElement): ({
   loopBackTo: HTMLInputElement,
   forever: HTMLInputElement,
   loopCount: HTMLInputElement,
@@ -31,6 +31,7 @@ describe('YtpcInputLoop', () => {
 
     const { container } = render(<YtpcInputLoop
       defaultState={state}
+      entryState={state}
       setEntryState={setEntryState}
     />);
 
@@ -68,6 +69,7 @@ describe('YtpcInputLoop', () => {
 
     const { container, rerender } = render(<YtpcInputLoop
       defaultState={state}
+      entryState={state}
       setEntryState={setEntryState}
     />);
 
@@ -90,6 +92,7 @@ describe('YtpcInputLoop', () => {
 
     rerender(<YtpcInputLoop
       defaultState={state}
+      entryState={state}
       setEntryState={setEntryState}
     />);
 

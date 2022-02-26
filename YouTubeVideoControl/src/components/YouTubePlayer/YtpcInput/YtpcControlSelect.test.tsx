@@ -3,15 +3,9 @@ import { render } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
 import { ControlType } from 'objects/YtpcEntry/YouTubePlayerControllerEntry';
-import YtpcControlSelect from './YtpcControlSelect';
-import YtpcInput360 from './YtpcInput360';
-import YtpcInputGoto from './YtpcInputGoto';
-import YtpcInputLoop from './YtpcInputLoop';
-import YtpcInputPause from './YtpcInputPause';
-import YtpcInputPlaybackRate from './YtpcInputPlaybackRate';
-import YtpcInputVolume from './YtpcInputVolume';
+import YtpcControlSelect, { getControlTypes } from './YtpcControlSelect';
 
-function getInputs(container: HTMLElement): ({
+export function getInputs(container: HTMLElement): ({
   select: HTMLSelectElement,
 }) {
   return {
@@ -30,24 +24,14 @@ describe('YtpcControlSelect', () => {
     const { select } = getInputs(container);
     const options = Array.from(select.getElementsByTagName('option'));
 
-    expect(options.map((opt) => opt.value)).toEqual([
-      ControlType.ThreeSixty,
-      ControlType.Goto,
-      ControlType.Loop,
-      ControlType.Pause,
-      ControlType.PlaybackRate,
-      ControlType.Volume,
-    ]);
+    expect(options.map((opt) => opt.value)).toEqual(
+      getControlTypes().map(([type, _]) => type),
+    );
   });
 
-  it.each([
-    [ControlType.ThreeSixty, YtpcInput360],
-    [ControlType.Goto, YtpcInputGoto],
-    [ControlType.Loop, YtpcInputLoop],
-    [ControlType.Pause, YtpcInputPause],
-    [ControlType.PlaybackRate, YtpcInputPlaybackRate],
-    [ControlType.Volume, YtpcInputVolume],
-  ])(
+  it.each(
+    getControlTypes(),
+  )(
     'returns the %s input component',
     (controlType: ControlType, expected: Function) => {
       const setControlInputMock = jest.fn();

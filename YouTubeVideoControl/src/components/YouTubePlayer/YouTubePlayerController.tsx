@@ -190,6 +190,7 @@ function YouTubePlayerController(props: YouTubePlayerControllerProps) {
           ytPlayer={props.ytPlayer}
           is360Video={is360Video}
           defaultState={defaultState}
+          setDefaultState={setDefaultState}
           entryState={entryState}
           setEntryState={setEntryState}
           createEntry={(state: YtpcEntryState) => {

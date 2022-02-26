@@ -20,7 +20,7 @@ function YtpcInputPlaybackRate(props: YtpcInputPlaybackRateProps) {
 
   useEffect(() => {
     const state: YtpcPlaybackRateState = {
-      atTime: pstate.atTime,
+      atTime: props.entryState.atTime,
       controlType: ControlType.PlaybackRate,
       playbackRate,
     };

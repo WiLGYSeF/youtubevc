@@ -6,7 +6,7 @@ import { ControlType } from 'objects/YtpcEntry/YouTubePlayerControllerEntry';
 import { YtpcVolumeState } from 'objects/YtpcEntry/YtpcVolumeEntry';
 import YtpcInputVolume, { LERP_TIME_DEFAULT } from './YtpcInputVolume';
 
-function getInputs(container: HTMLElement): ({
+export function getInputs(container: HTMLElement): ({
   volume: HTMLInputElement,
   lerp: HTMLInputElement,
   lerpSeconds: HTMLInputElement,
@@ -30,6 +30,7 @@ describe('YtpcInputVolume', () => {
 
     const { container } = render(<YtpcInputVolume
       defaultState={state}
+      entryState={state}
       setEntryState={setEntryState}
     />);
 
@@ -72,6 +73,7 @@ describe('YtpcInputVolume', () => {
 
     const { container, rerender } = render(<YtpcInputVolume
       defaultState={state}
+      entryState={state}
       setEntryState={setEntryState}
     />);
 
@@ -94,6 +96,7 @@ describe('YtpcInputVolume', () => {
 
     rerender(<YtpcInputVolume
       defaultState={state}
+      entryState={state}
       setEntryState={setEntryState}
     />);
 

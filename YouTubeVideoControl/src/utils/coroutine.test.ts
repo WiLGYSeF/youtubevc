@@ -1,7 +1,7 @@
 import Coroutine from './coroutine';
 import sleep from './sleep';
 
-const TIMEDIFF_THRESHOLD = 25;
+const TIMEDIFF_THRESHOLD = 50;
 
 describe('coroutine', () => {
   const mockRequestAnimationFrame = () => jest.spyOn(window, 'requestAnimationFrame')

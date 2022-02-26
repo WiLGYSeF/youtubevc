@@ -1,6 +1,6 @@
 import sleep from './sleep';
 
-const TIMEDIFF_THRESHOLD = 20;
+const TIMEDIFF_THRESHOLD = 50;
 
 describe('sleep', () => {
   it.each([

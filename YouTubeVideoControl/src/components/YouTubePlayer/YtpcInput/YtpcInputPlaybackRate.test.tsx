@@ -6,7 +6,7 @@ import { ControlType } from 'objects/YtpcEntry/YouTubePlayerControllerEntry';
 import { YtpcPlaybackRateState } from 'objects/YtpcEntry/YtpcPlaybackRateEntry';
 import YtpcInputPlaybackRate from './YtpcInputPlaybackRate';
 
-function getInputs(container: HTMLElement): ({
+export function getInputs(container: HTMLElement): ({
   playbackRate: HTMLSelectElement,
 }) {
   return {
@@ -25,6 +25,7 @@ describe('YtpcInputPlaybackRate', () => {
 
     const { container } = render(<YtpcInputPlaybackRate
       defaultState={state}
+      entryState={state}
       setEntryState={setEntryState}
       playbackRates={[0.25, 0.5, 1, 1.25, 1.5, 2]}
     />);
@@ -52,6 +53,7 @@ describe('YtpcInputPlaybackRate', () => {
 
     const { container, rerender } = render(<YtpcInputPlaybackRate
       defaultState={state}
+      entryState={state}
       setEntryState={setEntryState}
       playbackRates={playbackRates}
     />);
@@ -68,6 +70,7 @@ describe('YtpcInputPlaybackRate', () => {
 
     rerender(<YtpcInputPlaybackRate
       defaultState={state}
+      entryState={state}
       setEntryState={setEntryState}
       playbackRates={playbackRates}
     />);

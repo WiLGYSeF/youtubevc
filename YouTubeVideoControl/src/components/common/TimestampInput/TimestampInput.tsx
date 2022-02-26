@@ -31,8 +31,7 @@ function TimestampInput(props: TimestampInputProps) {
   const value = props.defaultValue ?? '';
   const getInput = () => (secondsToTimestamp(typeof value === 'number'
     ? value
-    : strToSeconds(value)
-  ));
+    : strToSeconds(value)));
   const getTime = () => (typeof value === 'number'
     ? value
     : strToSeconds(value)

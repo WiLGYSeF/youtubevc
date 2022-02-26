@@ -13,7 +13,7 @@ function YtpcInputGoto(props: YtpcControlInput) {
 
   useEffect(() => {
     const state: YtpcGotoState = {
-      atTime: pstate.atTime,
+      atTime: props.entryState.atTime,
       controlType: ControlType.Goto,
       gotoTime,
     };

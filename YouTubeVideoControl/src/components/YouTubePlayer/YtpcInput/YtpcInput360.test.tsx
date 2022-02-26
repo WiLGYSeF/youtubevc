@@ -6,7 +6,7 @@ import { ControlType } from 'objects/YtpcEntry/YouTubePlayerControllerEntry';
 import { Ytpc360State } from 'objects/YtpcEntry/Ytpc360Entry';
 import YtpcInput360, { LERP_TIME_DEFAULT } from './YtpcInput360';
 
-function getInputs(container: HTMLElement): ({
+export function getInputs(container: HTMLElement): ({
   yaw: HTMLInputElement,
   pitch: HTMLInputElement,
   roll: HTMLInputElement,
@@ -41,6 +41,7 @@ describe('YtpcInput360', () => {
 
     const { container } = render(<YtpcInput360
       defaultState={state}
+      entryState={state}
       setEntryState={setEntryState}
     />);
 
@@ -102,6 +103,7 @@ describe('YtpcInput360', () => {
 
     const { container, rerender } = render(<YtpcInput360
       defaultState={state}
+      entryState={state}
       setEntryState={setEntryState}
     />);
 
@@ -135,6 +137,7 @@ describe('YtpcInput360', () => {
 
     rerender(<YtpcInput360
       defaultState={state}
+      entryState={state}
       setEntryState={setEntryState}
     />);
 

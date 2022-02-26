@@ -31,7 +31,7 @@ function YtpcInput360(props: YtpcControlInput) {
 
   useEffect(() => {
     const state: Ytpc360State = {
-      atTime: pstate.atTime,
+      atTime: props.entryState.atTime,
       controlType: ControlType.ThreeSixty,
       sphereProps: {
         yaw: yaw === 360 ? 0 : yaw,

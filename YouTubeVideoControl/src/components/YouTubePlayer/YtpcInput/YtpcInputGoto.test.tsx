@@ -7,7 +7,7 @@ import { YtpcGotoState } from 'objects/YtpcEntry/YtpcGotoEntry';
 import { secondsToTimestamp } from 'utils/timestr';
 import YtpcInputGoto from './YtpcInputGoto';
 
-function getInputs(container: HTMLElement): ({
+export function getInputs(container: HTMLElement): ({
   gotoTime: HTMLInputElement,
 }) {
   return {
@@ -26,6 +26,7 @@ describe('YtpcInputGoto', () => {
 
     const { container } = render(<YtpcInputGoto
       defaultState={state}
+      entryState={state}
       setEntryState={setEntryState}
     />);
 
@@ -52,6 +53,7 @@ describe('YtpcInputGoto', () => {
 
     const { container, rerender } = render(<YtpcInputGoto
       defaultState={state}
+      entryState={state}
       setEntryState={setEntryState}
     />);
 
@@ -67,6 +69,7 @@ describe('YtpcInputGoto', () => {
 
     rerender(<YtpcInputGoto
       defaultState={state}
+      entryState={state}
       setEntryState={setEntryState}
     />);
 

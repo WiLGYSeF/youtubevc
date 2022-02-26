@@ -15,3 +15,7 @@ export function getFiberNodeName(node: Node): string | null {
   const component = fiber.return.elementType as Function;
   return component.name;
 }
+
+export function getNameFromFiberNode(node: any): string {
+  return (node.elementType as Function).name;
+}
