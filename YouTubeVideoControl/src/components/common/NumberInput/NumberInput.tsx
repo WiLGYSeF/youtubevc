@@ -49,7 +49,7 @@ function NumberInput(props: NumberInputProps) {
   };
 
   return (
-    <label data-label-right={labelRight}>
+    <label>
       {!labelRight && eLabel}
       <input
         min={props.minValue} max={props.maxValue} step={step ?? 'any'}

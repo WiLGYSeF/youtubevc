@@ -1,0 +1,27 @@
+.entry {
+  border: 1px solid #aaa;
+  display: flex;
+  height: 25px;
+  justify-content: space-between;
+  padding: 2px 4px;
+
+  :global {
+    .buttons {
+      display: flex;
+    }
+
+    .delete, .edit {
+      background-color: #fff;
+      border: 1px solid #aaa;
+      border-radius: 4px;
+      color: #000;
+      height: 20px;
+      user-select: none;
+      width: 20px;
+
+      &:hover {
+        background-color: #ddd;
+      }
+    }
+  }
+}

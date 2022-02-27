@@ -7,7 +7,7 @@ import { YtpcVolumeState } from 'objects/YtpcEntry/YtpcVolumeEntry';
 import useStatePropBacked from 'utils/useStatePropBacked';
 import { YtpcControlInput } from './YtpcControlInput';
 
-import './YtpcInputVolume.scss';
+import styles from './YtpcInputVolume.module.scss';
 
 const VOLUME_MIN = 0;
 const VOLUME_MAX = 100;
@@ -38,7 +38,7 @@ function YtpcInputVolume(props: YtpcControlInput) {
   }, [volume, lerpSet, lerpSeconds]);
 
   return (
-    <div>
+    <div className={styles.volume}>
       <span className="volume">
         <input
           type="range"

@@ -7,7 +7,7 @@ import { ControlType } from 'objects/YtpcEntry/YouTubePlayerControllerEntry';
 import useStatePropBacked from 'utils/useStatePropBacked';
 import { YtpcControlInput } from './YtpcControlInput';
 
-import './YtpcInput360.scss';
+import styles from './YtpcInput360.module.scss';
 
 export const LERP_TIME_DEFAULT = 3;
 
@@ -45,7 +45,7 @@ function YtpcInput360(props: YtpcControlInput) {
   }, [yaw, pitch, roll, fov, lerpSet, lerpSeconds]);
 
   return (
-    <div className="three-sixty">
+    <div className={styles['three-sixty']}>
       <span className="yaw">
         <NumberInput
           label="yaw: "

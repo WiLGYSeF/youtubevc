@@ -2,7 +2,7 @@ import React, { useEffect, useReducer } from 'react';
 
 import YouTubePlayerControllerEntry from 'objects/YtpcEntry/YouTubePlayerControllerEntry';
 
-import './YtpcEntry.scss';
+import styles from './YtpcEntry.module.scss';
 
 interface YtpcEntryProps {
   entry: YouTubePlayerControllerEntry;
@@ -25,7 +25,7 @@ function YtpcEntry(props: YtpcEntryProps) {
 
   return (
     <div
-      className="entry"
+      className={styles.entry}
       data-at-time={props.entry.atTime}
       data-control-type={props.entry.controlType}
       data-entry={JSON.stringify(props.entry)}

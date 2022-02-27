@@ -1,10 +1,10 @@
 import React from 'react';
 
-import './YtpcEntryBar.scss';
+import styles from './YtpcEntryBar.module.scss';
 
 function YtpcEntryBar() {
   return (
-    <div className="entry-bar">
+    <div className={styles['entry-bar']}>
       <div className="arrow" />
     </div>
   );

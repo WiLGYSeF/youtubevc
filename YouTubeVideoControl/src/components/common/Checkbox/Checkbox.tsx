@@ -2,7 +2,7 @@ import React, { ChangeEvent, useState } from 'react';
 
 import useStatePropBacked from 'utils/useStatePropBacked';
 
-import './Checkbox.scss';
+import styles from './Checkbox.module.scss';
 
 interface CheckboxProps {
   label: string;
@@ -22,7 +22,7 @@ function Checkbox(props: CheckboxProps) {
   );
 
   return (
-    <label htmlFor={inputIdInternal} className="cpt-checkbox" data-label-left={labelLeft}>
+    <label htmlFor={inputIdInternal} className={styles.checkbox}>
       {labelLeft && eLabel}
       <input
         type="checkbox"

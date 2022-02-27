@@ -17,7 +17,7 @@ import YtpcImport from './YtpcImport';
 import YtpcOptions from './YtpcOptions';
 import YtpcInput from './YtpcInput/YtpcInput';
 
-import './YouTubePlayerController.scss';
+import styles from './YouTubePlayerController.module.scss';
 
 interface YouTubePlayerControllerProps {
   ytPlayer?: YouTubePlayer;
@@ -179,9 +179,9 @@ function YouTubePlayerController(props: YouTubePlayerControllerProps) {
   }, [props.ytPlayer, entries, useLoopShuffle, useLoopCountForWeights]);
 
   return (
-    <div className="yt-controller">
+    <div className={styles['yt-controller']}>
       <div className="controls">
-        <div className="input">
+        <span className="input">
           <YtpcInput
             ytPlayer={props.ytPlayer}
             is360Video={is360Video}
@@ -195,7 +195,7 @@ function YouTubePlayerController(props: YouTubePlayerControllerProps) {
               setEntries(newEntries);
             }}
           />
-        </div>
+        </span>
 
         <span className="entry-list">
           <YtpcEntryList

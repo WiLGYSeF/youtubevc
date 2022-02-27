@@ -8,7 +8,7 @@ import { YtpcLoopState } from 'objects/YtpcEntry/YtpcLoopEntry';
 import useStatePropBacked from 'utils/useStatePropBacked';
 import { YtpcControlInput } from './YtpcControlInput';
 
-import './YtpcInputLoop.scss';
+import styles from './YtpcInputLoop.module.scss';
 
 const LOOP_COUNT_DEFAULT = 1;
 
@@ -32,7 +32,7 @@ function YtpcInputLoop(props: YtpcControlInput) {
   }, [loopBackTo, forever, loopCount]);
 
   return (
-    <div className="loop">
+    <div className={styles.loop}>
       <span className="loop-back-to">
         <TimestampInput
           defaultValue={dLoopBackTo}
