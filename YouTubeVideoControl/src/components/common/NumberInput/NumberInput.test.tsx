@@ -1,30 +1,54 @@
 import React from 'react';
-import renderer from 'react-test-renderer';
 import { fireEvent, render } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
+import flatten from 'utils/flattenElements';
 import NumberInput from './NumberInput';
+
+export interface NumberInputInputs {
+  input: HTMLInputElement;
+}
+
+export function getInputs(container: HTMLElement): NumberInputInputs {
+  return {
+    input: container.querySelector('input')!,
+  };
+}
+
+function getLabel(container: HTMLElement): HTMLElement {
+  return container.querySelector('[data-testid="label"]') as HTMLElement;
+}
 
 describe('NumberInput', () => {
   it('renders label', () => {
-    const component = renderer.create(<NumberInput
+    const { container } = render(<NumberInput
       label="test label"
       defaultValue={0}
       onChange={() => {}}
     />);
-    const tree = component.toJSON();
-    expect(tree).toMatchSnapshot();
+
+    const label = getLabel(container);
+    const { input } = getInputs(container);
+
+    const flattened = flatten(container);
+
+    expect(flattened.indexOf(label)).toBeLessThan(flattened.indexOf(input));
   });
 
   it('renders label on right', () => {
-    const component = renderer.create(<NumberInput
+    const { container } = render(<NumberInput
       label="test label"
       labelRight
       defaultValue={0}
       onChange={() => {}}
     />);
-    const tree = component.toJSON();
-    expect(tree).toMatchSnapshot();
+
+    const label = getLabel(container);
+    const { input } = getInputs(container);
+
+    const flattened = flatten(container);
+
+    expect(flattened.indexOf(input)).toBeLessThan(flattened.indexOf(label));
   });
 
   it.each([
@@ -76,7 +100,7 @@ describe('NumberInput', () => {
         }}
       />);
 
-      const input = container.getElementsByTagName('input')[0];
+      const { input } = getInputs(container);
 
       expect(input.value).toEqual(testValue.toString());
 
@@ -107,7 +131,7 @@ describe('NumberInput', () => {
       onChange={() => {}}
     />);
 
-    const input = container.getElementsByTagName('input')[0];
+    const { input } = getInputs(container);
 
     expect(input.value).toEqual('15');
 
@@ -132,7 +156,7 @@ describe('NumberInput', () => {
       onChange={() => { }}
     />);
 
-    const input = container.getElementsByTagName('input')[0];
+    const { input } = getInputs(container);
 
     expect(input.value).toEqual(value.toString());
 

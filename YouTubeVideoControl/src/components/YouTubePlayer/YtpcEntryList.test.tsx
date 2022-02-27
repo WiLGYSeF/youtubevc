@@ -1,5 +1,4 @@
 import React from 'react';
-import renderer from 'react-test-renderer';
 import { render } from '@testing-library/react';
 
 import YtpcGotoEntry from 'objects/YtpcEntry/YtpcGotoEntry';
@@ -11,22 +10,6 @@ export function getEntries(container: Element): Element[] {
 }
 
 describe('YtpcEntryList', () => {
-  it('renders entries', () => {
-    const entries = [
-      new YtpcGotoEntry(0, 0),
-      new YtpcGotoEntry(5, 0),
-      new YtpcGotoEntry(8, 0),
-    ];
-
-    const component = renderer.create(<YtpcEntryList
-      entries={entries}
-      deleteEntry={() => {}}
-      editEntry={() => {}}
-    />);
-    const tree = component.toJSON();
-    expect(tree).toMatchSnapshot();
-  });
-
   it.each([
     [0],
     [2],

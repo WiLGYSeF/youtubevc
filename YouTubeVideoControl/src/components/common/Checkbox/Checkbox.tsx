@@ -17,7 +17,9 @@ function Checkbox(props: CheckboxProps) {
   const [checked, setChecked] = useStatePropBacked(props.defaultChecked ?? false);
   const [inputIdInternal] = useState<string>(Checkbox.prototype.getIdInternal());
 
-  const eLabel = (<span>{props.label}</span>);
+  const eLabel = (
+    <span data-testid="label">{props.label}</span>
+  );
 
   return (
     <label htmlFor={inputIdInternal} className="cpt-checkbox" data-label-left={labelLeft}>

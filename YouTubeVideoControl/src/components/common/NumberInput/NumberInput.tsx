@@ -1,4 +1,4 @@
-import React, { ChangeEvent, KeyboardEvent, useState } from 'react';
+import React, { ChangeEvent, KeyboardEvent } from 'react';
 
 import coerceNumber from 'utils/coerceNumber';
 import useStatePropBacked from 'utils/useStatePropBacked';
@@ -39,7 +39,7 @@ function NumberInput(props: NumberInputProps) {
   }
 
   const eLabel = (
-    <span>{props.label}</span>
+    <span data-testid="label">{props.label}</span>
   );
 
   const doForceValue = () => {

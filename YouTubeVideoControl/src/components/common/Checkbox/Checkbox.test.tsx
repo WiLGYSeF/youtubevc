@@ -1,8 +1,22 @@
 import React from 'react';
-import renderer from 'react-test-renderer';
 import { render } from '@testing-library/react';
 
+import flatten from 'utils/flattenElements';
 import Checkbox from './Checkbox';
+
+export interface CheckboxInputs {
+  checkbox: HTMLInputElement;
+}
+
+export function getInputs(container: HTMLElement): CheckboxInputs {
+  return {
+    checkbox: container.querySelector('input')!,
+  };
+}
+
+function getLabel(container: HTMLElement): HTMLElement {
+  return container.querySelector('[data-testid="label"]') as HTMLElement;
+}
 
 describe('Checkbox', () => {
   let getIdInternalMock: jest.SpyInstance;
@@ -17,42 +31,56 @@ describe('Checkbox', () => {
   });
 
   it('renders label', () => {
-    const component = renderer.create(<Checkbox
+    const { container } = render(<Checkbox
       label="test label"
       onChange={() => {}}
     />);
-    const tree = component.toJSON();
-    expect(tree).toMatchSnapshot();
+
+    const label = getLabel(container);
+    const { checkbox } = getInputs(container);
+
+    const flattened = flatten(container);
+
+    expect(flattened.indexOf(checkbox)).toBeLessThan(flattened.indexOf(label));
   });
 
   it('renders label on left', () => {
-    const component = renderer.create(<Checkbox
+    const { container } = render(<Checkbox
       label="test label"
       labelLeft
-      onChange={() => { }}
+      onChange={() => {}}
     />);
-    const tree = component.toJSON();
-    expect(tree).toMatchSnapshot();
+
+    const label = getLabel(container);
+    const { checkbox } = getInputs(container);
+
+    const flattened = flatten(container);
+
+    expect(flattened.indexOf(label)).toBeLessThan(flattened.indexOf(checkbox));
   });
 
   it('renders checked', () => {
-    const component = renderer.create(<Checkbox
+    const { container } = render(<Checkbox
       label="test label"
-      onChange={() => { }}
+      onChange={() => {}}
       defaultChecked
     />);
-    const tree = component.toJSON();
-    expect(tree).toMatchSnapshot();
+
+    const { checkbox } = getInputs(container);
+
+    expect(checkbox.checked).toBeTruthy();
   });
 
   it('renders unchecked', () => {
-    const component = renderer.create(<Checkbox
+    const { container } = render(<Checkbox
       label="test label"
-      onChange={() => { }}
+      onChange={() => {}}
       defaultChecked={false}
     />);
-    const tree = component.toJSON();
-    expect(tree).toMatchSnapshot();
+
+    const { checkbox } = getInputs(container);
+
+    expect(checkbox.checked).toBeFalsy();
   });
 
   it('sends value on change', () => {
@@ -67,7 +95,7 @@ describe('Checkbox', () => {
       }}
     />);
 
-    const checkbox = container.getElementsByTagName('input')[0];
+    const { checkbox } = getInputs(container);
 
     expect(checkbox.checked).toBeFalsy();
     expect(result).toBeFalsy();
@@ -93,7 +121,7 @@ describe('Checkbox', () => {
       onChange={() => {}}
     />);
 
-    const checkbox = container.getElementsByTagName('input')[0];
+    const { checkbox } = getInputs(container);
 
     expect(checkbox.checked).toBeFalsy();
 
