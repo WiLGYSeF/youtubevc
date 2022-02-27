@@ -14,23 +14,25 @@ $border-radius: 6px;
   min-height: 30px;
   padding: 5px;
 
-  div {
-    display: inline;
-  }
+  :global {
+    div {
+      display: inline;
+    }
 
-  input[type="range"] {
-    position: relative;
-    top: 3px;
-  }
+    input[type="range"] {
+      position: relative;
+      top: 3px;
+    }
 
-  select {
-    margin-right: 4px;
-  }
+    select {
+      margin-right: 4px;
+    }
 
-  .entry-creation {
-    .now-time {
-      cursor: pointer;
-      padding: 0 2px;
+    .entry-creation {
+      .now-time {
+        cursor: pointer;
+        padding: 0 2px;
+      }
     }
   }
 }

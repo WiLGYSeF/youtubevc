@@ -6,7 +6,7 @@ import { YtpcPauseState } from 'objects/YtpcEntry/YtpcPauseEntry';
 import useStatePropBacked from 'utils/useStatePropBacked';
 import { YtpcControlInput } from './YtpcControlInput';
 
-import './YtpcInputPause.scss';
+import styles from './YtpcInputPause.module.scss';
 
 const PAUSE_FOR_DEFAULT = 5;
 
@@ -25,7 +25,7 @@ function YtpcInputPause(props: YtpcControlInput) {
   }, [pauseFor]);
 
   return (
-    <div className="pause">
+    <div className={styles.pause}>
       <TimestampInput
         defaultValue={dPauseTime}
         onChange={setPauseFor}

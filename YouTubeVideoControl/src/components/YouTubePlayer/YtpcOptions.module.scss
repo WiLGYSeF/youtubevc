@@ -3,7 +3,9 @@
   border-radius: 5px;
   min-height: 45px;
 
-  .indent {
-    margin-left: 15px;
+  :global {
+    .indent {
+      margin-left: 15px;
+    }
   }
 }

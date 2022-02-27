@@ -1,6 +1,6 @@
 import React from 'react';
 
-import './YtpcAdd.scss';
+import styles from './YtpcAdd.module.scss';
 
 interface YtpcAddProps {
   createEntry(): void;
@@ -8,7 +8,7 @@ interface YtpcAddProps {
 
 function YtpcAdd(props: YtpcAddProps) {
   return (
-    <div className="add" onClick={props.createEntry}>
+    <div className={styles.add} onClick={props.createEntry}>
       +
     </div>
   );

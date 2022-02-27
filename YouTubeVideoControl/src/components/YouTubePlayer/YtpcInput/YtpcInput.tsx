@@ -8,7 +8,7 @@ import YtpcAdd from '../YtpcAdd';
 import { YtpcControlInput } from './YtpcControlInput';
 import YtpcControlSelect, { controlTypeToComponent } from './YtpcControlSelect';
 
-import './YtpcInput.scss';
+import styles from './YtpcInput.module.scss';
 
 interface YtpcInputProps {
   ytPlayer?: YouTubePlayer;
@@ -33,7 +33,7 @@ function YtpcInput(props: YtpcInputProps) {
   }, [props.defaultState.controlType]);
 
   return (
-    <div className="input">
+    <div className={styles.input}>
       <div className="entry-creation">
         <span>At </span>
         <span

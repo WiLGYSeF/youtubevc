@@ -4,7 +4,7 @@ import YouTubePlayerControllerEntry from 'objects/YtpcEntry/YouTubePlayerControl
 import YtpcEntry from './YtpcEntry';
 import YtpcEntryBar from './YtpcEntryBar';
 
-import './YtpcEntryList.scss';
+import styles from './YtpcEntryList.module.scss';
 
 interface YtpcEntryListProps {
   entries: YouTubePlayerControllerEntry[];
@@ -33,7 +33,7 @@ function YtpcEntryList(props: YtpcEntryListProps) {
   }
 
   return (
-    <div className="entry-list">
+    <div className={styles['entry-list']}>
       {elements}
     </div>
   );

@@ -2,7 +2,7 @@ import React from 'react';
 
 import Checkbox from 'components/common/Checkbox/Checkbox';
 
-import './YtpcOptions.scss';
+import styles from './YtpcOptions.module.scss';
 
 interface YtpcOptionsProps {
   useLoopsForShuffling: boolean;
@@ -14,7 +14,7 @@ interface YtpcOptionsProps {
 
 function YtpcOptions(props: YtpcOptionsProps) {
   return (
-    <div className="option-container">
+    <div className={styles['option-container']}>
       <Checkbox
         label="Loop controls are shuffle regions"
         defaultChecked={props.useLoopsForShuffling}
