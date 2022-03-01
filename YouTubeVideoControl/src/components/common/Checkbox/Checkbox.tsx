@@ -39,6 +39,16 @@ function Checkbox(props: CheckboxProps) {
   );
 }
 
+export interface CheckboxInputs {
+  checkbox: HTMLInputElement;
+}
+
+export function getInputs(container: HTMLElement): CheckboxInputs {
+  return {
+    checkbox: container.querySelector('input')!,
+  };
+}
+
 // defined here to be able to mock in tests
 Checkbox.prototype.getIdInternal = (): string => `checkbox-${Math.random().toString(36).substring(2)}`;
 

@@ -1,7 +1,7 @@
 import React, { ChangeEvent, useEffect } from 'react';
 
-import Checkbox from 'components/common/Checkbox/Checkbox';
-import NumberInput from 'components/common/NumberInput/NumberInput';
+import Checkbox, { getInputs as checkboxGetInputs, CheckboxInputs } from 'components/common/Checkbox/Checkbox';
+import NumberInput, { getInputs as numberGetInputs, NumberInputInputs } from 'components/common/NumberInput/NumberInput';
 import { ControlType } from 'objects/YtpcEntry/YouTubePlayerControllerEntry';
 import { YtpcVolumeState } from 'objects/YtpcEntry/YtpcVolumeEntry';
 import useStatePropBacked from 'utils/useStatePropBacked';
@@ -74,6 +74,20 @@ function YtpcInputVolume(props: YtpcControlInput) {
       </span>
     </div>
   );
+}
+
+export interface YtpcInputVolumeInputs {
+  volume: HTMLInputElement;
+  lerp: CheckboxInputs;
+  lerpSeconds: NumberInputInputs;
+}
+
+export function getInputs(container: HTMLElement): YtpcInputVolumeInputs {
+  return {
+    volume: container.querySelector('.volume input')!,
+    lerp: checkboxGetInputs(container.querySelector('[data-testid="lerp"]')!),
+    lerpSeconds: numberGetInputs(container.querySelector('[data-testid="lerp-seconds"]')!),
+  };
 }
 
 export default YtpcInputVolume;

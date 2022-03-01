@@ -5,24 +5,7 @@ import userEvent from '@testing-library/user-event';
 import { ControlType } from 'objects/YtpcEntry/YouTubePlayerControllerEntry';
 import { YtpcLoopState } from 'objects/YtpcEntry/YtpcLoopEntry';
 import { secondsToTimestamp } from 'utils/timestr';
-import YtpcInputLoop from './YtpcInputLoop';
-import { getInputs as checkboxGetInputs, CheckboxInputs } from '../../common/Checkbox/Checkbox.test';
-import { getInputs as numberGetInputs, NumberInputInputs } from '../../common/NumberInput/NumberInput.test';
-import { getInputs as timestampGetInputs, TimestampInputsInput } from '../../common/TimestampInput/TimestampInput.test';
-
-export interface YtpcInputLoopInputs {
-  loopBackTo: TimestampInputsInput;
-  forever: CheckboxInputs;
-  loopCount: NumberInputInputs;
-}
-
-export function getInputs(container: HTMLElement): YtpcInputLoopInputs {
-  return {
-    loopBackTo: timestampGetInputs(container.querySelector('[data-testid="loop-back-to"]')!),
-    forever: checkboxGetInputs(container.querySelector('[data-testid="forever"]')!),
-    loopCount: numberGetInputs(container.querySelector('.loop-count')!),
-  };
-}
+import YtpcInputLoop, { getInputs } from './YtpcInputLoop';
 
 describe('YtpcInputLoop', () => {
   it('updates entry state', () => {

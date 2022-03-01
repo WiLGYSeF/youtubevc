@@ -53,4 +53,16 @@ function YtpcEntry(props: YtpcEntryProps) {
   );
 }
 
+export interface YtpcEntryInputs {
+  edit: HTMLElement,
+  eDelete: HTMLElement,
+}
+
+export function getInputs(container: HTMLElement): YtpcEntryInputs {
+  return {
+    edit: container.querySelector('.edit')!,
+    eDelete: container.querySelector('.delete')!,
+  };
+}
+
 export default YtpcEntry;

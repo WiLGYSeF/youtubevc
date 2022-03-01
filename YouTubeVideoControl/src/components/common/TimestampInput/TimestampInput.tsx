@@ -6,12 +6,6 @@ import { secondsToTimestamp, timestampToSeconds } from 'utils/timestr';
 import trimstr from 'utils/trimstr';
 import useStatePropBacked from 'utils/useStatePropBacked';
 
-interface TimestampInputProps {
-  defaultValue: number | string;
-  onChange(seconds: number): void;
-  setInput?(input: string): void;
-}
-
 const TIME_PLACEHOLDER = '00:00';
 
 function sanitizeTime(time: string): string {
@@ -25,6 +19,12 @@ function strToSeconds(str: string): number {
 
 function getWidth(str: string): string {
   return `${Math.max(str.length, TIME_PLACEHOLDER.length)}ch`;
+}
+
+interface TimestampInputProps {
+  defaultValue: number | string;
+  onChange(seconds: number): void;
+  setInput?(input: string): void;
 }
 
 function TimestampInput(props: TimestampInputProps) {
@@ -110,6 +110,16 @@ function TimestampInput(props: TimestampInputProps) {
       />
     </span>
   );
+}
+
+export interface TimestampInputsInput {
+  input: HTMLInputElement;
+}
+
+export function getInputs(container: HTMLElement): TimestampInputsInput {
+  return {
+    input: container.querySelector('input')!,
+  };
 }
 
 export default TimestampInput;

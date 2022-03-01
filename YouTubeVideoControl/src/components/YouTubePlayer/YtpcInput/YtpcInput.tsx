@@ -1,12 +1,18 @@
 import React, { useEffect, useState } from 'react';
 import { YouTubePlayer } from 'youtube-player/dist/types';
 
-import TimestampInput from 'components/common/TimestampInput/TimestampInput';
-import { YtpcEntryState } from 'objects/YtpcEntry/YouTubePlayerControllerEntry';
+import TimestampInput, { getInputs as timestampGetInputs, TimestampInputsInput } from 'components/common/TimestampInput/TimestampInput';
+import { ControlType, YtpcEntryState } from 'objects/YtpcEntry/YouTubePlayerControllerEntry';
 import round from 'utils/round';
-import YtpcAdd from '../YtpcAdd';
+import YtpcAdd, { getInputs as addGetInputs, YtpcAddInputs } from '../YtpcAdd';
 import { YtpcControlInput } from './YtpcControlInput';
-import YtpcControlSelect, { controlTypeToComponent } from './YtpcControlSelect';
+import YtpcControlSelect, { controlTypeToComponent, getInputs as controlSelectGetInputs, YtpcControlSelectInputs } from './YtpcControlSelect';
+import { getInputs as gotoGetInputs } from './YtpcInputGoto';
+import { getInputs as loopGetInputs } from './YtpcInputLoop';
+import { getInputs as pauseGetInputs } from './YtpcInputPause';
+import { getInputs as playbackRateGetInputs } from './YtpcInputPlaybackRate';
+import { getInputs as threeSixtyGetInputs } from './YtpcInput360';
+import { getInputs as volumeGetInputs } from './YtpcInputVolume';
 
 import styles from './YtpcInput.module.scss';
 
@@ -88,6 +94,62 @@ function YtpcInput(props: YtpcInputProps) {
       </span>
     </div>
   );
+}
+
+export interface YtpcInputInputs {
+  nowTime: HTMLElement;
+  atTime: TimestampInputsInput;
+  controlSelect: YtpcControlSelectInputs;
+  controlInput: HTMLElement;
+  add: YtpcAddInputs;
+}
+
+export function getInputs(container: HTMLElement): YtpcInputInputs {
+  return {
+    nowTime: container.querySelector('.now-time')!,
+    atTime: timestampGetInputs(container.querySelector('[data-testid="at-time"]')!),
+    controlSelect: controlSelectGetInputs(container.querySelector('[data-testid="control-select"]')!),
+    controlInput: container.querySelector('[data-testid="control-input"]')!,
+    add: addGetInputs(container.querySelector('[data-testid="add"]')!),
+  };
+}
+
+export function getInputsByControl(container: HTMLElement, type: ControlType): any {
+  let inputs;
+
+  switch (type) {
+    case ControlType.Goto:
+      inputs = gotoGetInputs(container);
+      break;
+    case ControlType.Loop:
+      inputs = loopGetInputs(container);
+      break;
+    case ControlType.Pause:
+      inputs = pauseGetInputs(container);
+      break;
+    case ControlType.PlaybackRate:
+      inputs = playbackRateGetInputs(container);
+      break;
+    case ControlType.ThreeSixty:
+      inputs = threeSixtyGetInputs(container);
+      break;
+    case ControlType.Volume:
+      inputs = volumeGetInputs(container);
+      break;
+    default:
+      inputs = null;
+      break;
+  }
+
+  if (inputs) {
+    for (const [key, value] of Object.entries(inputs)) {
+      if (!value) {
+        return null;
+      }
+    }
+  }
+
+  return inputs;
 }
 
 export default YtpcInput;

@@ -8,23 +8,14 @@ import YtpcLoopEntry from 'objects/YtpcEntry/YtpcLoopEntry';
 import { secondsToTimestamp } from 'utils/timestr';
 import { PLAYBACK_RATES } from 'utils/youtube';
 import { YouTubePlayer } from 'youtube-player/dist/types';
-import YouTubePlayerController, { addEntry, filterLoopEntries, getRandomLoopEntry } from './YouTubePlayerController';
-import { getInputs as inputGetInputs, getInputsByControl, YtpcInputInputs } from './YtpcInput/YtpcInput.test';
-import { YtpcInputLoopInputs } from './YtpcInput/YtpcInputLoop.test';
-import { getInputs as clearGetInputs, YtpcClearInputs } from './YtpcClear.test';
-import { getInputs as entryGetInputs } from './YtpcEntry.test';
-import { getEntries } from './YtpcEntryList.test';
-import { YtpcInputGotoInputs } from './YtpcInput/YtpcInputGoto.test';
-
-export function getInputs(container: HTMLElement): ({
-  input: YtpcInputInputs,
-  clear: YtpcClearInputs
-}) {
-  return {
-    input: inputGetInputs(container.querySelector('[data-testid="ytpc-input"]')!),
-    clear: clearGetInputs(container.querySelector('[data-testid="ytpc-clear"]')!),
-  };
-}
+import YouTubePlayerController, {
+  addEntry, filterLoopEntries, getInputs, getRandomLoopEntry,
+} from './YouTubePlayerController';
+import { getInputsByControl } from './YtpcInput/YtpcInput';
+import { YtpcInputLoopInputs } from './YtpcInput/YtpcInputLoop';
+import { YtpcInputGotoInputs } from './YtpcInput/YtpcInputGoto';
+import { getInputs as entryGetInputs } from './YtpcEntry';
+import { getEntries } from './YtpcEntryList';
 
 function expectAscendingOrder(arr: any[], cmp: (a: any, b: any) => number): void {
   for (let i = 1; i < arr.length; i += 1) {

@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 
-import TimestampInput from 'components/common/TimestampInput/TimestampInput';
+import TimestampInput, { getInputs as timestampGetInputs, TimestampInputsInput } from 'components/common/TimestampInput/TimestampInput';
 import { ControlType } from 'objects/YtpcEntry/YouTubePlayerControllerEntry';
 import { YtpcGotoState } from 'objects/YtpcEntry/YtpcGotoEntry';
 import useStatePropBacked from 'utils/useStatePropBacked';
@@ -26,6 +26,16 @@ function YtpcInputGoto(props: YtpcControlInput) {
       onChange={setGotoTime}
     />
   );
+}
+
+export interface YtpcInputGotoInputs {
+  gotoTime: TimestampInputsInput;
+}
+
+export function getInputs(container: HTMLElement): YtpcInputGotoInputs {
+  return {
+    gotoTime: timestampGetInputs(container),
+  };
 }
 
 export default YtpcInputGoto;

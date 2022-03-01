@@ -2,17 +2,7 @@ import React from 'react';
 import { render } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
-import YtpcClear from './YtpcClear';
-
-export interface YtpcClearInputs {
-  clear: HTMLElement;
-}
-
-export function getInputs(container: HTMLElement): YtpcClearInputs {
-  return {
-    clear: container.querySelector('.clear')!,
-  };
-}
+import YtpcClear, { getInputs } from './YtpcClear';
 
 describe('YtpcClear', () => {
   it('clears entries on click', () => {

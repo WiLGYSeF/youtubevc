@@ -90,4 +90,14 @@ function YtpcControlSelect(props: ControlSelectProps) {
   );
 }
 
+export interface YtpcControlSelectInputs {
+  select: HTMLSelectElement;
+}
+
+export function getInputs(container: HTMLElement): YtpcControlSelectInputs {
+  return {
+    select: container.getElementsByTagName('select')[0],
+  };
+}
+
 export default YtpcControlSelect;

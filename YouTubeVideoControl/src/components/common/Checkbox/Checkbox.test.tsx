@@ -2,17 +2,7 @@ import React from 'react';
 import { render } from '@testing-library/react';
 
 import flatten from 'utils/flattenElements';
-import Checkbox from './Checkbox';
-
-export interface CheckboxInputs {
-  checkbox: HTMLInputElement;
-}
-
-export function getInputs(container: HTMLElement): CheckboxInputs {
-  return {
-    checkbox: container.querySelector('input')!,
-  };
-}
+import Checkbox, { getInputs } from './Checkbox';
 
 function getLabel(container: HTMLElement): HTMLElement {
   return container.querySelector('[data-testid="label"]') as HTMLElement;

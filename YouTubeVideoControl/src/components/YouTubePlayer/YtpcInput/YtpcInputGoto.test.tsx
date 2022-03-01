@@ -5,18 +5,7 @@ import userEvent from '@testing-library/user-event';
 import { ControlType } from 'objects/YtpcEntry/YouTubePlayerControllerEntry';
 import { YtpcGotoState } from 'objects/YtpcEntry/YtpcGotoEntry';
 import { secondsToTimestamp } from 'utils/timestr';
-import YtpcInputGoto from './YtpcInputGoto';
-import { getInputs as timestampGetInputs, TimestampInputsInput } from '../../common/TimestampInput/TimestampInput.test';
-
-export interface YtpcInputGotoInputs {
-  gotoTime: TimestampInputsInput;
-}
-
-export function getInputs(container: HTMLElement): YtpcInputGotoInputs {
-  return {
-    gotoTime: timestampGetInputs(container),
-  };
-}
+import YtpcInputGoto, { getInputs } from './YtpcInputGoto';
 
 describe('YtpcInputGoto', () => {
   it('updates entry state', () => {

@@ -3,17 +3,7 @@ import { render } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
 import { ControlType } from 'objects/YtpcEntry/YouTubePlayerControllerEntry';
-import YtpcControlSelect, { getControlTypes } from './YtpcControlSelect';
-
-export interface YtpcControlSelectInputs {
-  select: HTMLSelectElement;
-}
-
-export function getInputs(container: HTMLElement): YtpcControlSelectInputs {
-  return {
-    select: container.getElementsByTagName('select')[0],
-  };
-}
+import YtpcControlSelect, { getControlTypes, getInputs } from './YtpcControlSelect';
 
 describe('YtpcControlSelect', () => {
   it('shows all input options', () => {

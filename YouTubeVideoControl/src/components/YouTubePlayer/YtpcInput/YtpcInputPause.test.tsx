@@ -5,18 +5,7 @@ import userEvent from '@testing-library/user-event';
 import { ControlType } from 'objects/YtpcEntry/YouTubePlayerControllerEntry';
 import { YtpcPauseState } from 'objects/YtpcEntry/YtpcPauseEntry';
 import { secondsToTimestamp } from 'utils/timestr';
-import YtpcInputPause from './YtpcInputPause';
-import { getInputs as timestampGetInputs, TimestampInputsInput } from '../../common/TimestampInput/TimestampInput.test';
-
-export interface YtpcInputPauseInputs {
-  pauseTime: TimestampInputsInput;
-}
-
-export function getInputs(container: HTMLElement): YtpcInputPauseInputs {
-  return {
-    pauseTime: timestampGetInputs(container.querySelector('.pause')!),
-  };
-}
+import YtpcInputPause, { getInputs } from './YtpcInputPause';
 
 describe('YtpcInputPause', () => {
   it('updates entry state', () => {

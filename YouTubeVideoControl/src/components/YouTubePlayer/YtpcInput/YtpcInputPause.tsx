@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 
-import TimestampInput from 'components/common/TimestampInput/TimestampInput';
+import TimestampInput, { getInputs as timestampGetInputs, TimestampInputsInput } from 'components/common/TimestampInput/TimestampInput';
 import { ControlType } from 'objects/YtpcEntry/YouTubePlayerControllerEntry';
 import { YtpcPauseState } from 'objects/YtpcEntry/YtpcPauseEntry';
 import useStatePropBacked from 'utils/useStatePropBacked';
@@ -32,6 +32,16 @@ function YtpcInputPause(props: YtpcControlInput) {
       />
     </div>
   );
+}
+
+export interface YtpcInputPauseInputs {
+  pauseTime: TimestampInputsInput;
+}
+
+export function getInputs(container: HTMLElement): YtpcInputPauseInputs {
+  return {
+    pauseTime: timestampGetInputs(container.querySelector('.pause')!),
+  };
 }
 
 export default YtpcInputPause;

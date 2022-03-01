@@ -6,74 +6,9 @@ import { YouTubePlayer } from 'youtube-player/dist/types';
 import { ControlType } from 'objects/YtpcEntry/YouTubePlayerControllerEntry';
 import { YtpcGotoState } from 'objects/YtpcEntry/YtpcGotoEntry';
 import { getFiberNode, getNameFromFiberNode } from 'utils/test/fiberNode';
-import { getInputs as timestampGetInputs, TimestampInputsInput } from '../../common/TimestampInput/TimestampInput.test';
-import { getInputs as addGetInputs, YtpcAddInputs } from '../YtpcAdd.test';
-import { getInputs as controlSelectGetInputs, YtpcControlSelectInputs } from './YtpcControlSelect.test';
-import { getInputs as gotoGetInputs } from './YtpcInputGoto.test';
-import { getInputs as loopGetInputs } from './YtpcInputLoop.test';
-import { getInputs as pauseGetInputs } from './YtpcInputPause.test';
-import { getInputs as playbackRateGetInputs } from './YtpcInputPlaybackRate.test';
-import { getInputs as threeSixtyGetInputs } from './YtpcInput360.test';
-import { getInputs as volumeGetInputs } from './YtpcInputVolume.test';
-
-import YtpcInput from './YtpcInput';
 import { getControlTypes } from './YtpcControlSelect';
-
-export interface YtpcInputInputs {
-  nowTime: HTMLElement;
-  atTime: TimestampInputsInput;
-  controlSelect: YtpcControlSelectInputs;
-  controlInput: HTMLElement;
-  add: YtpcAddInputs;
-}
-
-export function getInputs(container: HTMLElement): YtpcInputInputs {
-  return {
-    nowTime: container.querySelector('.now-time')!,
-    atTime: timestampGetInputs(container.querySelector('[data-testid="at-time"]')!),
-    controlSelect: controlSelectGetInputs(container.querySelector('[data-testid="control-select"]')!),
-    controlInput: container.querySelector('[data-testid="control-input"]')!,
-    add: addGetInputs(container.querySelector('[data-testid="add"]')!),
-  };
-}
-
-export function getInputsByControl(container: HTMLElement, type: ControlType): any {
-  let inputs;
-
-  switch (type) {
-    case ControlType.Goto:
-      inputs = gotoGetInputs(container);
-      break;
-    case ControlType.Loop:
-      inputs = loopGetInputs(container);
-      break;
-    case ControlType.Pause:
-      inputs = pauseGetInputs(container);
-      break;
-    case ControlType.PlaybackRate:
-      inputs = playbackRateGetInputs(container);
-      break;
-    case ControlType.ThreeSixty:
-      inputs = threeSixtyGetInputs(container);
-      break;
-    case ControlType.Volume:
-      inputs = volumeGetInputs(container);
-      break;
-    default:
-      inputs = null;
-      break;
-  }
-
-  if (inputs) {
-    for (const [key, value] of Object.entries(inputs)) {
-      if (!value) {
-        return null;
-      }
-    }
-  }
-
-  return inputs;
-}
+import YtpcInput, { getInputs } from './YtpcInput';
+import { getInputs as loopGetInputs } from './YtpcInputLoop';
 
 describe('YtpcInput', () => {
   it.each(

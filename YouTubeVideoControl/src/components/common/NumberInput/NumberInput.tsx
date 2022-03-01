@@ -3,6 +3,9 @@ import React, { ChangeEvent, KeyboardEvent } from 'react';
 import coerceNumber from 'utils/coerceNumber';
 import useStatePropBacked from 'utils/useStatePropBacked';
 
+const NUMBER_REGEX = /^-?\d*\.?\d{0,5}$/;
+const NONNUMBER_REGEX = /[^\d.-]/g;
+
 interface NumberInputProps {
   label?: string;
   labelRight?: boolean;
@@ -17,9 +20,6 @@ interface NumberInputProps {
 
   onChange(value: number): void;
 }
-
-const NUMBER_REGEX = /^-?\d*\.?\d{0,5}$/;
-const NONNUMBER_REGEX = /[^\d.-]/g;
 
 function NumberInput(props: NumberInputProps) {
   const [number, setNumber] = useStatePropBacked(props.defaultValue);
@@ -83,6 +83,16 @@ function NumberInput(props: NumberInputProps) {
       {labelRight && eLabel}
     </label>
   );
+}
+
+export interface NumberInputInputs {
+  input: HTMLInputElement;
+}
+
+export function getInputs(container: HTMLElement): NumberInputInputs {
+  return {
+    input: container.querySelector('input')!,
+  };
 }
 
 export default NumberInput;

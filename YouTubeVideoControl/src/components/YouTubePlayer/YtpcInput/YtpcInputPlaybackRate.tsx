@@ -41,4 +41,14 @@ function YtpcInputPlaybackRate(props: YtpcInputPlaybackRateProps) {
   );
 }
 
+export interface YtpcInputPlaybackRateInputs {
+  playbackRate: HTMLSelectElement;
+}
+
+export function getInputs(container: HTMLElement): YtpcInputPlaybackRateInputs {
+  return {
+    playbackRate: container.querySelector('[data-testid="playback-rate"] select')!,
+  };
+}
+
 export default YtpcInputPlaybackRate;

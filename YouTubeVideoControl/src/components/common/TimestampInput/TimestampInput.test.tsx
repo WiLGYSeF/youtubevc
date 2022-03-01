@@ -2,17 +2,7 @@ import React from 'react';
 import { fireEvent, render } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
-import TimestampInput from './TimestampInput';
-
-export interface TimestampInputsInput {
-  input: HTMLInputElement;
-}
-
-export function getInputs(container: HTMLElement): TimestampInputsInput {
-  return {
-    input: container.querySelector('input')!,
-  };
-}
+import TimestampInput, { getInputs } from './TimestampInput';
 
 describe('TimestampInput', () => {
   it('renders with string input', () => {

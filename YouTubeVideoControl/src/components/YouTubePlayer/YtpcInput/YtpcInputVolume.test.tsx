@@ -4,23 +4,7 @@ import userEvent from '@testing-library/user-event';
 
 import { ControlType } from 'objects/YtpcEntry/YouTubePlayerControllerEntry';
 import { YtpcVolumeState } from 'objects/YtpcEntry/YtpcVolumeEntry';
-import YtpcInputVolume, { LERP_TIME_DEFAULT } from './YtpcInputVolume';
-import { getInputs as checkboxGetInputs, CheckboxInputs } from '../../common/Checkbox/Checkbox.test';
-import { getInputs as numberGetInputs, NumberInputInputs } from '../../common/NumberInput/NumberInput.test';
-
-export interface YtpcInputVolumeInputs {
-  volume: HTMLInputElement;
-  lerp: CheckboxInputs;
-  lerpSeconds: NumberInputInputs;
-}
-
-export function getInputs(container: HTMLElement): YtpcInputVolumeInputs {
-  return {
-    volume: container.querySelector('.volume input')!,
-    lerp: checkboxGetInputs(container.querySelector('[data-testid="lerp"]')!),
-    lerpSeconds: numberGetInputs(container.querySelector('[data-testid="lerp-seconds"]')!),
-  };
-}
+import YtpcInputVolume, { getInputs, LERP_TIME_DEFAULT } from './YtpcInputVolume';
 
 describe('YtpcInputVolume', () => {
   it('updates entry state', () => {

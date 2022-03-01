@@ -4,17 +4,7 @@ import userEvent from '@testing-library/user-event';
 
 import { ControlType } from 'objects/YtpcEntry/YouTubePlayerControllerEntry';
 import YtpcGotoEntry from 'objects/YtpcEntry/YtpcGotoEntry';
-import YtpcEntry from './YtpcEntry';
-
-export function getInputs(container: HTMLElement): ({
-  edit: HTMLElement,
-  eDelete: HTMLElement,
-}) {
-  return {
-    edit: container.querySelector('.edit')!,
-    eDelete: container.querySelector('.delete')!,
-  };
-}
+import YtpcEntry, { getInputs } from './YtpcEntry';
 
 describe('YtpcEntry', () => {
   it('edits the entry on click', () => {

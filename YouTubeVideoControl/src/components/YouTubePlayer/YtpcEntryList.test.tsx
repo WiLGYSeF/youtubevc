@@ -5,10 +5,6 @@ import YtpcGotoEntry from 'objects/YtpcEntry/YtpcGotoEntry';
 import { getFiberNodeName } from 'utils/test/fiberNode';
 import YtpcEntryList from './YtpcEntryList';
 
-export function getEntries(container: Element): Element[] {
-  return Array.from(container.querySelectorAll('.entry'));
-}
-
 describe('YtpcEntryList', () => {
   it.each([
     [0],

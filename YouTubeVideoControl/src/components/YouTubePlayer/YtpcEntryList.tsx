@@ -39,4 +39,8 @@ function YtpcEntryList(props: YtpcEntryListProps) {
   );
 }
 
+export function getEntries(container: Element): Element[] {
+  return Array.from(container.querySelectorAll('.entry'));
+}
+
 export default YtpcEntryList;

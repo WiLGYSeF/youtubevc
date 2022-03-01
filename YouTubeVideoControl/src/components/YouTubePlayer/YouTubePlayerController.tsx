@@ -9,22 +9,15 @@ import YtpcLoopEntry from 'objects/YtpcEntry/YtpcLoopEntry';
 import Coroutine from 'utils/coroutine';
 import useStatePropBacked from 'utils/useStatePropBacked';
 import { getVideoIdByUrl, playerHas360Video } from 'utils/youtube';
-import YtpcClear from './YtpcClear';
+import YtpcClear, { getInputs as clearGetInputs, YtpcClearInputs } from './YtpcClear';
 import YtpcCopyLink from './YtpcCopyLink';
-import YtpcEntryList from './YtpcEntryList';
+import YtpcEntryList, { getEntries } from './YtpcEntryList';
 import YtpcExport, { ExportType } from './YtpcExport';
 import YtpcImport from './YtpcImport';
 import YtpcOptions from './YtpcOptions';
-import YtpcInput from './YtpcInput/YtpcInput';
+import YtpcInput, { getInputs as inputGetInputs, getInputsByControl, YtpcInputInputs } from './YtpcInput/YtpcInput';
 
 import styles from './YouTubePlayerController.module.scss';
-
-interface YouTubePlayerControllerProps {
-  ytPlayer?: YouTubePlayer;
-  entries?: string | null;
-  loopShuffle: boolean;
-  shuffleWeight: boolean;
-}
 
 const EVENT_ONSTATECHANGE = 'onStateChange';
 
@@ -89,6 +82,13 @@ export function getRandomLoopEntry(
     random -= loopWeights[selected];
   }
   return loopEntries[selected];
+}
+
+interface YouTubePlayerControllerProps {
+  ytPlayer?: YouTubePlayer;
+  entries?: string | null;
+  loopShuffle: boolean;
+  shuffleWeight: boolean;
 }
 
 function YouTubePlayerController(props: YouTubePlayerControllerProps) {
@@ -256,6 +256,16 @@ function YouTubePlayerController(props: YouTubePlayerControllerProps) {
       <div className="padding" />
     </div>
   );
+}
+
+export function getInputs(container: HTMLElement): ({
+  input: YtpcInputInputs,
+  clear: YtpcClearInputs
+}) {
+  return {
+    input: inputGetInputs(container.querySelector('[data-testid="ytpc-input"]')!),
+    clear: clearGetInputs(container.querySelector('[data-testid="ytpc-clear"]')!),
+  };
 }
 
 export default YouTubePlayerController;

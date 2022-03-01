@@ -5,17 +5,7 @@ import userEvent from '@testing-library/user-event';
 import { ControlType } from 'objects/YtpcEntry/YouTubePlayerControllerEntry';
 import { YtpcPlaybackRateState } from 'objects/YtpcEntry/YtpcPlaybackRateEntry';
 import { PLAYBACK_RATES } from 'utils/youtube';
-import YtpcInputPlaybackRate from './YtpcInputPlaybackRate';
-
-export interface YtpcInputPlaybackRateInputs {
-  playbackRate: HTMLSelectElement;
-}
-
-export function getInputs(container: HTMLElement): YtpcInputPlaybackRateInputs {
-  return {
-    playbackRate: container.querySelector('[data-testid="playback-rate"] select')!,
-  };
-}
+import YtpcInputPlaybackRate, { getInputs } from './YtpcInputPlaybackRate';
 
 describe('YtpcInputPlaybackRate', () => {
   it('updates entry state', () => {

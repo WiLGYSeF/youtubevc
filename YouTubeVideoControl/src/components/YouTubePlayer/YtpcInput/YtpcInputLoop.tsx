@@ -1,8 +1,8 @@
 import React, { useEffect } from 'react';
 
-import Checkbox from 'components/common/Checkbox/Checkbox';
-import NumberInput from 'components/common/NumberInput/NumberInput';
-import TimestampInput from 'components/common/TimestampInput/TimestampInput';
+import Checkbox, { getInputs as checkboxGetInputs, CheckboxInputs } from 'components/common/Checkbox/Checkbox';
+import NumberInput, { getInputs as numberGetInputs, NumberInputInputs } from 'components/common/NumberInput/NumberInput';
+import TimestampInput, { getInputs as timestampGetInputs, TimestampInputsInput } from 'components/common/TimestampInput/TimestampInput';
 import { ControlType } from 'objects/YtpcEntry/YouTubePlayerControllerEntry';
 import { YtpcLoopState } from 'objects/YtpcEntry/YtpcLoopEntry';
 import useStatePropBacked from 'utils/useStatePropBacked';
@@ -65,6 +65,20 @@ function YtpcInputLoop(props: YtpcControlInput) {
       </span>
     </div>
   );
+}
+
+export interface YtpcInputLoopInputs {
+  loopBackTo: TimestampInputsInput;
+  forever: CheckboxInputs;
+  loopCount: NumberInputInputs;
+}
+
+export function getInputs(container: HTMLElement): YtpcInputLoopInputs {
+  return {
+    loopBackTo: timestampGetInputs(container.querySelector('[data-testid="loop-back-to"]')!),
+    forever: checkboxGetInputs(container.querySelector('[data-testid="forever"]')!),
+    loopCount: numberGetInputs(container.querySelector('.loop-count')!),
+  };
 }
 
 export default YtpcInputLoop;

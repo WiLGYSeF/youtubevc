@@ -2,17 +2,7 @@ import React from 'react';
 import { render } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
-import YtpcAdd from './YtpcAdd';
-
-export interface YtpcAddInputs {
-  add: HTMLElement;
-}
-
-export function getInputs(container: HTMLElement): YtpcAddInputs {
-  return {
-    add: container.querySelector('.add')!,
-  };
-}
+import YtpcAdd, { getInputs } from './YtpcAdd';
 
 describe('YtpcAdd', () => {
   it('calls create entry on click', () => {

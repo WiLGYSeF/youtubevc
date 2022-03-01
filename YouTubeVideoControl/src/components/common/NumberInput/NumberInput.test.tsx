@@ -3,17 +3,7 @@ import { fireEvent, render } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
 import flatten from 'utils/flattenElements';
-import NumberInput from './NumberInput';
-
-export interface NumberInputInputs {
-  input: HTMLInputElement;
-}
-
-export function getInputs(container: HTMLElement): NumberInputInputs {
-  return {
-    input: container.querySelector('input')!,
-  };
-}
+import NumberInput, { getInputs } from './NumberInput';
 
 function getLabel(container: HTMLElement): HTMLElement {
   return container.querySelector('[data-testid="label"]') as HTMLElement;

@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 
-import Checkbox from 'components/common/Checkbox/Checkbox';
-import NumberInput from 'components/common/NumberInput/NumberInput';
+import Checkbox, { getInputs as checkboxGetInputs, CheckboxInputs } from 'components/common/Checkbox/Checkbox';
+import NumberInput, { getInputs as numberGetInputs, NumberInputInputs } from 'components/common/NumberInput/NumberInput';
 import Ytpc360Entry, { Ytpc360State } from 'objects/YtpcEntry/Ytpc360Entry';
 import { ControlType } from 'objects/YtpcEntry/YouTubePlayerControllerEntry';
 import useStatePropBacked from 'utils/useStatePropBacked';
@@ -109,6 +109,26 @@ function YtpcInput360(props: YtpcControlInput) {
       </span>
     </div>
   );
+}
+
+export interface YtpcInput360Inputs {
+  yaw: NumberInputInputs;
+  pitch: NumberInputInputs;
+  roll: NumberInputInputs;
+  fov: NumberInputInputs;
+  lerp: CheckboxInputs;
+  lerpSeconds: NumberInputInputs;
+}
+
+export function getInputs(container: HTMLElement): YtpcInput360Inputs {
+  return {
+    yaw: numberGetInputs(container.querySelector('[data-testid="yaw"]')!),
+    pitch: numberGetInputs(container.querySelector('[data-testid="pitch"]')!),
+    roll: numberGetInputs(container.querySelector('[data-testid="roll"]')!),
+    fov: numberGetInputs(container.querySelector('[data-testid="fov"]')!),
+    lerp: checkboxGetInputs(container.querySelector('[data-testid="lerp"]')!),
+    lerpSeconds: numberGetInputs(container.querySelector('[data-testid="lerp-seconds"]')!),
+  };
 }
 
 export default YtpcInput360;

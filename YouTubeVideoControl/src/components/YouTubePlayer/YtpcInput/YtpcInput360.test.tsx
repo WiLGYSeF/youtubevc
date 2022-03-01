@@ -4,29 +4,7 @@ import userEvent from '@testing-library/user-event';
 
 import { ControlType } from 'objects/YtpcEntry/YouTubePlayerControllerEntry';
 import { Ytpc360State } from 'objects/YtpcEntry/Ytpc360Entry';
-import YtpcInput360, { LERP_TIME_DEFAULT } from './YtpcInput360';
-import { getInputs as checkboxGetInputs, CheckboxInputs } from '../../common/Checkbox/Checkbox.test';
-import { getInputs as numberGetInputs, NumberInputInputs } from '../../common/NumberInput/NumberInput.test';
-
-export interface YtpcInput360Inputs {
-  yaw: NumberInputInputs;
-  pitch: NumberInputInputs;
-  roll: NumberInputInputs;
-  fov: NumberInputInputs;
-  lerp: CheckboxInputs;
-  lerpSeconds: NumberInputInputs;
-}
-
-export function getInputs(container: HTMLElement): YtpcInput360Inputs {
-  return {
-    yaw: numberGetInputs(container.querySelector('[data-testid="yaw"]')!),
-    pitch: numberGetInputs(container.querySelector('[data-testid="pitch"]')!),
-    roll: numberGetInputs(container.querySelector('[data-testid="roll"]')!),
-    fov: numberGetInputs(container.querySelector('[data-testid="fov"]')!),
-    lerp: checkboxGetInputs(container.querySelector('[data-testid="lerp"]')!),
-    lerpSeconds: numberGetInputs(container.querySelector('[data-testid="lerp-seconds"]')!),
-  };
-}
+import YtpcInput360, { getInputs, LERP_TIME_DEFAULT } from './YtpcInput360';
 
 describe('YtpcInput360', () => {
   it('updates entry state', () => {

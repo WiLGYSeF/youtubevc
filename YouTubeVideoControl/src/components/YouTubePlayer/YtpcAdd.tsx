@@ -14,4 +14,14 @@ function YtpcAdd(props: YtpcAddProps) {
   );
 }
 
+export interface YtpcAddInputs {
+  add: HTMLElement;
+}
+
+export function getInputs(container: HTMLElement): YtpcAddInputs {
+  return {
+    add: container.querySelector('.add')!,
+  };
+}
+
 export default YtpcAdd;
