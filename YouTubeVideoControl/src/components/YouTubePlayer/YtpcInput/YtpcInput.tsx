@@ -50,7 +50,7 @@ function YtpcInput(props: YtpcInputProps) {
         >
           *
         </span>
-        <span className="at-time">
+        <span data-testid="at-time">
           <TimestampInput
             defaultValue={props.defaultState.atTime}
             onChange={(seconds: number) => {
@@ -61,7 +61,7 @@ function YtpcInput(props: YtpcInputProps) {
           />
         </span>
         <span>, </span>
-        <span className="control-select">
+        <span data-testid="control-select">
           <YtpcControlSelect
             is360Video={props.is360Video}
             defaultControlType={props.defaultState.controlType}
@@ -74,7 +74,7 @@ function YtpcInput(props: YtpcInputProps) {
             }}
           />
         </span>
-        <span className="control-input">
+        <span data-testid="control-input">
           {createComponent({
             entryState: props.entryState,
             defaultState: props.defaultState,
@@ -83,7 +83,7 @@ function YtpcInput(props: YtpcInputProps) {
           })}
         </span>
       </div>
-      <span className="add">
+      <span data-testid="add">
         <YtpcAdd createEntry={() => props.createEntry(props.entryState)} />
       </span>
     </div>

@@ -28,7 +28,7 @@ function YtpcInputPlaybackRate(props: YtpcInputPlaybackRateProps) {
   }, [playbackRate]);
 
   return (
-    <div className="playback-rate">
+    <div data-testid="playback-rate">
       <select
         value={playbackRate}
         onChange={(e: ChangeEvent<HTMLSelectElement>) => {

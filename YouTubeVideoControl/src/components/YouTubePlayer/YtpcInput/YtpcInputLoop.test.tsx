@@ -6,18 +6,21 @@ import { ControlType } from 'objects/YtpcEntry/YouTubePlayerControllerEntry';
 import { YtpcLoopState } from 'objects/YtpcEntry/YtpcLoopEntry';
 import { secondsToTimestamp } from 'utils/timestr';
 import YtpcInputLoop from './YtpcInputLoop';
+import { getInputs as checkboxGetInputs, CheckboxInputs } from '../../common/Checkbox/Checkbox.test';
+import { getInputs as numberGetInputs, NumberInputInputs } from '../../common/NumberInput/NumberInput.test';
+import { getInputs as timestampGetInputs, TimestampInputsInput } from '../../common/TimestampInput/TimestampInput.test';
 
 export interface YtpcInputLoopInputs {
-  loopBackTo: HTMLInputElement;
-  forever: HTMLInputElement;
-  loopCount: HTMLInputElement;
+  loopBackTo: TimestampInputsInput;
+  forever: CheckboxInputs;
+  loopCount: NumberInputInputs;
 }
 
 export function getInputs(container: HTMLElement): YtpcInputLoopInputs {
   return {
-    loopBackTo: container.querySelector('.loop-back-to')!.getElementsByTagName('input')[0],
-    forever: container.querySelector('.forever')!.getElementsByTagName('input')[0],
-    loopCount: container.querySelector('.loop-count')!.getElementsByTagName('input')[0],
+    loopBackTo: timestampGetInputs(container.querySelector('[data-testid="loop-back-to"]')!),
+    forever: checkboxGetInputs(container.querySelector('[data-testid="forever"]')!),
+    loopCount: numberGetInputs(container.querySelector('.loop-count')!),
   };
 }
 
@@ -43,13 +46,13 @@ describe('YtpcInputLoop', () => {
       loopCount,
     } = getInputs(container);
 
-    userEvent.clear(loopBackTo);
-    userEvent.type(loopBackTo, '12:34');
+    userEvent.clear(loopBackTo.input);
+    userEvent.type(loopBackTo.input, '12:34');
 
-    userEvent.click(forever);
+    userEvent.click(forever.checkbox);
 
-    userEvent.clear(loopCount);
-    userEvent.type(loopCount, '3');
+    userEvent.clear(loopCount.input);
+    userEvent.type(loopCount.input, '3');
 
     const { calls } = setEntryState.mock;
     expect(calls[calls.length - 1][0]).toEqual({
@@ -81,9 +84,9 @@ describe('YtpcInputLoop', () => {
       loopCount,
     } = getInputs(container);
 
-    expect(loopBackTo.value).toEqual(secondsToTimestamp(state.loopBackTo));
-    expect(forever.checked).toEqual((state.loopCount ?? -1) < 0);
-    expect(loopCount.value).toEqual(state.loopCount.toString());
+    expect(loopBackTo.input.value).toEqual(secondsToTimestamp(state.loopBackTo));
+    expect(forever.checkbox.checked).toEqual((state.loopCount ?? -1) < 0);
+    expect(loopCount.input.value).toEqual(state.loopCount.toString());
 
     state = {
       atTime: 0,
@@ -98,8 +101,8 @@ describe('YtpcInputLoop', () => {
       setEntryState={setEntryState}
     />);
 
-    expect(loopBackTo.value).toEqual(secondsToTimestamp(state.loopBackTo));
-    expect(forever.checked).toEqual((state.loopCount ?? -1) < 0);
-    expect(loopCount.value).toEqual(state.loopCount.toString());
+    expect(loopBackTo.input.value).toEqual(secondsToTimestamp(state.loopBackTo));
+    expect(forever.checkbox.checked).toEqual((state.loopCount ?? -1) < 0);
+    expect(loopCount.input.value).toEqual(state.loopCount.toString());
   });
 });

@@ -6,14 +6,15 @@ import { ControlType } from 'objects/YtpcEntry/YouTubePlayerControllerEntry';
 import { YtpcGotoState } from 'objects/YtpcEntry/YtpcGotoEntry';
 import { secondsToTimestamp } from 'utils/timestr';
 import YtpcInputGoto from './YtpcInputGoto';
+import { getInputs as timestampGetInputs, TimestampInputsInput } from '../../common/TimestampInput/TimestampInput.test';
 
 export interface YtpcInputGotoInputs {
-  gotoTime: HTMLInputElement;
+  gotoTime: TimestampInputsInput;
 }
 
 export function getInputs(container: HTMLElement): YtpcInputGotoInputs {
   return {
-    gotoTime: container.getElementsByTagName('input')[0],
+    gotoTime: timestampGetInputs(container),
   };
 }
 
@@ -34,8 +35,8 @@ describe('YtpcInputGoto', () => {
 
     const { gotoTime } = getInputs(container);
 
-    userEvent.clear(gotoTime);
-    userEvent.type(gotoTime, '12:34');
+    userEvent.clear(gotoTime.input);
+    userEvent.type(gotoTime.input, '12:34');
 
     const { calls } = setEntryState.mock;
     expect(calls[calls.length - 1][0]).toEqual({
@@ -61,7 +62,7 @@ describe('YtpcInputGoto', () => {
 
     const { gotoTime } = getInputs(container);
 
-    expect(gotoTime.value).toEqual(secondsToTimestamp(state.gotoTime));
+    expect(gotoTime.input.value).toEqual(secondsToTimestamp(state.gotoTime));
 
     state = {
       atTime: 0,
@@ -75,6 +76,6 @@ describe('YtpcInputGoto', () => {
       setEntryState={setEntryState}
     />);
 
-    expect(gotoTime.value).toEqual(secondsToTimestamp(state.gotoTime));
+    expect(gotoTime.input.value).toEqual(secondsToTimestamp(state.gotoTime));
   });
 });

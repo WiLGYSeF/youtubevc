@@ -6,14 +6,15 @@ import { ControlType } from 'objects/YtpcEntry/YouTubePlayerControllerEntry';
 import { YtpcPauseState } from 'objects/YtpcEntry/YtpcPauseEntry';
 import { secondsToTimestamp } from 'utils/timestr';
 import YtpcInputPause from './YtpcInputPause';
+import { getInputs as timestampGetInputs, TimestampInputsInput } from '../../common/TimestampInput/TimestampInput.test';
 
 export interface YtpcInputPauseInputs {
-  pauseTime: HTMLInputElement;
+  pauseTime: TimestampInputsInput;
 }
 
 export function getInputs(container: HTMLElement): YtpcInputPauseInputs {
   return {
-    pauseTime: container.querySelector('.pause')!.getElementsByTagName('input')[0],
+    pauseTime: timestampGetInputs(container.querySelector('.pause')!),
   };
 }
 
@@ -34,8 +35,8 @@ describe('YtpcInputPause', () => {
 
     const { pauseTime } = getInputs(container);
 
-    userEvent.clear(pauseTime);
-    userEvent.type(pauseTime, '12:34');
+    userEvent.clear(pauseTime.input);
+    userEvent.type(pauseTime.input, '12:34');
 
     const { calls } = setEntryState.mock;
     expect(calls[calls.length - 1][0]).toEqual({
@@ -61,7 +62,7 @@ describe('YtpcInputPause', () => {
 
     const { pauseTime } = getInputs(container);
 
-    expect(pauseTime.value).toEqual(secondsToTimestamp(state.pauseTime));
+    expect(pauseTime.input.value).toEqual(secondsToTimestamp(state.pauseTime));
 
     state = {
       atTime: 0,
@@ -75,6 +76,6 @@ describe('YtpcInputPause', () => {
       setEntryState={setEntryState}
     />);
 
-    expect(pauseTime.value).toEqual(secondsToTimestamp(state.pauseTime));
+    expect(pauseTime.input.value).toEqual(secondsToTimestamp(state.pauseTime));
   });
 });

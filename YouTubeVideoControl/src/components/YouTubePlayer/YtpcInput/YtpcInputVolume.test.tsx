@@ -5,18 +5,20 @@ import userEvent from '@testing-library/user-event';
 import { ControlType } from 'objects/YtpcEntry/YouTubePlayerControllerEntry';
 import { YtpcVolumeState } from 'objects/YtpcEntry/YtpcVolumeEntry';
 import YtpcInputVolume, { LERP_TIME_DEFAULT } from './YtpcInputVolume';
+import { getInputs as checkboxGetInputs, CheckboxInputs } from '../../common/Checkbox/Checkbox.test';
+import { getInputs as numberGetInputs, NumberInputInputs } from '../../common/NumberInput/NumberInput.test';
 
 export interface YtpcInputVolumeInputs {
   volume: HTMLInputElement;
-  lerp: HTMLInputElement;
-  lerpSeconds: HTMLInputElement;
+  lerp: CheckboxInputs;
+  lerpSeconds: NumberInputInputs;
 }
 
 export function getInputs(container: HTMLElement): YtpcInputVolumeInputs {
   return {
-    volume: container.querySelector('.volume')!.getElementsByTagName('input')[0],
-    lerp: container.querySelector('.lerp')!.getElementsByTagName('input')[0],
-    lerpSeconds: container.querySelector('.lerp-seconds')!.getElementsByTagName('input')[0],
+    volume: container.querySelector('.volume input')!,
+    lerp: checkboxGetInputs(container.querySelector('[data-testid="lerp"]')!),
+    lerpSeconds: numberGetInputs(container.querySelector('[data-testid="lerp-seconds"]')!),
   };
 }
 
@@ -48,12 +50,12 @@ describe('YtpcInputVolume', () => {
       },
     });
 
-    userEvent.click(lerp);
+    userEvent.click(lerp.checkbox);
 
-    expect(lerpSeconds.value).toEqual(LERP_TIME_DEFAULT.toString());
+    expect(lerpSeconds.input.value).toEqual(LERP_TIME_DEFAULT.toString());
 
-    userEvent.clear(lerpSeconds);
-    userEvent.type(lerpSeconds, '5');
+    userEvent.clear(lerpSeconds.input);
+    userEvent.type(lerpSeconds.input, '5');
 
     const { calls } = setEntryState.mock;
     expect(calls[calls.length - 1][0]).toEqual({
@@ -86,8 +88,8 @@ describe('YtpcInputVolume', () => {
     } = getInputs(container);
 
     expect(volume.value).toEqual(state.volume.toString());
-    expect(lerp.checked).toEqual((state.lerpSeconds ?? -1) >= 0);
-    expect(lerpSeconds.value).toEqual(LERP_TIME_DEFAULT.toString());
+    expect(lerp.checkbox.checked).toEqual((state.lerpSeconds ?? -1) >= 0);
+    expect(lerpSeconds.input.value).toEqual(LERP_TIME_DEFAULT.toString());
 
     state = {
       atTime: 0,
@@ -103,7 +105,7 @@ describe('YtpcInputVolume', () => {
     />);
 
     expect(volume.value).toEqual(state.volume.toString());
-    expect(lerp.checked).toEqual((state.lerpSeconds ?? -1) >= 0);
-    expect(lerpSeconds.value).toEqual(state.lerpSeconds.toString());
+    expect(lerp.checkbox.checked).toEqual((state.lerpSeconds ?? -1) >= 0);
+    expect(lerpSeconds.input.value).toEqual(state.lerpSeconds.toString());
   });
 });

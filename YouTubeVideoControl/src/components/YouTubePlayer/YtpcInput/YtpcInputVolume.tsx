@@ -39,7 +39,7 @@ function YtpcInputVolume(props: YtpcControlInput) {
 
   return (
     <div className={styles.volume}>
-      <span className="volume">
+      <span data-testid="volume">
         <input
           type="range"
           min={VOLUME_MIN} max={VOLUME_MAX}
@@ -50,7 +50,7 @@ function YtpcInputVolume(props: YtpcControlInput) {
         />
       </span>
       <span>{volume}</span>
-      <span className="lerp">
+      <span data-testid="lerp">
         <Checkbox
           label="lerp"
           defaultChecked={lerpSet}
@@ -58,7 +58,7 @@ function YtpcInputVolume(props: YtpcControlInput) {
         />
       </span>
       <span
-        className="lerp-seconds" style={{
+        data-testid="lerp-seconds" style={{
           display: lerpSet ? '' : 'none',
         }}
       >

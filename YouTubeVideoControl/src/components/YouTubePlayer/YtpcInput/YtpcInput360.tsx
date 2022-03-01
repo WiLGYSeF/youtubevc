@@ -46,7 +46,7 @@ function YtpcInput360(props: YtpcControlInput) {
 
   return (
     <div className={styles['three-sixty']}>
-      <span className="yaw">
+      <span data-testid="yaw">
         <NumberInput
           label="yaw: "
           minValue={Ytpc360Entry.YAW_MIN} maxValue={Ytpc360Entry.YAW_MAX} step={null}
@@ -56,7 +56,7 @@ function YtpcInput360(props: YtpcControlInput) {
           onChange={setYaw}
         />
       </span>
-      <span className="pitch">
+      <span data-testid="pitch">
         <NumberInput
           label="pitch: "
           minValue={Ytpc360Entry.PITCH_MIN} maxValue={Ytpc360Entry.PITCH_MAX} step={null}
@@ -66,7 +66,7 @@ function YtpcInput360(props: YtpcControlInput) {
           onChange={setPitch}
         />
       </span>
-      <span className="roll">
+      <span data-testid="roll">
         <NumberInput
           label="roll: "
           minValue={Ytpc360Entry.ROLL_MIN} maxValue={Ytpc360Entry.ROLL_MAX} step={null}
@@ -76,7 +76,7 @@ function YtpcInput360(props: YtpcControlInput) {
           onChange={setRoll}
         />
       </span>
-      <span className="fov">
+      <span data-testid="fov">
         <NumberInput
           label="fov: "
           minValue={Ytpc360Entry.FOV_MIN} maxValue={Ytpc360Entry.FOV_MAX} step={null}
@@ -85,7 +85,7 @@ function YtpcInput360(props: YtpcControlInput) {
           onChange={setFov}
         />
       </span>
-      <span className="lerp">
+      <span data-testid="lerp">
         <Checkbox
           label="lerp"
           defaultChecked={lerpSet}
@@ -93,7 +93,7 @@ function YtpcInput360(props: YtpcControlInput) {
         />
       </span>
       <span
-        className="lerp-seconds" style={{
+        data-testid="lerp-seconds" style={{
           display: lerpSet ? '' : 'none',
         }}
       >

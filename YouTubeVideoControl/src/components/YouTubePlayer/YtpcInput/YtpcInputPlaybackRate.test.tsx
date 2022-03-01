@@ -13,7 +13,7 @@ export interface YtpcInputPlaybackRateInputs {
 
 export function getInputs(container: HTMLElement): YtpcInputPlaybackRateInputs {
   return {
-    playbackRate: container.querySelector('.playback-rate')!.getElementsByTagName('select')[0],
+    playbackRate: container.querySelector('[data-testid="playback-rate"] select')!,
   };
 }
 

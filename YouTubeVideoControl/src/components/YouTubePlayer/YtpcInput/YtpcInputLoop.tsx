@@ -33,13 +33,13 @@ function YtpcInputLoop(props: YtpcControlInput) {
 
   return (
     <div className={styles.loop}>
-      <span className="loop-back-to">
+      <span data-testid="loop-back-to">
         <TimestampInput
           defaultValue={dLoopBackTo}
           onChange={setLoopBackTo}
         />
       </span>
-      <span className="forever">
+      <span data-testid="forever">
         <Checkbox
           label={forever ? 'forever' : 'times'}
           defaultChecked={forever}

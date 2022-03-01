@@ -5,24 +5,26 @@ import userEvent from '@testing-library/user-event';
 import { ControlType } from 'objects/YtpcEntry/YouTubePlayerControllerEntry';
 import { Ytpc360State } from 'objects/YtpcEntry/Ytpc360Entry';
 import YtpcInput360, { LERP_TIME_DEFAULT } from './YtpcInput360';
+import { getInputs as checkboxGetInputs, CheckboxInputs } from '../../common/Checkbox/Checkbox.test';
+import { getInputs as numberGetInputs, NumberInputInputs } from '../../common/NumberInput/NumberInput.test';
 
 export interface YtpcInput360Inputs {
-  yaw: HTMLInputElement;
-  pitch: HTMLInputElement;
-  roll: HTMLInputElement;
-  fov: HTMLInputElement;
-  lerp: HTMLInputElement;
-  lerpSeconds: HTMLInputElement;
+  yaw: NumberInputInputs;
+  pitch: NumberInputInputs;
+  roll: NumberInputInputs;
+  fov: NumberInputInputs;
+  lerp: CheckboxInputs;
+  lerpSeconds: NumberInputInputs;
 }
 
 export function getInputs(container: HTMLElement): YtpcInput360Inputs {
   return {
-    yaw: container.querySelector('.yaw')!.getElementsByTagName('input')[0],
-    pitch: container.querySelector('.pitch')!.getElementsByTagName('input')[0],
-    roll: container.querySelector('.roll')!.getElementsByTagName('input')[0],
-    fov: container.querySelector('.fov')!.getElementsByTagName('input')[0],
-    lerp: container.querySelector('.lerp')!.getElementsByTagName('input')[0],
-    lerpSeconds: container.querySelector('.lerp-seconds')!.getElementsByTagName('input')[0],
+    yaw: numberGetInputs(container.querySelector('[data-testid="yaw"]')!),
+    pitch: numberGetInputs(container.querySelector('[data-testid="pitch"]')!),
+    roll: numberGetInputs(container.querySelector('[data-testid="roll"]')!),
+    fov: numberGetInputs(container.querySelector('[data-testid="fov"]')!),
+    lerp: checkboxGetInputs(container.querySelector('[data-testid="lerp"]')!),
+    lerpSeconds: numberGetInputs(container.querySelector('[data-testid="lerp-seconds"]')!),
   };
 }
 
@@ -56,24 +58,24 @@ describe('YtpcInput360', () => {
       lerpSeconds,
     } = getInputs(container);
 
-    userEvent.clear(yaw);
-    userEvent.type(yaw, '1');
+    userEvent.clear(yaw.input);
+    userEvent.type(yaw.input, '1');
 
-    userEvent.clear(pitch);
-    userEvent.type(pitch, '2');
+    userEvent.clear(pitch.input);
+    userEvent.type(pitch.input, '2');
 
-    userEvent.clear(roll);
-    userEvent.type(roll, '3');
+    userEvent.clear(roll.input);
+    userEvent.type(roll.input, '3');
 
-    userEvent.clear(fov);
-    userEvent.type(fov, '110');
+    userEvent.clear(fov.input);
+    userEvent.type(fov.input, '110');
 
-    userEvent.click(lerp);
+    userEvent.click(lerp.checkbox);
 
-    expect(lerpSeconds.value).toEqual(LERP_TIME_DEFAULT.toString());
+    expect(lerpSeconds.input.value).toEqual(LERP_TIME_DEFAULT.toString());
 
-    userEvent.clear(lerpSeconds);
-    userEvent.type(lerpSeconds, '5');
+    userEvent.clear(lerpSeconds.input);
+    userEvent.type(lerpSeconds.input, '5');
 
     const { calls } = setEntryState.mock;
     expect(calls[calls.length - 1][0]).toEqual({
@@ -118,12 +120,12 @@ describe('YtpcInput360', () => {
       lerpSeconds,
     } = getInputs(container);
 
-    expect(yaw.value).toEqual(state.sphereProps.yaw.toString());
-    expect(pitch.value).toEqual(state.sphereProps.pitch.toString());
-    expect(roll.value).toEqual(state.sphereProps.roll.toString());
-    expect(fov.value).toEqual(state.sphereProps.fov.toString());
-    expect(lerp.checked).toEqual((state.lerpSeconds ?? -1) >= 0);
-    expect(lerpSeconds.value).toEqual(LERP_TIME_DEFAULT.toString());
+    expect(yaw.input.value).toEqual(state.sphereProps.yaw.toString());
+    expect(pitch.input.value).toEqual(state.sphereProps.pitch.toString());
+    expect(roll.input.value).toEqual(state.sphereProps.roll.toString());
+    expect(fov.input.value).toEqual(state.sphereProps.fov.toString());
+    expect(lerp.checkbox.checked).toEqual((state.lerpSeconds ?? -1) >= 0);
+    expect(lerpSeconds.input.value).toEqual(LERP_TIME_DEFAULT.toString());
 
     state = {
       atTime: 0,
@@ -143,11 +145,11 @@ describe('YtpcInput360', () => {
       setEntryState={setEntryState}
     />);
 
-    expect(yaw.value).toEqual(state.sphereProps.yaw.toString());
-    expect(pitch.value).toEqual(state.sphereProps.pitch.toString());
-    expect(roll.value).toEqual(state.sphereProps.roll.toString());
-    expect(fov.value).toEqual(state.sphereProps.fov.toString());
-    expect(lerp.checked).toEqual((state.lerpSeconds ?? -1) >= 0);
-    expect(lerpSeconds.value).toEqual((state.lerpSeconds ?? -1).toString());
+    expect(yaw.input.value).toEqual(state.sphereProps.yaw.toString());
+    expect(pitch.input.value).toEqual(state.sphereProps.pitch.toString());
+    expect(roll.input.value).toEqual(state.sphereProps.roll.toString());
+    expect(fov.input.value).toEqual(state.sphereProps.fov.toString());
+    expect(lerp.checkbox.checked).toEqual((state.lerpSeconds ?? -1) >= 0);
+    expect(lerpSeconds.input.value).toEqual((state.lerpSeconds ?? -1).toString());
   });
 });

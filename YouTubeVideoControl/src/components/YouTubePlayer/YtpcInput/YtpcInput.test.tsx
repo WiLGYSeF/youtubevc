@@ -6,6 +6,7 @@ import { YouTubePlayer } from 'youtube-player/dist/types';
 import { ControlType } from 'objects/YtpcEntry/YouTubePlayerControllerEntry';
 import { YtpcGotoState } from 'objects/YtpcEntry/YtpcGotoEntry';
 import { getFiberNode, getNameFromFiberNode } from 'utils/test/fiberNode';
+import { getInputs as timestampGetInputs, TimestampInputsInput } from '../../common/TimestampInput/TimestampInput.test';
 import { getInputs as addGetInputs, YtpcAddInputs } from '../YtpcAdd.test';
 import { getInputs as controlSelectGetInputs, YtpcControlSelectInputs } from './YtpcControlSelect.test';
 import { getInputs as gotoGetInputs } from './YtpcInputGoto.test';
@@ -20,7 +21,7 @@ import { getControlTypes } from './YtpcControlSelect';
 
 export interface YtpcInputInputs {
   nowTime: HTMLElement;
-  atTime: HTMLInputElement;
+  atTime: TimestampInputsInput;
   controlSelect: YtpcControlSelectInputs;
   controlInput: HTMLElement;
   add: YtpcAddInputs;
@@ -29,10 +30,10 @@ export interface YtpcInputInputs {
 export function getInputs(container: HTMLElement): YtpcInputInputs {
   return {
     nowTime: container.querySelector('.now-time')!,
-    atTime: container.querySelector('.at-time')!.getElementsByTagName('input')[0],
-    controlSelect: controlSelectGetInputs(container.querySelector('.control-select')!),
-    controlInput: container.querySelector('.control-input')!,
-    add: addGetInputs(container.querySelector('.add')!),
+    atTime: timestampGetInputs(container.querySelector('[data-testid="at-time"]')!),
+    controlSelect: controlSelectGetInputs(container.querySelector('[data-testid="control-select"]')!),
+    controlInput: container.querySelector('[data-testid="control-input"]')!,
+    add: addGetInputs(container.querySelector('[data-testid="add"]')!),
   };
 }
 
@@ -152,11 +153,11 @@ describe('YtpcInput', () => {
 
     const { atTime } = getInputs(container);
 
-    userEvent.clear(atTime);
-    userEvent.type(atTime, '1:23');
-    fireEvent.blur(atTime);
+    userEvent.clear(atTime.input);
+    userEvent.type(atTime.input, '1:23');
+    fireEvent.blur(atTime.input);
 
-    expect(atTime.value).toEqual('01:23');
+    expect(atTime.input.value).toEqual('01:23');
     expect(entryState).toEqual({
       atTime: 83,
       controlType: ControlType.Goto,
@@ -211,7 +212,7 @@ describe('YtpcInput', () => {
 
     userEvent.click(nowTime);
 
-    expect(atTime.value).toEqual('02:03.46');
+    expect(atTime.input.value).toEqual('02:03.46');
   });
 
   it('adds an entry', () => {
@@ -264,15 +265,15 @@ describe('YtpcInput', () => {
       add,
     } = getInputs(container);
 
-    userEvent.clear(atTime);
-    userEvent.type(atTime, '1:23');
+    userEvent.clear(atTime.input);
+    userEvent.type(atTime.input, '1:23');
 
     userEvent.selectOptions(controlSelect.select, ControlType.Loop);
 
     const { loopBackTo } = loopGetInputs(controlInput);
 
-    userEvent.clear(loopBackTo);
-    userEvent.type(loopBackTo, '23');
+    userEvent.clear(loopBackTo.input);
+    userEvent.type(loopBackTo.input, '23');
 
     userEvent.click(add.add);
 

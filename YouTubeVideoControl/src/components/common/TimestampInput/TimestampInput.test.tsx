@@ -4,6 +4,16 @@ import userEvent from '@testing-library/user-event';
 
 import TimestampInput from './TimestampInput';
 
+export interface TimestampInputsInput {
+  input: HTMLInputElement;
+}
+
+export function getInputs(container: HTMLElement): TimestampInputsInput {
+  return {
+    input: container.querySelector('input')!,
+  };
+}
+
 describe('TimestampInput', () => {
   it('renders with string input', () => {
     const { container } = render(<TimestampInput
@@ -21,7 +31,7 @@ describe('TimestampInput', () => {
       onChange={() => {}}
     />);
 
-    const input = container.getElementsByTagName('input')[0];
+    const { input } = getInputs(container);
     expect(input.value).toEqual('01:00:07');
   });
 
@@ -53,7 +63,7 @@ describe('TimestampInput', () => {
         }}
       />);
 
-      const input = container.getElementsByTagName('input')[0];
+      const { input } = getInputs(container);
 
       userEvent.clear(input);
 
@@ -81,7 +91,7 @@ describe('TimestampInput', () => {
       setInput={testFn}
     />);
 
-    const input = container.getElementsByTagName('input')[0];
+    const { input } = getInputs(container);
 
     expect(input.value).toEqual('01:11');
 
@@ -104,7 +114,7 @@ describe('TimestampInput', () => {
       onChange={() => {}}
     />);
 
-    const input = container.getElementsByTagName('input')[0];
+    const { input } = getInputs(container);
 
     expect(input.value).toEqual('00:05');
 

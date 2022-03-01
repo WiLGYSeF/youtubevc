@@ -21,8 +21,8 @@ export function getInputs(container: HTMLElement): ({
   clear: YtpcClearInputs
 }) {
   return {
-    input: inputGetInputs(container.querySelector('.controls .input')!),
-    clear: clearGetInputs(container.querySelector('.clear')!),
+    input: inputGetInputs(container.querySelector('[data-testid="ytpc-input"]')!),
+    clear: clearGetInputs(container.querySelector('[data-testid="ytpc-clear"]')!),
   };
 }
 
@@ -30,6 +30,10 @@ function expectAscendingOrder(arr: any[], cmp: (a: any, b: any) => number): void
   for (let i = 1; i < arr.length; i += 1) {
     expect(cmp(arr[i - 1], arr[i]) <= 0).toBeTruthy();
   }
+}
+
+function getEntryList(container: HTMLElement): HTMLElement {
+  return container.querySelector('[data-testid="entry-list"]')!;
 }
 
 describe('YouTubePlayerController', () => {
@@ -146,8 +150,8 @@ describe('YouTubePlayerController', () => {
 
       const { input } = getInputs(container);
 
-      userEvent.clear(input.atTime);
-      userEvent.type(input.atTime, '12:34');
+      userEvent.clear(input.atTime.input);
+      userEvent.type(input.atTime.input, '12:34');
 
       userEvent.selectOptions(input.controlSelect.select, ControlType.Loop);
 
@@ -157,17 +161,17 @@ describe('YouTubePlayerController', () => {
         loopCount,
       } = getInputsByControl(input.controlInput, ControlType.Loop) as YtpcInputLoopInputs;
 
-      userEvent.clear(loopBackTo);
-      userEvent.type(loopBackTo, '56');
+      userEvent.clear(loopBackTo.input);
+      userEvent.type(loopBackTo.input, '56');
 
-      userEvent.click(forever);
+      userEvent.click(forever.checkbox);
 
-      userEvent.clear(loopCount);
-      userEvent.type(loopCount, '4');
+      userEvent.clear(loopCount.input);
+      userEvent.type(loopCount.input, '4');
 
       userEvent.click(input.add.add);
 
-      const entryList = container.querySelector('.entry-list')!;
+      const entryList = getEntryList(container);
       const entries = getEntries(entryList) as HTMLElement[];
 
       expect(entries.length).toEqual(1);
@@ -292,7 +296,7 @@ describe('YouTubePlayerController', () => {
 
         userEvent.click(edit);
 
-        expect(input.atTime.value).toEqual(secondsToTimestamp(entry.atTime));
+        expect(input.atTime.input.value).toEqual(secondsToTimestamp(entry.atTime));
         expect(input.controlSelect.select.value).toEqual(test.controlType);
 
         switch (test.controlType) {
@@ -300,16 +304,16 @@ describe('YouTubePlayerController', () => {
             const gotoEntry = entry as YtpcGotoEntry;
             const gotoInput = getInputsByControl(input.controlInput, ControlType.Goto) as YtpcInputGotoInputs;
 
-            expect(gotoInput.gotoTime.value).toEqual(secondsToTimestamp(gotoEntry.gotoTime));
+            expect(gotoInput.gotoTime.input.value).toEqual(secondsToTimestamp(gotoEntry.gotoTime));
             break;
           }
           case ControlType.Loop: {
             const loopEntry = entry as YtpcLoopEntry;
             const loopInput = getInputsByControl(input.controlInput, ControlType.Loop) as YtpcInputLoopInputs;
 
-            expect(loopInput.loopBackTo.value).toEqual(secondsToTimestamp(loopEntry.loopBackTo));
-            expect(loopInput.forever.checked).toEqual(loopEntry.loopCount < 0);
-            expect(loopInput.loopCount.value).toEqual(loopEntry.loopCount.toString());
+            expect(loopInput.loopBackTo.input.value).toEqual(secondsToTimestamp(loopEntry.loopBackTo));
+            expect(loopInput.forever.checkbox.checked).toEqual(loopEntry.loopCount < 0);
+            expect(loopInput.loopCount.input.value).toEqual(loopEntry.loopCount.toString());
             break;
           }
           default:

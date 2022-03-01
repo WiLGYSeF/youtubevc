@@ -181,7 +181,7 @@ function YouTubePlayerController(props: YouTubePlayerControllerProps) {
   return (
     <div className={styles['yt-controller']}>
       <div className="controls">
-        <span className="input">
+        <span data-testid="ytpc-input">
           <YtpcInput
             ytPlayer={props.ytPlayer}
             is360Video={is360Video}
@@ -197,7 +197,7 @@ function YouTubePlayerController(props: YouTubePlayerControllerProps) {
           />
         </span>
 
-        <span className="entry-list">
+        <span data-testid="entry-list">
           <YtpcEntryList
             entries={entries}
             barIndex={barIndex}
@@ -211,7 +211,7 @@ function YouTubePlayerController(props: YouTubePlayerControllerProps) {
         </span>
 
         <div>
-          <span className="clear">
+          <span data-testid="ytpc-clear">
             <YtpcClear clearEntries={() => {
               setEntries([]);
             }}
