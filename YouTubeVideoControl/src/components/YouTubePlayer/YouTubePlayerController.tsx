@@ -11,17 +11,15 @@ import useStatePropBacked from 'utils/useStatePropBacked';
 import { getVideoIdByUrl, playerHas360Video } from 'utils/youtube';
 import YtpcClear, { getInputs as clearGetInputs, YtpcClearInputs } from './YtpcClear';
 import YtpcCopyLink from './YtpcCopyLink';
-import YtpcEntryList, { getEntries } from './YtpcEntryList';
+import YtpcEntryList from './YtpcEntryList';
 import YtpcExport, { ExportType } from './YtpcExport';
 import YtpcImport from './YtpcImport';
 import YtpcOptions from './YtpcOptions';
-import YtpcInput, { getInputs as inputGetInputs, getInputsByControl, YtpcInputInputs } from './YtpcInput/YtpcInput';
+import YtpcInput, { getInputs as inputGetInputs, YtpcInputInputs } from './YtpcInput/YtpcInput';
 
 import styles from './YouTubePlayerController.module.scss';
 
 const EVENT_ONSTATECHANGE = 'onStateChange';
-
-const TIME_DIFF_MAX = 0.1;
 
 export function addEntry(
   entries: YouTubePlayerControllerEntry[],
@@ -82,6 +80,34 @@ export function getRandomLoopEntry(
     random -= loopWeights[selected];
   }
   return loopEntries[selected];
+}
+export function performEntryActions(
+  ytPlayer: YouTubePlayer,
+  entries: YouTubePlayerControllerEntry[],
+  curTime: number,
+  lastTime: number,
+  useLoopShuffle: boolean,
+  useLoopCountForWeights: boolean,
+) {
+  let lastMatchingIdx = -1;
+  let idx = 0;
+
+  for (const entry of entries) {
+    if (entry.atTime <= curTime) {
+      if (entry.atTime >= lastTime) {
+        if (entry.controlType === ControlType.Loop && useLoopShuffle) {
+          const loopEntry = getRandomLoopEntry(entries, useLoopCountForWeights);
+          ytPlayer.seekTo(loopEntry.loopBackTo, true);
+        } else {
+          entry.performAction(ytPlayer, curTime);
+        }
+      }
+      lastMatchingIdx = idx;
+    }
+    idx += 1;
+  }
+
+  return lastMatchingIdx;
 }
 
 interface YouTubePlayerControllerProps {
@@ -149,23 +175,14 @@ function YouTubePlayerController(props: YouTubePlayerControllerProps) {
 
       const curTime = props.ytPlayer.getCurrentTime();
 
-      let idx = 0;
-      let lastMatchingIdx = -1;
-
-      for (const entry of entries) {
-        if (entry.atTime < curTime) {
-          if (entry.atTime >= Math.max(lastTime, curTime - TIME_DIFF_MAX)) {
-            if (entry.controlType === ControlType.Loop && useLoopShuffle) {
-              const loopEntry = getRandomLoopEntry(entries, useLoopCountForWeights);
-              props.ytPlayer.seekTo(loopEntry.loopBackTo, true);
-            } else {
-              entry.performAction(props.ytPlayer, curTime);
-            }
-          }
-          lastMatchingIdx = idx;
-        }
-        idx += 1;
-      }
+      const lastMatchingIdx = performEntryActions(
+        props.ytPlayer,
+        entries,
+        curTime,
+        lastTime,
+        useLoopShuffle,
+        useLoopCountForWeights,
+      );
 
       setBarIndex(lastMatchingIdx + 1);
 
