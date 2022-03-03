@@ -1,22 +1,25 @@
 import React from 'react';
-import { render, screen } from '@testing-library/react';
+import { act, render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
 import YouTubePlayerControllerEntry, { ControlType } from 'objects/YtpcEntry/YouTubePlayerControllerEntry';
 import YtpcGotoEntry from 'objects/YtpcEntry/YtpcGotoEntry';
 import YtpcLoopEntry from 'objects/YtpcEntry/YtpcLoopEntry';
+import pollUntil from 'utils/test/pollUntil';
 import { secondsToTimestamp } from 'utils/timestr';
 import { PLAYBACK_RATES } from 'utils/youtube';
 import { YouTubePlayer } from 'youtube-player/dist/types';
 import YouTubePlayerController, {
-  performEntryActions,
-  addEntry, filterLoopEntries, getInputs, getRandomLoopEntry,
+  addEntry, filterLoopEntries, getInputs, getRandomLoopEntry, performEntryActions,
 } from './YouTubePlayerController';
 import { getInputsByControl } from './YtpcInput/YtpcInput';
 import { YtpcInputLoopInputs } from './YtpcInput/YtpcInputLoop';
 import { YtpcInputGotoInputs } from './YtpcInput/YtpcInputGoto';
 import { getInputs as entryGetInputs } from './YtpcEntry';
 import { getEntries } from './YtpcEntryList';
+
+const IMPORT_POLL_TIMEOUT = 3000;
+const IMPORT_POLL_TICK = 10;
 
 function expectAscendingOrder(arr: any[], cmp: (a: any, b: any) => number): void {
   for (let i = 1; i < arr.length; i += 1) {
@@ -178,7 +181,7 @@ describe('YouTubePlayerController', () => {
         entries[1].atTime,
         entries[0].atTime,
         false,
-        false
+        false,
       );
 
       expect(lastMatchingIdx).toEqual(1);
@@ -310,7 +313,7 @@ describe('YouTubePlayerController', () => {
       expect(entries.length).toEqual(3);
       expect(entries.map(getEntryObject)).toEqual(expected);
 
-      const { eDelete } = entryGetInputs(entries[1]);
+      const { delete: eDelete } = entryGetInputs(entries[1]);
 
       userEvent.click(eDelete);
       expected.splice(1, 1);
@@ -398,7 +401,7 @@ describe('YouTubePlayerController', () => {
             const gotoEntry = entry as YtpcGotoEntry;
             const gotoInput = getInputsByControl(
               input.controlInput,
-              ControlType.Goto
+              ControlType.Goto,
             ) as YtpcInputGotoInputs;
 
             expect(gotoInput.gotoTime.input.value)
@@ -409,7 +412,7 @@ describe('YouTubePlayerController', () => {
             const loopEntry = entry as YtpcLoopEntry;
             const loopInput = getInputsByControl(
               input.controlInput,
-              ControlType.Loop
+              ControlType.Loop,
             ) as YtpcInputLoopInputs;
 
             expect(loopInput.loopBackTo.input.value)
@@ -460,6 +463,104 @@ describe('YouTubePlayerController', () => {
       entries = getEntries(entryList) as HTMLElement[];
 
       expect(entries.length).toEqual(0);
+    });
+
+    it('imports entries from a file', async () => {
+      const startEntries = [
+        {
+          atTime: 10,
+          controlType: ControlType.Goto,
+          gotoTime: 0,
+        },
+      ];
+
+      const expected = [
+        {
+          atTime: 0,
+          controlType: ControlType.Goto,
+          gotoTime: 15,
+        },
+        {
+          atTime: 10,
+          controlType: ControlType.Goto,
+          gotoTime: 25,
+        },
+        {
+          atTime: 123,
+          controlType: ControlType.Goto,
+          gotoTime: 4,
+        },
+      ];
+
+      // entries length is used in pollUntil
+      expect(expected.length).not.toEqual(startEntries.length);
+
+      const { container } = render(<YouTubePlayerController
+        ytPlayer={ytPlayer}
+        entries={JSON.stringify(startEntries)}
+        loopShuffle={false}
+        shuffleWeight={false}
+      />);
+
+      const { import: eImport } = getInputs(container);
+      const entryList = container.querySelector('.entry-list')!;
+
+      await act(async () => {
+        const file = new File([JSON.stringify(expected)], 'test.json', { type: 'text/plain' });
+        userEvent.upload(eImport.input, file);
+
+        await pollUntil(
+          () => getEntries(entryList).length === expected.length,
+          IMPORT_POLL_TIMEOUT,
+          IMPORT_POLL_TICK,
+        );
+      });
+
+      const entries = getEntries(entryList) as HTMLElement[];
+
+      expect(entries.map(getEntryObject)).toEqual(expected);
+    });
+
+    it('notifies on import fail', async () => {
+      const alertMock = jest.spyOn(window, 'alert').mockImplementation();
+      const consoleMock = jest.spyOn(console, 'error').mockImplementation();
+
+      const startEntries = [
+        {
+          atTime: 10,
+          controlType: ControlType.Goto,
+          gotoTime: 0,
+        },
+      ];
+
+      const { container } = render(<YouTubePlayerController
+        ytPlayer={ytPlayer}
+        entries={JSON.stringify(startEntries)}
+        loopShuffle={false}
+        shuffleWeight={false}
+      />);
+
+      const { import: eImport } = getInputs(container);
+      const entryList = container.querySelector('.entry-list')!;
+
+      await act(async () => {
+        const file = new File(['invalid'], 'test.json', { type: 'text/plain' });
+        userEvent.upload(eImport.input, file);
+
+        await pollUntil(
+          () => alertMock.mock.calls.length > 0,
+          IMPORT_POLL_TIMEOUT,
+          IMPORT_POLL_TICK,
+        );
+      });
+
+      const entries = getEntries(entryList) as HTMLElement[];
+
+      expect(entries.map(getEntryObject)).toEqual(startEntries);
+      expect(alertMock).toHaveBeenCalledTimes(1);
+
+      alertMock.mockRestore();
+      consoleMock.mockRestore();
     });
   });
 });

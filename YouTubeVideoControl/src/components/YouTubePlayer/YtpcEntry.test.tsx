@@ -43,7 +43,7 @@ describe('YtpcEntry', () => {
       editEntry={editEntry}
     />);
 
-    const { eDelete } = getInputs(container);
+    const { delete: eDelete } = getInputs(container);
 
     userEvent.click(eDelete);
     expect(deleteEntry).toHaveBeenCalledTimes(1);

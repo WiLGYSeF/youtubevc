@@ -4,13 +4,13 @@ import YouTubePlayerControllerEntry from 'objects/YtpcEntry/YouTubePlayerControl
 
 import styles from './YtpcEntry.module.scss';
 
+const UPDATE_INTERVAL = 100;
+
 interface YtpcEntryProps {
   entry: YouTubePlayerControllerEntry;
   deleteEntry(entry: YouTubePlayerControllerEntry): void;
   editEntry(entry: YouTubePlayerControllerEntry): void;
 }
-
-const UPDATE_INTERVAL = 100;
 
 function YtpcEntry(props: YtpcEntryProps) {
   const [, forceUpdate] = useReducer((x) => x + 1, 0);
@@ -55,13 +55,13 @@ function YtpcEntry(props: YtpcEntryProps) {
 
 export interface YtpcEntryInputs {
   edit: HTMLElement,
-  eDelete: HTMLElement,
+  delete: HTMLElement,
 }
 
 export function getInputs(container: HTMLElement): YtpcEntryInputs {
   return {
     edit: container.querySelector('.edit')!,
-    eDelete: container.querySelector('.delete')!,
+    delete: container.querySelector('.delete')!,
   };
 }
 

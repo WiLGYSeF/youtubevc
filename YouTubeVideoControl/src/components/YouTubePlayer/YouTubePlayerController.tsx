@@ -13,7 +13,7 @@ import YtpcClear, { getInputs as clearGetInputs, YtpcClearInputs } from './YtpcC
 import YtpcCopyLink from './YtpcCopyLink';
 import YtpcEntryList from './YtpcEntryList';
 import YtpcExport, { ExportType } from './YtpcExport';
-import YtpcImport from './YtpcImport';
+import YtpcImport, { getInputs as importGetInputs, YtpcImportInputs } from './YtpcImport';
 import YtpcOptions from './YtpcOptions';
 import YtpcInput, { getInputs as inputGetInputs, YtpcInputInputs } from './YtpcInput/YtpcInput';
 
@@ -234,16 +234,18 @@ function YouTubePlayerController(props: YouTubePlayerControllerProps) {
             }}
             />
           </span>
-          <YtpcImport
-            addEntry={addEntry}
-            setEntries={setEntries}
-            onLoad={(success: boolean) => {
-              if (!success) {
-                console.error('file import failed');
-                alert('File import failed!');
-              }
-            }}
-          />
+          <span data-testid="ytpc-import">
+            <YtpcImport
+              addEntry={addEntry}
+              setEntries={setEntries}
+              onLoad={(success: boolean) => {
+                if (!success) {
+                  console.error('file import failed');
+                  alert('File import failed!');
+                }
+              }}
+            />
+          </span>
           <YtpcExport
             filename={`youtubevc-${getVideoIdByUrl(props.ytPlayer?.getVideoUrl() ?? '')}.txt`}
             entries={entries}
@@ -275,13 +277,17 @@ function YouTubePlayerController(props: YouTubePlayerControllerProps) {
   );
 }
 
-export function getInputs(container: HTMLElement): ({
-  input: YtpcInputInputs,
-  clear: YtpcClearInputs
-}) {
+export interface YouTubePlayerControllerInputs {
+  input: YtpcInputInputs;
+  clear: YtpcClearInputs;
+  import: YtpcImportInputs;
+}
+
+export function getInputs(container: HTMLElement): YouTubePlayerControllerInputs {
   return {
     input: inputGetInputs(container.querySelector('[data-testid="ytpc-input"]')!),
     clear: clearGetInputs(container.querySelector('[data-testid="ytpc-clear"]')!),
+    import: importGetInputs(container.querySelector('[data-testid="ytpc-import"]')!),
   };
 }
 

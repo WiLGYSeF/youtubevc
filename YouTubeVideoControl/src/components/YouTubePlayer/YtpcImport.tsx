@@ -10,12 +10,6 @@ interface ImportResult {
   error: unknown;
 }
 
-interface YtpcImportProps {
-  addEntry(entries: YouTubePlayerControllerEntry[], entry: YouTubePlayerControllerEntry): void;
-  setEntries(entries: YouTubePlayerControllerEntry[]): void;
-  onLoad?(success: boolean): void;
-}
-
 function tryImportJson(
   data: string,
   addEntry: (entries: YouTubePlayerControllerEntry[], entry: YouTubePlayerControllerEntry) => void,
@@ -75,6 +69,12 @@ function tryImportText(
   }
 }
 
+interface YtpcImportProps {
+  addEntry(entries: YouTubePlayerControllerEntry[], entry: YouTubePlayerControllerEntry): void;
+  setEntries(entries: YouTubePlayerControllerEntry[]): void;
+  onLoad?(success: boolean): void;
+}
+
 function YtpcImport(props: YtpcImportProps) {
   const loadFile = (e: ChangeEvent<HTMLInputElement>) => {
     if (!e.target.files) {
@@ -122,6 +122,16 @@ function YtpcImport(props: YtpcImportProps) {
       </button>
     </div>
   );
+}
+
+export interface YtpcImportInputs {
+  input: HTMLInputElement;
+}
+
+export function getInputs(container: HTMLElement): YtpcImportInputs {
+  return {
+    input: container.querySelector('input')!,
+  };
 }
 
 export default YtpcImport;
