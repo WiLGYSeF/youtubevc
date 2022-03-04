@@ -10,14 +10,16 @@ import Coroutine from 'utils/coroutine';
 import useStatePropBacked from 'utils/useStatePropBacked';
 import { getVideoIdByUrl, playerHas360Video } from 'utils/youtube';
 import YtpcClear, { getInputs as clearGetInputs, YtpcClearInputs } from './YtpcClear';
-import YtpcCopyLink from './YtpcCopyLink';
+import YtpcCopyLink, { getInputs as copyLinkGetInputs, YtpcCopyLinkInputs } from './YtpcCopyLink';
 import YtpcEntryList from './YtpcEntryList';
-import YtpcExport, { ExportType } from './YtpcExport';
+import YtpcExport, { getInputs as exportGetInputs, ExportType, YtpcExportInputs } from './YtpcExport';
 import YtpcImport, { getInputs as importGetInputs, YtpcImportInputs } from './YtpcImport';
 import YtpcOptions from './YtpcOptions';
 import YtpcInput, { getInputs as inputGetInputs, YtpcInputInputs } from './YtpcInput/YtpcInput';
 
 import styles from './YouTubePlayerController.module.scss';
+
+export const EXPORT_TYPE = ExportType.Text;
 
 const EVENT_ONSTATECHANGE = 'onStateChange';
 
@@ -246,22 +248,26 @@ function YouTubePlayerController(props: YouTubePlayerControllerProps) {
               }}
             />
           </span>
-          <YtpcExport
-            filename={`youtubevc-${getVideoIdByUrl(props.ytPlayer?.getVideoUrl() ?? '')}.txt`}
-            entries={entries}
-            exportType={ExportType.Text}
-          />
-          <YtpcCopyLink
-            videoId={getVideoIdByUrl(props.ytPlayer?.getVideoUrl() ?? '')}
-            entries={entries}
-            onCopy={() => {
-              // timeout used to show popup *after* link copied to clipboard
-              setTimeout(() => {
-                alert('Copied URL to clipboard');
-              }, 0);
-              return true;
-            }}
-          />
+          <span data-testid="ytpc-export">
+            <YtpcExport
+              filename={`youtubevc-${getVideoIdByUrl(props.ytPlayer?.getVideoUrl() ?? '')}.txt`}
+              entries={entries}
+              exportType={EXPORT_TYPE}
+            />
+          </span>
+          <span data-testid="ytpc-copylink">
+            <YtpcCopyLink
+              videoId={getVideoIdByUrl(props.ytPlayer?.getVideoUrl() ?? '')}
+              entries={entries}
+              onCopy={() => {
+                // timeout used to show popup *after* link copied to clipboard
+                setTimeout(() => {
+                  alert('Copied URL to clipboard');
+                }, 0);
+                return true;
+              }}
+            />
+          </span>
         </div>
       </div>
       <div className="options">
@@ -281,6 +287,8 @@ export interface YouTubePlayerControllerInputs {
   input: YtpcInputInputs;
   clear: YtpcClearInputs;
   import: YtpcImportInputs;
+  export: YtpcExportInputs;
+  copyLink: YtpcCopyLinkInputs;
 }
 
 export function getInputs(container: HTMLElement): YouTubePlayerControllerInputs {
@@ -288,7 +296,13 @@ export function getInputs(container: HTMLElement): YouTubePlayerControllerInputs
     input: inputGetInputs(container.querySelector('[data-testid="ytpc-input"]')!),
     clear: clearGetInputs(container.querySelector('[data-testid="ytpc-clear"]')!),
     import: importGetInputs(container.querySelector('[data-testid="ytpc-import"]')!),
+    export: exportGetInputs(container.querySelector('[data-testid="ytpc-export"]')!),
+    copyLink: copyLinkGetInputs(container.querySelector('[data-testid="ytpc-copylink"]')!),
   };
+}
+
+export function getEntryList(container: HTMLElement): HTMLElement {
+  return container.querySelector('.entry-list')!;
 }
 
 export default YouTubePlayerController;

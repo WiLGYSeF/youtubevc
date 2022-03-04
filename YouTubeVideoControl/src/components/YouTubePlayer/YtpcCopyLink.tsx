@@ -33,6 +33,16 @@ function YtpcCopyLink(props: YtpcCopyLinkProps) {
   );
 }
 
+export interface YtpcCopyLinkInputs {
+  button: HTMLButtonElement;
+}
+
+export function getInputs(container: HTMLElement): YtpcCopyLinkInputs {
+  return {
+    button: container.querySelector('button')!,
+  };
+}
+
 // defined here to be able to mock in tests
 YtpcCopyLink.prototype.copy = (str: string): void => {
   copy(str);

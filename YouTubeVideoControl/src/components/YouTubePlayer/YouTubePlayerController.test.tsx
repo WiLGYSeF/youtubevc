@@ -1,5 +1,5 @@
 import React from 'react';
-import { act, render, screen } from '@testing-library/react';
+import { act, render } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
 import YouTubePlayerControllerEntry, { ControlType } from 'objects/YtpcEntry/YouTubePlayerControllerEntry';
@@ -10,13 +10,15 @@ import { secondsToTimestamp } from 'utils/timestr';
 import { PLAYBACK_RATES } from 'utils/youtube';
 import { YouTubePlayer } from 'youtube-player/dist/types';
 import YouTubePlayerController, {
-  addEntry, filterLoopEntries, getInputs, getRandomLoopEntry, performEntryActions,
+  addEntry, EXPORT_TYPE, filterLoopEntries, getInputs, getRandomLoopEntry, performEntryActions,
 } from './YouTubePlayerController';
 import { getInputsByControl } from './YtpcInput/YtpcInput';
 import { YtpcInputLoopInputs } from './YtpcInput/YtpcInputLoop';
 import { YtpcInputGotoInputs } from './YtpcInput/YtpcInputGoto';
 import { getInputs as entryGetInputs } from './YtpcEntry';
 import { getEntries } from './YtpcEntryList';
+import YtpcExport, { entriesToFileData } from './YtpcExport';
+import YtpcCopyLink from './YtpcCopyLink';
 
 const IMPORT_POLL_TIMEOUT = 3000;
 const IMPORT_POLL_TICK = 10;
@@ -307,7 +309,7 @@ describe('YouTubePlayerController', () => {
         shuffleWeight={false}
       />);
 
-      const entryList = container.querySelector('.entry-list')!;
+      const entryList = getEntryList(container);
       let entries = getEntries(entryList) as HTMLElement[];
 
       expect(entries.length).toEqual(3);
@@ -383,7 +385,7 @@ describe('YouTubePlayerController', () => {
 
       const { input } = getInputs(container);
 
-      const entryList = container.querySelector('.entry-list')!;
+      const entryList = getEntryList(container);
       const entries = getEntries(entryList) as HTMLElement[];
 
       for (const test of tests) {
@@ -453,7 +455,7 @@ describe('YouTubePlayerController', () => {
         shuffleWeight={false}
       />);
 
-      const entryList = container.querySelector('.entry-list')!;
+      const entryList = getEntryList(container);
       let entries = getEntries(entryList) as HTMLElement[];
 
       const { clear } = getInputs(container);
@@ -503,7 +505,7 @@ describe('YouTubePlayerController', () => {
       />);
 
       const { import: eImport } = getInputs(container);
-      const entryList = container.querySelector('.entry-list')!;
+      const entryList = getEntryList(container);
 
       await act(async () => {
         const file = new File([JSON.stringify(expected)], 'test.json', { type: 'text/plain' });
@@ -541,7 +543,7 @@ describe('YouTubePlayerController', () => {
       />);
 
       const { import: eImport } = getInputs(container);
-      const entryList = container.querySelector('.entry-list')!;
+      const entryList = getEntryList(container);
 
       await act(async () => {
         const file = new File(['invalid'], 'test.json', { type: 'text/plain' });
@@ -561,6 +563,65 @@ describe('YouTubePlayerController', () => {
 
       alertMock.mockRestore();
       consoleMock.mockRestore();
+    });
+
+    it('exports entries', async () => {
+      const saveAsMock = jest.spyOn(YtpcExport.prototype, 'saveAs').mockImplementation();
+
+      const entries = [
+        new YtpcGotoEntry(10, 0),
+      ];
+
+      const { container } = render(<YouTubePlayerController
+        ytPlayer={ytPlayer}
+        entries={JSON.stringify(entries)}
+        loopShuffle={false}
+        shuffleWeight={false}
+      />);
+
+      const { export: eExport } = getInputs(container);
+
+      userEvent.click(eExport.button);
+
+      // TODO: this does state update?
+      await act(async () => {
+        const blob = saveAsMock.mock.calls[0][0] as Blob;
+        const blobContent = await (new Response(blob)).text();
+
+        expect(blobContent).toEqual(entriesToFileData(EXPORT_TYPE, entries));
+      });
+
+      saveAsMock.mockRestore();
+    });
+
+    it('copies link', () => {
+      const copyMock = jest.spyOn(YtpcCopyLink.prototype, 'copy').mockImplementation();
+
+      const videoId = '_BSSJi-sHh8';
+      const getVideoUrlMock = jest.spyOn(ytPlayer, 'getVideoUrl')
+        .mockImplementation(() => `https://www.youtube.com/watch?v=${videoId}`);
+
+      const entries = [
+        new YtpcGotoEntry(10, 0),
+      ];
+
+      const { container } = render(<YouTubePlayerController
+        ytPlayer={ytPlayer}
+        entries={JSON.stringify(entries)}
+        loopShuffle={false}
+        shuffleWeight={false}
+      />);
+
+      const { copyLink } = getInputs(container);
+
+      userEvent.click(copyLink.button);
+
+      expect(copyMock).toHaveBeenCalledWith(
+        `${process.env.REACT_APP_BASE_URL}/watch?v=${videoId}&entries=${encodeURI(JSON.stringify(entries))}`,
+      );
+
+      copyMock.mockRestore();
+      getVideoUrlMock.mockRestore();
     });
   });
 });

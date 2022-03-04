@@ -4,7 +4,7 @@ import sleep from './sleep';
 const TIMEDIFF_THRESHOLD = 50;
 
 describe('coroutine', () => {
-  const mockRequestAnimationFrame = () => jest.spyOn(window, 'requestAnimationFrame')
+  const requestAnimationFrameMock = () => jest.spyOn(window, 'requestAnimationFrame')
     .mockImplementation();
 
   const doCallback = (routine: Coroutine, timestamp: number): void => {
@@ -14,7 +14,7 @@ describe('coroutine', () => {
   };
 
   it('runs callback', () => {
-    const raf = mockRequestAnimationFrame();
+    const raf = requestAnimationFrameMock();
 
     const start = 0;
     const total = 3;
@@ -41,7 +41,7 @@ describe('coroutine', () => {
   });
 
   it('runs until timeout', () => {
-    const raf = mockRequestAnimationFrame();
+    const raf = requestAnimationFrameMock();
 
     const start = 0;
     const timeout = 5;
@@ -64,7 +64,7 @@ describe('coroutine', () => {
   });
 
   it('runs at interval', () => {
-    const raf = mockRequestAnimationFrame();
+    const raf = requestAnimationFrameMock();
 
     const start = 1;
     const total = 3;
@@ -86,7 +86,7 @@ describe('coroutine', () => {
   });
 
   it('runs until limit', () => {
-    const raf = mockRequestAnimationFrame();
+    const raf = requestAnimationFrameMock();
 
     const start = 0;
     const total = 3;
@@ -107,7 +107,7 @@ describe('coroutine', () => {
   });
 
   it('stops when stopped in callback', () => {
-    const raf = mockRequestAnimationFrame();
+    const raf = requestAnimationFrameMock();
 
     const start = 0;
     const total = 3;
@@ -129,7 +129,7 @@ describe('coroutine', () => {
   });
 
   it('pauses and resumes', async () => {
-    const raf = mockRequestAnimationFrame();
+    const raf = requestAnimationFrameMock();
 
     const routine = new Coroutine(() => {});
 
