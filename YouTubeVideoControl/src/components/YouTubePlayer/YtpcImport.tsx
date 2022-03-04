@@ -17,10 +17,8 @@ function tryImportJson(
   const entries: YouTubePlayerControllerEntry[] = [];
 
   try {
-    const json = JSON.parse(data);
-    for (let i = 0; i < json.length; i += 1) {
-      const entry: YtpcEntryState = json[i];
-
+    const json = JSON.parse(data) as YtpcEntryState[];
+    for (const entry of json) {
       addEntry(entries, EntryBuilder.buildEntry(entry));
     }
 

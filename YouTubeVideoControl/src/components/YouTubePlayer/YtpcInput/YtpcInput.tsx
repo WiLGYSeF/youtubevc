@@ -142,7 +142,7 @@ export function getInputsByControl(container: HTMLElement, type: ControlType): a
   }
 
   if (inputs) {
-    for (const [key, value] of Object.entries(inputs)) {
+    for (const value of Object.values(inputs)) {
       if (!value) {
         return null;
       }

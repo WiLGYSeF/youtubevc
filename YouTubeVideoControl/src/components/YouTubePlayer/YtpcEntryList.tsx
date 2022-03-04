@@ -16,7 +16,7 @@ interface YtpcEntryListProps {
 function YtpcEntryList(props: YtpcEntryListProps) {
   const elements = props.entries.map((e, i) => (
     <YtpcEntry
-      key={`${i}-${e.getKey()}`}
+      key={e.getKey()}
       entry={e}
       deleteEntry={props.deleteEntry}
       editEntry={props.editEntry}

@@ -34,6 +34,7 @@ export function addEntry(
   if (existingEntryIndex === -1) {
     entries.push(entry);
   } else {
+    // eslint-disable-next-line no-param-reassign
     entries[existingEntryIndex] = entry;
   }
 
@@ -60,9 +61,7 @@ export function getRandomLoopEntry(
   let totalWeight = 0;
 
   if (useLoopCountForWeights) {
-    for (let i = 0; i < loopEntries.length; i += 1) {
-      highestWeight = Math.max(highestWeight, loopEntries[i].loopCount);
-    }
+    highestWeight = Math.max(...loopEntries.map((e) => e.loopCount));
   }
 
   for (const entry of loopEntries) {

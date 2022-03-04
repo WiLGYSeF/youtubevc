@@ -30,16 +30,18 @@
     }
   },
   "rules": {
-    "react/destructuring-assignment": [
-      "off"
-    ],
+    "react/destructuring-assignment": [ "off" ],
+    "react/require-default-props": [ "off" ],
     "react/jsx-filename-extension": [
       "error",
       { "extensions": [ ".tsx", ".ts" ] }
     ],
     "react/jsx-max-props-per-line": [
       "error",
-      { "maximum": 3, "when": "multiline" }
+      {
+        "maximum": 3,
+        "when": "multiline"
+      }
     ],
     "@typescript-eslint/lines-between-class-members": [
       "error",
