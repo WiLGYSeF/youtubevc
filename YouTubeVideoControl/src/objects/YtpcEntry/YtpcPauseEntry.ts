@@ -3,7 +3,7 @@ import { YouTubePlayer } from 'youtube-player/dist/types';
 import Coroutine, { MSEC_PER_SEC } from 'utils/coroutine';
 import round from 'utils/round';
 import { secondsToTimestring, timestampToSeconds, timestringToSeconds } from 'utils/timestr';
-import YouTubePlayerControllerEntry, { ControlType, YtpcEntryState } from './YouTubePlayerControllerEntry';
+import YouTubePlayerControllerEntry, { ControlType, ExpectedState, YtpcEntryState } from './YouTubePlayerControllerEntry';
 
 export interface YtpcPauseState extends YtpcEntryState {
   pauseTime: number;
@@ -28,7 +28,7 @@ class YtpcPauseEntry extends YouTubePlayerControllerEntry {
     return YtpcPauseEntry.ACTION_STR;
   }
 
-  public performAction(ytPlayer: YouTubePlayer): void {
+  public performAction(ytPlayer: YouTubePlayer): ExpectedState {
     ytPlayer.pauseVideo();
 
     const pauseTime = this.pauseTime * MSEC_PER_SEC;
@@ -41,6 +41,7 @@ class YtpcPauseEntry extends YouTubePlayerControllerEntry {
       ytPlayer.playVideo();
     });
     this.routine.start();
+    return {};
   }
 
   public getState(): YtpcPauseState {

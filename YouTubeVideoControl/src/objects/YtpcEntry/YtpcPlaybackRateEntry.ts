@@ -1,7 +1,7 @@
 import { YouTubePlayer } from 'youtube-player/dist/types';
 
 import { timestampToSeconds } from 'utils/timestr';
-import YouTubePlayerControllerEntry, { ControlType, YtpcEntryState } from './YouTubePlayerControllerEntry';
+import YouTubePlayerControllerEntry, { ControlType, ExpectedState, YtpcEntryState } from './YouTubePlayerControllerEntry';
 
 export interface YtpcPlaybackRateState extends YtpcEntryState {
   playbackRate: number;
@@ -22,8 +22,9 @@ class YtpcPlaybackRateEntry extends YouTubePlayerControllerEntry {
     return YtpcPlaybackRateEntry.ACTION_STR;
   }
 
-  public performAction(ytPlayer: YouTubePlayer): void {
+  public performAction(ytPlayer: YouTubePlayer): ExpectedState {
     ytPlayer.setPlaybackRate(this.playbackRate);
+    return {};
   }
 
   public getState(): YtpcPlaybackRateState {

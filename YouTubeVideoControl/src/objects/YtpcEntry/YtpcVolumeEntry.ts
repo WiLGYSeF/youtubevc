@@ -4,7 +4,7 @@ import Coroutine, { MSEC_PER_SEC } from 'utils/coroutine';
 import lerp from 'utils/lerp';
 import round from 'utils/round';
 import { secondsToTimestring, timestampToSeconds } from 'utils/timestr';
-import YouTubePlayerControllerEntry, { ControlType, YtpcEntryState } from './YouTubePlayerControllerEntry';
+import YouTubePlayerControllerEntry, { ControlType, ExpectedState, YtpcEntryState } from './YouTubePlayerControllerEntry';
 
 export interface YtpcVolumeState extends YtpcEntryState {
   volume: number;
@@ -32,7 +32,7 @@ class YtpcVolumeEntry extends YouTubePlayerControllerEntry {
     return YtpcVolumeEntry.ACTION_STR;
   }
 
-  public performAction(ytPlayer: YouTubePlayer): void {
+  public performAction(ytPlayer: YouTubePlayer): ExpectedState {
     if (this.lerpSeconds > 0) {
       const vol = ytPlayer.getVolume();
       const lerpMs = this.lerpSeconds * MSEC_PER_SEC;
@@ -49,6 +49,7 @@ class YtpcVolumeEntry extends YouTubePlayerControllerEntry {
     } else {
       ytPlayer.setVolume(this.volume);
     }
+    return {};
   }
 
   public getState(): YtpcVolumeState {

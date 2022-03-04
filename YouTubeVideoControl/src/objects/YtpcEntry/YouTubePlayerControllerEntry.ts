@@ -16,6 +16,10 @@ export interface YtpcEntryState {
   controlType: ControlType;
 }
 
+export interface ExpectedState {
+  currentTime?: number;
+}
+
 abstract class YouTubePlayerControllerEntry {
   public static REGEXSTR_TIMESTAMP = String.raw`(?:\d+:)*\d+(?:\.\d*)?`;
 
@@ -29,7 +33,7 @@ abstract class YouTubePlayerControllerEntry {
 
   abstract get actionStr(): string;
 
-  abstract performAction(ytPlayer: YouTubePlayer, currentTime: number): void;
+  abstract performAction(ytPlayer: YouTubePlayer, currentTime: number): ExpectedState;
 
   abstract getControlStr(stateless: boolean): string;
 

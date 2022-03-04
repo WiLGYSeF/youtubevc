@@ -19,6 +19,7 @@ import { getInputs as entryGetInputs } from './YtpcEntry';
 import { getEntries } from './YtpcEntryList';
 import YtpcExport, { entriesToFileData } from './YtpcExport';
 import YtpcCopyLink from './YtpcCopyLink';
+import PlayerStates from 'youtube-player/dist/constants/PlayerStates';
 
 const IMPORT_POLL_TIMEOUT = 3000;
 const IMPORT_POLL_TICK = 10;
@@ -130,54 +131,54 @@ describe('YouTubePlayerController', () => {
     } as unknown as YouTubePlayer;
 
     it('performs entry actions', () => {
-      const performActionMock = jest.spyOn(YtpcGotoEntry.prototype, 'performAction')
-        .mockImplementation();
-
       const entries = [
         new YtpcGotoEntry(4, 10),
         new YtpcGotoEntry(15, 0),
       ];
 
-      let lastMatchingIdx = 0;
+      let lastMatchingIndex = 0;
+      let expectedState: object = {};
 
       const doTest = (curTime: number, lastTime: number) => {
-        performActionMock.mockClear();
-        lastMatchingIdx = performEntryActions(ytPlayer, entries, curTime, lastTime, false, false);
+        (ytPlayer.seekTo as jest.Mock).mockClear();
+        ({
+          lastMatchingIndex,
+          expectedState
+        } = performEntryActions(ytPlayer, entries, curTime, lastTime, false, false));
       };
 
       for (let i = 0; i < entries[0].atTime; i += 0.1) {
         doTest(i - 0.1, i);
-        expect(lastMatchingIdx).toEqual(-1);
-        expect(performActionMock).toHaveBeenCalledTimes(0);
+        expect(lastMatchingIndex).toEqual(-1);
+        expect(expectedState).toEqual({});
+        expect(ytPlayer.seekTo).toHaveBeenCalledTimes(0);
       }
 
       doTest(entries[0].atTime, entries[0].atTime - 0.1);
-      expect(lastMatchingIdx).toEqual(0);
-      expect(performActionMock).toHaveBeenCalledTimes(1);
+      expect(lastMatchingIndex).toEqual(0);
+      expect(ytPlayer.seekTo).toHaveBeenCalledTimes(1);
 
       for (let i = 0; i < entries.length; i += 1) {
         doTest(entries[i].atTime + 0.005, entries[i].atTime - 0.005);
-        expect(lastMatchingIdx).toEqual(i);
-        expect(performActionMock).toHaveBeenCalledTimes(1);
+        expect(lastMatchingIndex).toEqual(i);
+        expect(expectedState).toEqual({
+          currentTime: entries[i].gotoTime,
+        });
+        expect(ytPlayer.seekTo).toHaveBeenCalledTimes(1);
       }
 
       doTest(entries[1].atTime - 0.005, entries[1].atTime - 0.01);
-      expect(lastMatchingIdx).toEqual(0);
-      expect(performActionMock).toHaveBeenCalledTimes(0);
-
-      performActionMock.mockRestore();
+      expect(lastMatchingIndex).toEqual(0);
+      expect(ytPlayer.seekTo).toHaveBeenCalledTimes(0);
     });
 
     it('performs multiple actions', () => {
-      const performActionMock = jest.spyOn(YtpcGotoEntry.prototype, 'performAction')
-        .mockImplementation();
-
       const entries = [
         new YtpcGotoEntry(15, 1),
         new YtpcGotoEntry(15.1, 0),
       ];
 
-      const lastMatchingIdx = performEntryActions(
+      const { lastMatchingIndex, expectedState } = performEntryActions(
         ytPlayer,
         entries,
         entries[1].atTime,
@@ -186,11 +187,13 @@ describe('YouTubePlayerController', () => {
         false,
       );
 
-      expect(lastMatchingIdx).toEqual(1);
-      expect(performActionMock).toHaveBeenCalledTimes(2);
-      expect(performActionMock.mock.instances).toEqual(entries);
-
-      performActionMock.mockRestore();
+      expect(lastMatchingIndex).toEqual(1);
+      expect(expectedState).toEqual({
+        currentTime: 0,
+      });
+      expect(ytPlayer.seekTo).toHaveBeenCalledTimes(2);
+      expect((ytPlayer.seekTo as jest.Mock).mock.calls.map((c) => c[0]))
+        .toEqual(entries.map((e) => e.gotoTime));
     });
 
     it('performs entry actions with loop shuffle', () => {
@@ -198,30 +201,28 @@ describe('YouTubePlayerController', () => {
         new YtpcLoopEntry(15, 0),
       ];
 
-      let lastMatchingIdx = 0;
+      let lastMatchingIndex = 0;
 
       const doTest = (curTime: number, lastTime: number) => {
         (ytPlayer.seekTo as jest.Mock).mockClear();
-        lastMatchingIdx = performEntryActions(ytPlayer, entries, curTime, lastTime, true, false);
+        ({ lastMatchingIndex } = performEntryActions(ytPlayer, entries, curTime, lastTime, true, false));
       };
 
       for (let i = 0; i < entries[0].atTime; i += 0.1) {
         doTest(i - 0.1, i);
-        expect(lastMatchingIdx).toEqual(-1);
+        expect(lastMatchingIndex).toEqual(-1);
         expect(ytPlayer.seekTo).toHaveBeenCalledTimes(0);
       }
 
       doTest(entries[0].atTime, entries[0].atTime - 0.1);
-      expect(lastMatchingIdx).toEqual(0);
+      expect(lastMatchingIndex).toEqual(0);
       expect(ytPlayer.seekTo).toHaveBeenCalledTimes(1);
 
       for (let i = 0; i < entries.length; i += 1) {
         doTest(entries[i].atTime + 0.005, entries[i].atTime - 0.005);
-        expect(lastMatchingIdx).toEqual(i);
+        expect(lastMatchingIndex).toEqual(i);
         expect(ytPlayer.seekTo).toHaveBeenCalledTimes(1);
       }
-
-      (ytPlayer.seekTo as jest.Mock).mockRestore();
     });
   });
 
@@ -234,6 +235,7 @@ describe('YouTubePlayerController', () => {
       addEventListener: jest.fn(),
       getAvailablePlaybackRates: jest.fn(() => PLAYBACK_RATES),
       getCurrentTime: jest.fn(),
+      getPlayerState: jest.fn(() => PlayerStates.PLAYING),
       getVideoUrl: jest.fn(),
       removeEventListener: jest.fn(),
       seekTo: jest.fn(),

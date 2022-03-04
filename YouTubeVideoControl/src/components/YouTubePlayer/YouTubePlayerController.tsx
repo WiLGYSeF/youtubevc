@@ -3,7 +3,7 @@ import { YouTubePlayer } from 'youtube-player/dist/types';
 import PlayerStates from 'youtube-player/dist/constants/PlayerStates';
 
 import EntryBuilder from 'objects/YtpcEntry/EntryBuilder';
-import YouTubePlayerControllerEntry, { ControlType, YtpcEntryState } from 'objects/YtpcEntry/YouTubePlayerControllerEntry';
+import YouTubePlayerControllerEntry, { ControlType, ExpectedState, YtpcEntryState } from 'objects/YtpcEntry/YouTubePlayerControllerEntry';
 import { YouTubePlayer360 } from 'objects/YtpcEntry/Ytpc360Entry';
 import YtpcLoopEntry from 'objects/YtpcEntry/YtpcLoopEntry';
 import Coroutine from 'utils/coroutine';
@@ -89,8 +89,12 @@ export function performEntryActions(
   lastTime: number,
   useLoopShuffle: boolean,
   useLoopCountForWeights: boolean,
-) {
-  let lastMatchingIdx = -1;
+): ({
+  lastMatchingIndex: number,
+  expectedState: ExpectedState,
+}) {
+  const expectedState: ExpectedState = {};
+  let lastMatchingIndex = -1;
   let idx = 0;
 
   for (const entry of entries) {
@@ -99,16 +103,20 @@ export function performEntryActions(
         if (entry.controlType === ControlType.Loop && useLoopShuffle) {
           const loopEntry = getRandomLoopEntry(entries, useLoopCountForWeights);
           ytPlayer.seekTo(loopEntry.loopBackTo, true);
+          expectedState.currentTime = loopEntry.loopBackTo;
         } else {
-          entry.performAction(ytPlayer, curTime);
+          Object.assign(expectedState, entry.performAction(ytPlayer, curTime));
         }
       }
-      lastMatchingIdx = idx;
+      lastMatchingIndex = idx;
     }
     idx += 1;
   }
 
-  return lastMatchingIdx;
+  return {
+    lastMatchingIndex,
+    expectedState,
+  };
 }
 
 interface YouTubePlayerControllerProps {
@@ -170,13 +178,13 @@ function YouTubePlayerController(props: YouTubePlayerControllerProps) {
     let lastTime = props.ytPlayer?.getCurrentTime() ?? 0;
 
     const routine = new Coroutine(() => {
-      if (!props.ytPlayer) {
+      if (!props.ytPlayer || props.ytPlayer.getPlayerState() !== PlayerStates.PLAYING) {
         return;
       }
 
       const curTime = props.ytPlayer.getCurrentTime();
 
-      const lastMatchingIdx = performEntryActions(
+      const { lastMatchingIndex, expectedState } = performEntryActions(
         props.ytPlayer,
         entries,
         curTime,
@@ -185,9 +193,9 @@ function YouTubePlayerController(props: YouTubePlayerControllerProps) {
         useLoopCountForWeights,
       );
 
-      setBarIndex(lastMatchingIdx + 1);
+      setBarIndex(lastMatchingIndex + 1);
 
-      lastTime = curTime;
+      lastTime = expectedState.currentTime ?? curTime;
     });
     routine.start();
 

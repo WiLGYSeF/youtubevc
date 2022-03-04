@@ -1,7 +1,7 @@
 import { YouTubePlayer } from 'youtube-player/dist/types';
 
 import { secondsToTimestamp, timestampToSeconds } from 'utils/timestr';
-import YouTubePlayerControllerEntry, { ControlType, YtpcEntryState } from './YouTubePlayerControllerEntry';
+import YouTubePlayerControllerEntry, { ControlType, ExpectedState, YtpcEntryState } from './YouTubePlayerControllerEntry';
 
 export interface YtpcLoopState extends YtpcEntryState {
   loopBackTo: number;
@@ -37,13 +37,17 @@ class YtpcLoopEntry extends YouTubePlayerControllerEntry {
     return this.loopNum;
   }
 
-  public performAction(ytPlayer: YouTubePlayer): void {
+  public performAction(ytPlayer: YouTubePlayer): ExpectedState {
     if (this.loopCount >= 0 && this.loopNum >= this.loopCount) {
-      return;
+      return {};
     }
 
     ytPlayer.seekTo(this.loopBackTo, true);
     this.loopNum += 1;
+
+    return {
+      currentTime: this.loopBackTo,
+    };
   }
 
   public getState(): YtpcLoopState {

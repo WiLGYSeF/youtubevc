@@ -17,10 +17,13 @@ describe('YtpcLoopEntry', () => {
       seekTo,
     }));
 
-    entry.performAction(ytPlayer() as unknown as YouTubePlayer);
+    const result = entry.performAction(ytPlayer() as unknown as YouTubePlayer);
 
     expect(seekTo).toBeCalledTimes(1);
     expect(seekTo).lastCalledWith(entry.loopBackTo, true);
+    expect(result).toEqual({
+      currentTime: entry.loopBackTo,
+    });
   });
 
   it('loops back up to count', () => {

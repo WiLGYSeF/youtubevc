@@ -1,7 +1,7 @@
 import { YouTubePlayer } from 'youtube-player/dist/types';
 
 import { secondsToTimestamp, timestampToSeconds } from 'utils/timestr';
-import YouTubePlayerControllerEntry, { ControlType, YtpcEntryState } from './YouTubePlayerControllerEntry';
+import YouTubePlayerControllerEntry, { ControlType, ExpectedState, YtpcEntryState } from './YouTubePlayerControllerEntry';
 
 export interface YtpcGotoState extends YtpcEntryState {
   gotoTime: number;
@@ -22,8 +22,11 @@ class YtpcGotoEntry extends YouTubePlayerControllerEntry {
     return YtpcGotoEntry.ACTION_STR;
   }
 
-  public performAction(ytPlayer: YouTubePlayer): void {
+  public performAction(ytPlayer: YouTubePlayer): ExpectedState {
     ytPlayer.seekTo(this.gotoTime, true);
+    return {
+      currentTime: this.gotoTime,
+    };
   }
 
   public getState(): YtpcGotoState {

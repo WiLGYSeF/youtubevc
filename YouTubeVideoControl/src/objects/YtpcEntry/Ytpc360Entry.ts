@@ -4,7 +4,7 @@ import Coroutine, { MSEC_PER_SEC } from 'utils/coroutine';
 import lerp from 'utils/lerp';
 import round from 'utils/round';
 import { secondsToTimestring, timestampToSeconds } from 'utils/timestr';
-import YouTubePlayerControllerEntry, { ControlType, YtpcEntryState } from './YouTubePlayerControllerEntry';
+import YouTubePlayerControllerEntry, { ControlType, ExpectedState, YtpcEntryState } from './YouTubePlayerControllerEntry';
 
 export interface SphericalProperties {
   yaw: number;
@@ -61,7 +61,7 @@ class Ytpc360Entry extends YouTubePlayerControllerEntry {
     return Ytpc360Entry.ACTION_STR;
   }
 
-  public performAction(ytPlayer: YouTubePlayer360): void {
+  public performAction(ytPlayer: YouTubePlayer360): ExpectedState {
     if (this.lerpSeconds > 0) {
       const props = ytPlayer.getSphericalProperties();
       if (Object.keys(props).length) {
@@ -85,6 +85,8 @@ class Ytpc360Entry extends YouTubePlayerControllerEntry {
     } else {
       ytPlayer.setSphericalProperties(this.sphereProps);
     }
+
+    return {};
   }
 
   public getState(): Ytpc360State {
