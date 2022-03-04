@@ -15,7 +15,7 @@ const LOOP_COUNT_DEFAULT = 1;
 function YtpcInputLoop(props: YtpcControlInput) {
   const pstate = props.defaultState as YtpcLoopState;
   const dLoopBackTo = pstate?.loopBackTo ?? 0;
-  const dLoopCount = pstate?.loopCount ?? LOOP_COUNT_DEFAULT;
+  const dLoopCount = Math.max(pstate?.loopCount ?? LOOP_COUNT_DEFAULT, 0);
 
   const [loopBackTo, setLoopBackTo] = useStatePropBacked(dLoopBackTo);
   const [forever, setForever] = useStatePropBacked((pstate?.loopCount ?? -1) < 0);

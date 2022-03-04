@@ -82,6 +82,12 @@ export function getRandomLoopEntry(
   }
   return loopEntries[selected];
 }
+
+interface PerformEntryActionsResult {
+  lastMatchingIndex: number,
+  expectedState: ExpectedState,
+}
+
 export function performEntryActions(
   ytPlayer: YouTubePlayer,
   entries: YouTubePlayerControllerEntry[],
@@ -89,10 +95,7 @@ export function performEntryActions(
   lastTime: number,
   useLoopShuffle: boolean,
   useLoopCountForWeights: boolean,
-): ({
-  lastMatchingIndex: number,
-  expectedState: ExpectedState,
-}) {
+): PerformEntryActionsResult {
   const expectedState: ExpectedState = {};
   let lastMatchingIndex = -1;
   let idx = 0;

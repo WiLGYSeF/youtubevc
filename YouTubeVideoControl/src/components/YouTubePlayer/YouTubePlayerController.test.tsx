@@ -9,6 +9,7 @@ import pollUntil from 'utils/test/pollUntil';
 import { secondsToTimestamp } from 'utils/timestr';
 import { PLAYBACK_RATES } from 'utils/youtube';
 import { YouTubePlayer } from 'youtube-player/dist/types';
+import PlayerStates from 'youtube-player/dist/constants/PlayerStates';
 import YouTubePlayerController, {
   addEntry, EXPORT_TYPE, filterLoopEntries, getInputs, getRandomLoopEntry, performEntryActions,
 } from './YouTubePlayerController';
@@ -19,7 +20,6 @@ import { getInputs as entryGetInputs } from './YtpcEntry';
 import { getEntries } from './YtpcEntryList';
 import YtpcExport, { entriesToFileData } from './YtpcExport';
 import YtpcCopyLink from './YtpcCopyLink';
-import PlayerStates from 'youtube-player/dist/constants/PlayerStates';
 
 const IMPORT_POLL_TIMEOUT = 3000;
 const IMPORT_POLL_TICK = 10;
@@ -143,7 +143,7 @@ describe('YouTubePlayerController', () => {
         (ytPlayer.seekTo as jest.Mock).mockClear();
         ({
           lastMatchingIndex,
-          expectedState
+          expectedState,
         } = performEntryActions(ytPlayer, entries, curTime, lastTime, false, false));
       };
 
@@ -422,7 +422,8 @@ describe('YouTubePlayerController', () => {
             expect(loopInput.loopBackTo.input.value)
               .toEqual(secondsToTimestamp(loopEntry.loopBackTo));
             expect(loopInput.forever.checkbox.checked).toEqual(loopEntry.loopCount < 0);
-            expect(loopInput.loopCount.input.value).toEqual(loopEntry.loopCount.toString());
+            expect(loopInput.loopCount.input.value)
+              .toEqual(Math.max(loopEntry.loopCount, 0).toString());
             break;
           }
           default:

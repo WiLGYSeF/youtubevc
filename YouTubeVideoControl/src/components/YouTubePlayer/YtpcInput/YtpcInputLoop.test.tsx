@@ -69,7 +69,7 @@ describe('YtpcInputLoop', () => {
 
     expect(loopBackTo.input.value).toEqual(secondsToTimestamp(state.loopBackTo));
     expect(forever.checkbox.checked).toEqual((state.loopCount ?? -1) < 0);
-    expect(loopCount.input.value).toEqual(state.loopCount.toString());
+    expect(loopCount.input.value).toEqual(Math.max(state.loopCount, 0).toString());
 
     state = {
       atTime: 0,
