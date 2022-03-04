@@ -1,94 +1,134 @@
 import React, { useEffect } from 'react';
 
-import Checkbox from 'components/common/Checkbox';
-import NumberInput from 'components/common/NumberInput';
+import Checkbox, { getInputs as checkboxGetInputs, CheckboxInputs } from 'components/common/Checkbox/Checkbox';
+import NumberInput, { getInputs as numberGetInputs, NumberInputInputs } from 'components/common/NumberInput/NumberInput';
 import Ytpc360Entry, { Ytpc360State } from 'objects/YtpcEntry/Ytpc360Entry';
+import { ControlType } from 'objects/YtpcEntry/YouTubePlayerControllerEntry';
 import useStatePropBacked from 'utils/useStatePropBacked';
 import { YtpcControlInput } from './YtpcControlInput';
 
-import './YtpcInput360.scss';
+import styles from './YtpcInput360.module.scss';
 
-const LERP_TIME_DEFAULT = 0;
+export const LERP_TIME_DEFAULT = 3;
 
 function YtpcInput360(props: YtpcControlInput) {
-  const pstate = props.state as Ytpc360State;
-  const [yaw, setYaw] = useStatePropBacked(pstate?.sphereProps?.yaw ?? Ytpc360Entry.YAW_DEFAULT);
-  const [pitch, setPitch] = useStatePropBacked(pstate?.sphereProps?.pitch ?? Ytpc360Entry.PITCH_DEFAULT);
-  const [roll, setRoll] = useStatePropBacked(pstate?.sphereProps?.roll ?? Ytpc360Entry.ROLL_DEFAULT);
-  const [fov, setFov] = useStatePropBacked(pstate?.sphereProps?.fov ?? Ytpc360Entry.FOV_DEFAULT);
+  const pstate = props.defaultState as Ytpc360State;
+  const dYaw = pstate?.sphereProps?.yaw ?? Ytpc360Entry.YAW_DEFAULT;
+  const dPitch = pstate?.sphereProps?.pitch ?? Ytpc360Entry.PITCH_DEFAULT;
+  const dRoll = pstate?.sphereProps?.roll ?? Ytpc360Entry.ROLL_DEFAULT;
+  const dFov = pstate?.sphereProps?.fov ?? Ytpc360Entry.FOV_DEFAULT;
+  const dLerpSeconds = pstate?.lerpSeconds ?? -1;
+
+  const [yaw, setYaw] = useStatePropBacked(dYaw);
+  const [pitch, setPitch] = useStatePropBacked(dPitch);
+  const [roll, setRoll] = useStatePropBacked(dRoll);
+  const [fov, setFov] = useStatePropBacked(dFov);
 
   const [lerpSet, setLerp] = useStatePropBacked((pstate?.lerpSeconds ?? -1) >= 0);
-
-  const lerpSeconds = pstate?.lerpSeconds ?? -1;
-  const [lerpTime, setLerpTime] = useStatePropBacked(lerpSeconds < 0
-    ? LERP_TIME_DEFAULT
-    : lerpSeconds);
+  const [lerpSeconds, setLerpSeconds] = useStatePropBacked(dLerpSeconds >= 0
+    ? dLerpSeconds
+    : LERP_TIME_DEFAULT);
 
   useEffect(() => {
     const state: Ytpc360State = {
-      atTime: pstate.atTime,
-      controlType: pstate.controlType,
+      atTime: props.entryState.atTime,
+      controlType: ControlType.ThreeSixty,
       sphereProps: {
         yaw: yaw === 360 ? 0 : yaw,
         pitch,
         roll,
         fov,
       },
-      lerpSeconds: lerpSet ? lerpTime : -1,
+      lerpSeconds: lerpSet ? lerpSeconds : -1,
     };
     props.setEntryState(state);
-  }, [yaw, pitch, roll, fov, lerpSet, lerpTime]);
+  }, [yaw, pitch, roll, fov, lerpSet, lerpSeconds]);
 
   return (
-    <div className="three-sixty">
-      <NumberInput
-        label="yaw: "
-        minValue={Ytpc360Entry.YAW_MIN} maxValue={Ytpc360Entry.YAW_MAX} step={null}
-        value={yaw}
-        clamp={false}
-        onChange={setYaw}
-      />
-      <NumberInput
-        label="pitch: "
-        minValue={Ytpc360Entry.PITCH_MIN} maxValue={Ytpc360Entry.PITCH_MAX} step={null}
-        value={pitch}
-        clamp={false}
-        onChange={setPitch}
-      />
-      <NumberInput
-        label="roll: "
-        minValue={Ytpc360Entry.ROLL_MIN} maxValue={Ytpc360Entry.ROLL_MAX} step={null}
-        value={roll}
-        clamp={false}
-        onChange={setRoll}
-      />
-      <NumberInput
-        label="fov: "
-        minValue={Ytpc360Entry.FOV_MIN} maxValue={Ytpc360Entry.FOV_MAX} step={null}
-        value={fov}
-        forceValue
-        onChange={setFov}
-      />
-      <Checkbox
-        label="lerp"
-        checked={lerpSet}
-        onChange={setLerp}
-      />
-      {lerpSet && (
-        <span>
-          <span> for </span>
-          <NumberInput
-            label=" seconds"
-            labelRight
-            minValue={0} step={null}
-            value={lerpTime}
-            forceValue
-            onChange={setLerpTime}
-          />
-        </span>
-      )}
+    <div className={styles['three-sixty']}>
+      <span data-testid="yaw">
+        <NumberInput
+          label="yaw: "
+          minValue={Ytpc360Entry.YAW_MIN} maxValue={Ytpc360Entry.YAW_MAX} step={null}
+          defaultValue={dYaw}
+          clamp={false}
+          forceValue
+          onChange={setYaw}
+        />
+      </span>
+      <span data-testid="pitch">
+        <NumberInput
+          label="pitch: "
+          minValue={Ytpc360Entry.PITCH_MIN} maxValue={Ytpc360Entry.PITCH_MAX} step={null}
+          defaultValue={dPitch}
+          clamp={false}
+          forceValue
+          onChange={setPitch}
+        />
+      </span>
+      <span data-testid="roll">
+        <NumberInput
+          label="roll: "
+          minValue={Ytpc360Entry.ROLL_MIN} maxValue={Ytpc360Entry.ROLL_MAX} step={null}
+          defaultValue={dRoll}
+          clamp={false}
+          forceValue
+          onChange={setRoll}
+        />
+      </span>
+      <span data-testid="fov">
+        <NumberInput
+          label="fov: "
+          minValue={Ytpc360Entry.FOV_MIN} maxValue={Ytpc360Entry.FOV_MAX} step={null}
+          defaultValue={dFov}
+          forceValue
+          onChange={setFov}
+        />
+      </span>
+      <span data-testid="lerp">
+        <Checkbox
+          label="lerp"
+          defaultChecked={lerpSet}
+          onChange={setLerp}
+        />
+      </span>
+      <span
+        data-testid="lerp-seconds" style={{
+          display: lerpSet ? '' : 'none',
+        }}
+      >
+        <span> for </span>
+        <NumberInput
+          label=" seconds"
+          labelRight
+          minValue={0} step={null}
+          defaultValue={dLerpSeconds >= 0 ? dLerpSeconds : LERP_TIME_DEFAULT}
+          forceValue
+          onChange={setLerpSeconds}
+        />
+      </span>
     </div>
   );
+}
+
+export interface YtpcInput360Inputs {
+  yaw: NumberInputInputs;
+  pitch: NumberInputInputs;
+  roll: NumberInputInputs;
+  fov: NumberInputInputs;
+  lerp: CheckboxInputs;
+  lerpSeconds: NumberInputInputs;
+}
+
+export function getInputs(container: HTMLElement): YtpcInput360Inputs {
+  return {
+    yaw: numberGetInputs(container.querySelector('[data-testid="yaw"]')!),
+    pitch: numberGetInputs(container.querySelector('[data-testid="pitch"]')!),
+    roll: numberGetInputs(container.querySelector('[data-testid="roll"]')!),
+    fov: numberGetInputs(container.querySelector('[data-testid="fov"]')!),
+    lerp: checkboxGetInputs(container.querySelector('[data-testid="lerp"]')!),
+    lerpSeconds: numberGetInputs(container.querySelector('[data-testid="lerp-seconds"]')!),
+  };
 }
 
 export default YtpcInput360;

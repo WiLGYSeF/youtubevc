@@ -6,13 +6,11 @@ import YouTubePlayerControllerEntry from 'objects/YtpcEntry/YouTubePlayerControl
 interface YtpcCopyLinkProps {
   videoId: string | null,
   entries: YouTubePlayerControllerEntry[];
+  onCopy?(url: string): boolean;
 }
 
-// const BASE_URL = 'https://www.youtubevc.com';
-const BASE_URL = 'http://localhost:3000';
-
 function getUrl(videoId: string, entries: YouTubePlayerControllerEntry[]): string {
-  return `${BASE_URL}/watch?v=${videoId}&entries=${encodeURI(JSON.stringify(entries))}`;
+  return `${process.env.REACT_APP_BASE_URL}/watch?v=${videoId}&entries=${encodeURI(JSON.stringify(entries))}`;
 }
 
 function YtpcCopyLink(props: YtpcCopyLinkProps) {
@@ -22,7 +20,10 @@ function YtpcCopyLink(props: YtpcCopyLinkProps) {
         type="button"
         onClick={() => {
           if (props.videoId) {
-            copy(getUrl(props.videoId, props.entries));
+            const url = getUrl(props.videoId, props.entries);
+            if (!props.onCopy || props.onCopy(url)) {
+              YtpcCopyLink.prototype.copy(url);
+            }
           }
         }}
       >
@@ -31,5 +32,20 @@ function YtpcCopyLink(props: YtpcCopyLinkProps) {
     </div>
   );
 }
+
+export interface YtpcCopyLinkInputs {
+  button: HTMLButtonElement;
+}
+
+export function getInputs(container: HTMLElement): YtpcCopyLinkInputs {
+  return {
+    button: container.querySelector('button')!,
+  };
+}
+
+// defined here to be able to mock in tests
+YtpcCopyLink.prototype.copy = (str: string): void => {
+  copy(str);
+};
 
 export default YtpcCopyLink;

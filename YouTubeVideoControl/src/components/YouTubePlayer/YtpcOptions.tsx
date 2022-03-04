@@ -1,8 +1,8 @@
 import React from 'react';
 
-import Checkbox from 'components/common/Checkbox';
+import Checkbox from 'components/common/Checkbox/Checkbox';
 
-import './YtpcOptions.scss';
+import styles from './YtpcOptions.module.scss';
 
 interface YtpcOptionsProps {
   useLoopsForShuffling: boolean;
@@ -14,17 +14,17 @@ interface YtpcOptionsProps {
 
 function YtpcOptions(props: YtpcOptionsProps) {
   return (
-    <div className="option-container">
+    <div className={styles['option-container']}>
       <Checkbox
         label="Loop controls are shuffle regions"
-        checked={props.useLoopsForShuffling}
+        defaultChecked={props.useLoopsForShuffling}
         onChange={props.setLoopsForShuffling}
       />
       {props.useLoopsForShuffling && (
         <div className="indent">
           <Checkbox
             label="Use loop counts as shuffle weights"
-            checked={props.useLoopCountForWeights}
+            defaultChecked={props.useLoopCountForWeights}
             onChange={props.setLoopCountForWeights}
           />
         </div>

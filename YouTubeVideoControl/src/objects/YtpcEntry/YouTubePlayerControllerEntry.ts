@@ -31,17 +31,23 @@ abstract class YouTubePlayerControllerEntry {
 
   abstract performAction(ytPlayer: YouTubePlayer, currentTime: number): void;
 
+  abstract getControlStr(stateless: boolean): string;
+
   public getState(): YtpcEntryState {
     return {
       controlType: this.controlType,
-      atTime: this.atTime
+      atTime: this.atTime,
     };
   }
 
-  abstract getControlStr(): string;
+  public restoreState(): void {}
 
   public toString(): string {
-    return `At ${secondsToTimestamp(this.atTime)}, ${this.actionStr} ${this.getControlStr()}`;
+    return `At ${secondsToTimestamp(this.atTime)}, ${this.actionStr} ${this.getControlStr(false)}`;
+  }
+
+  public toStringStateless(): string {
+    return `At ${secondsToTimestamp(this.atTime)}, ${this.actionStr} ${this.getControlStr(true)}`;
   }
 
   public getKey(): string {

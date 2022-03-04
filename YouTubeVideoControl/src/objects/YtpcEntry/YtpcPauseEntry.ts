@@ -1,7 +1,7 @@
 import { YouTubePlayer } from 'youtube-player/dist/types';
 
 import Coroutine, { MSEC_PER_SEC } from 'utils/coroutine';
-import { mget } from 'utils/regexp-match-group';
+import round from 'utils/round';
 import { secondsToTimestring, timestampToSeconds, timestringToSeconds } from 'utils/timestr';
 import YouTubePlayerControllerEntry, { ControlType, YtpcEntryState } from './YouTubePlayerControllerEntry';
 
@@ -14,27 +14,33 @@ class YtpcPauseEntry extends YouTubePlayerControllerEntry {
 
   public pauseTime: number;
 
+  private routine: Coroutine | null;
+
   constructor(atTime: number, pauseTime: number) {
     super(ControlType.Pause, atTime);
 
     this.pauseTime = pauseTime;
+
+    this.routine = null;
   }
 
   public get actionStr(): string {
     return YtpcPauseEntry.ACTION_STR;
   }
 
-  public performAction(ytPlayer: YouTubePlayer, currentTime: number): void {
+  public performAction(ytPlayer: YouTubePlayer): void {
     ytPlayer.pauseVideo();
 
     const pauseTime = this.pauseTime * MSEC_PER_SEC;
-    const routine = new Coroutine((timestamp: number) => {
-      if (timestamp - routine.startTime > pauseTime) {
-        ytPlayer.playVideo();
-        routine.stop();
+    this.routine = new Coroutine((timestamp: number) => {
+      if (timestamp - this.routine!.startTimestamp >= pauseTime) {
+        this.routine!.stop();
       }
     });
-    routine.start();
+    this.routine.stopEmitter.on(() => {
+      ytPlayer.playVideo();
+    });
+    this.routine.start();
   }
 
   public getState(): YtpcPauseState {
@@ -44,8 +50,22 @@ class YtpcPauseEntry extends YouTubePlayerControllerEntry {
     };
   }
 
-  public getControlStr(): string {
-    return secondsToTimestring(this.pauseTime);
+  public restoreState(): void {
+    this.routine?.stop();
+  }
+
+  public getControlStr(stateless: boolean = false): string {
+    let result = secondsToTimestring(this.pauseTime);
+
+    if (!stateless && this.routine?.running) {
+      result += ` (${secondsToTimestring(round(this.pauseTime - this.routine.runningTime / 1000, 1))} left)`;
+    }
+
+    return result;
+  }
+
+  public static fromState(state: YtpcPauseState): YtpcPauseEntry {
+    return new YtpcPauseEntry(state.atTime, state.pauseTime);
   }
 
   public static fromString(str: string): YtpcPauseEntry | null {
@@ -57,14 +77,14 @@ class YtpcPauseEntry extends YouTubePlayerControllerEntry {
     ].join(''));
 
     const match = str.match(regex);
-    if (!match) {
+    if (!match || !match.groups) {
       return null;
     }
 
     try {
       return new YtpcPauseEntry(
-        timestampToSeconds(mget(match, 'timestamp')),
-        timestringToSeconds(mget(match, 'timestring')),
+        timestampToSeconds(match.groups.timestamp),
+        timestringToSeconds(match.groups.timestring),
       );
     } catch {
       return null;

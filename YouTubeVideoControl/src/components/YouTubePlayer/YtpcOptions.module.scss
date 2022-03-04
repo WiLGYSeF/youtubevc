@@ -1,0 +1,11 @@
+.option-container {
+  border: 1px solid #aaa;
+  border-radius: 5px;
+  min-height: 45px;
+
+  :global {
+    .indent {
+      margin-left: 15px;
+    }
+  }
+}

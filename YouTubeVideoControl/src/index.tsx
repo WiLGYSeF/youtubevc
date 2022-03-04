@@ -6,7 +6,7 @@ import {
 
 import App from './App';
 import Home from './routes/Home';
-import YouTubePlayer from './routes/YouTubePlayerContainer';
+import YouTubePlayerContainer from './routes/YouTubePlayerContainer';
 
 import reportWebVitals from './reportWebVitals';
 
@@ -17,7 +17,7 @@ ReactDOM.render(
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<App />}>
-          <Route path="watch" element={<YouTubePlayer />} />
+          <Route path="watch" element={<YouTubePlayerContainer />} />
           <Route index element={<Home />} />
         </Route>
         <Route path="*" element={<Navigate to="/" />} />

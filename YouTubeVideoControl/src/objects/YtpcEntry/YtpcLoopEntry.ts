@@ -1,7 +1,6 @@
 import { YouTubePlayer } from 'youtube-player/dist/types';
 
 import { secondsToTimestamp, timestampToSeconds } from 'utils/timestr';
-import { mget } from 'utils/regexp-match-group';
 import YouTubePlayerControllerEntry, { ControlType, YtpcEntryState } from './YouTubePlayerControllerEntry';
 
 export interface YtpcLoopState extends YtpcEntryState {
@@ -34,7 +33,11 @@ class YtpcLoopEntry extends YouTubePlayerControllerEntry {
     return YtpcLoopEntry.ACTION_STR;
   }
 
-  public performAction(ytPlayer: YouTubePlayer, currentTime: number): void {
+  public get loopNumber(): number {
+    return this.loopNum;
+  }
+
+  public performAction(ytPlayer: YouTubePlayer): void {
     if (this.loopCount >= 0 && this.loopNum >= this.loopCount) {
       return;
     }
@@ -51,12 +54,27 @@ class YtpcLoopEntry extends YouTubePlayerControllerEntry {
     };
   }
 
-  public getControlStr(): string {
-    return `${secondsToTimestamp(this.loopBackTo)} ${
+  public restoreState(): void {
+    this.loopNum = 0;
+  }
+
+  public getControlStr(stateless: boolean = false): string {
+    let result = `${secondsToTimestamp(this.loopBackTo)} ${
       this.loopCount >= 0
         ? `${this.loopCount} time${this.loopCount !== 1 ? 's' : ''}`
         : 'forever'
     }`;
+
+    if (!stateless && this.loopCount > 0) {
+      const remain = this.loopCount - this.loopNum;
+      result += ` (${remain} loop${remain !== 1 ? 's' : ''} left)`;
+    }
+
+    return result;
+  }
+
+  public static fromState(state: YtpcLoopState): YtpcLoopEntry {
+    return new YtpcLoopEntry(state.atTime, state.loopBackTo, state.loopCount);
   }
 
   public static fromString(str: string): YtpcLoopEntry | null {
@@ -64,20 +82,20 @@ class YtpcLoopEntry extends YouTubePlayerControllerEntry {
       String.raw`^At (?<timestamp>${YouTubePlayerControllerEntry.REGEXSTR_TIMESTAMP}),`,
       String.raw` ${YtpcLoopEntry.ACTION_STR}`,
       String.raw` (?<loopBackTo>${YouTubePlayerControllerEntry.REGEXSTR_TIMESTAMP})`,
-      String.raw` (?:(?<loopCount>\d+) times?|forever)`,
+      String.raw`(?: (?<loopCount>\d+) times?| forever)?`,
       String.raw`$`,
     ].join(''));
 
     const match = str.match(regex);
-    if (!match) {
+    if (!match || !match.groups) {
       return null;
     }
 
     try {
       return new YtpcLoopEntry(
-        timestampToSeconds(mget(match, 'timestamp')),
-        timestampToSeconds(mget(match, 'loopBackTo')),
-        Number(match.groups ? match.groups.loopCount ?? -1 : -1),
+        timestampToSeconds(match.groups.timestamp),
+        timestampToSeconds(match.groups.loopBackTo),
+        Number(match.groups.loopCount ?? -1),
       );
     } catch {
       return null;

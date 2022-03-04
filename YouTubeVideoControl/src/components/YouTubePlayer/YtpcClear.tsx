@@ -12,4 +12,14 @@ function YtpcClear(props: YtpcClearProps) {
   );
 }
 
+export interface YtpcClearInputs {
+  clear: HTMLElement;
+}
+
+export function getInputs(container: HTMLElement): YtpcClearInputs {
+  return {
+    clear: container.querySelector('.clear')!,
+  };
+}
+
 export default YtpcClear;

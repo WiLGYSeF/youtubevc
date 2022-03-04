@@ -10,6 +10,9 @@ export default function coerceNumber(
   doClamp?: boolean,
 ): number {
   let num = value;
+  if (Number.isNaN(num)) {
+    return num;
+  }
 
   if (doClamp) {
     if (minValue !== undefined && maxValue === undefined) {
@@ -22,8 +25,18 @@ export default function coerceNumber(
   } else if (minValue !== undefined && maxValue !== undefined) {
     const diff = maxValue - minValue;
 
-    for (; num < minValue; num += diff);
-    for (; num > maxValue; num -= diff);
+    if (num < minValue || num > maxValue) {
+      num %= diff;
+      if (num > 0 && maxValue < 0) {
+        num = -num;
+      }
+    }
+    if (num < minValue) {
+      num += diff;
+    }
+    if (num > maxValue) {
+      num -= diff;
+    }
   }
 
   if (step) {

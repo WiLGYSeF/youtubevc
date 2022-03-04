@@ -1,5 +1,6 @@
 import React, { ChangeEvent, useEffect } from 'react';
 
+import { ControlType } from 'objects/YtpcEntry/YouTubePlayerControllerEntry';
 import { YtpcPlaybackRateState } from 'objects/YtpcEntry/YtpcPlaybackRateEntry';
 import useStatePropBacked from 'utils/useStatePropBacked';
 import { YtpcControlInput } from './YtpcControlInput';
@@ -11,23 +12,25 @@ interface YtpcInputPlaybackRateProps extends YtpcControlInput {
 const PLAYBACK_RATE_DEFAULT = 1;
 
 function YtpcInputPlaybackRate(props: YtpcInputPlaybackRateProps) {
-  const pstate = props.state as YtpcPlaybackRateState;
-  const [playbackRate, setPlaybackRate] = useStatePropBacked(pstate?.playbackRate ?? PLAYBACK_RATE_DEFAULT);
+  const pstate = props.defaultState as YtpcPlaybackRateState;
+  const dPlaybackRate = pstate.playbackRate ?? PLAYBACK_RATE_DEFAULT;
+
+  const [playbackRate, setPlaybackRate] = useStatePropBacked(dPlaybackRate);
   const playbackRates = props.playbackRates ?? [PLAYBACK_RATE_DEFAULT];
 
   useEffect(() => {
     const state: YtpcPlaybackRateState = {
-      atTime: pstate.atTime,
-      controlType: pstate.controlType,
+      atTime: props.entryState.atTime,
+      controlType: ControlType.PlaybackRate,
       playbackRate,
     };
     props.setEntryState(state);
   }, [playbackRate]);
 
   return (
-    <div className="playback-rate">
+    <div data-testid="playback-rate">
       <select
-        defaultValue={playbackRate}
+        value={playbackRate}
         onChange={(e: ChangeEvent<HTMLSelectElement>) => {
           setPlaybackRate(Number(e.target.value));
         }}
@@ -36,6 +39,16 @@ function YtpcInputPlaybackRate(props: YtpcInputPlaybackRateProps) {
       </select>
     </div>
   );
+}
+
+export interface YtpcInputPlaybackRateInputs {
+  playbackRate: HTMLSelectElement;
+}
+
+export function getInputs(container: HTMLElement): YtpcInputPlaybackRateInputs {
+  return {
+    playbackRate: container.querySelector('[data-testid="playback-rate"] select')!,
+  };
 }
 
 export default YtpcInputPlaybackRate;

@@ -8,6 +8,26 @@ export enum ExportType {
   Text = 'text',
 }
 
+export const LINE_ENDING = '\r\n';
+
+export function entriesToFileData(
+  exportType: ExportType,
+  entries: YouTubePlayerControllerEntry[],
+): string {
+  let data = '';
+  switch (exportType) {
+    case ExportType.Text:
+      data = entries.map((e) => e.toStringStateless()).join(LINE_ENDING)
+        + LINE_ENDING;
+      break;
+    case ExportType.Json:
+    default:
+      data = JSON.stringify(entries, null, 2);
+      break;
+  }
+  return data;
+}
+
 interface YtpcExportProps {
   filename: string;
   entries: YouTubePlayerControllerEntry[];
@@ -15,26 +35,13 @@ interface YtpcExportProps {
   exportType?: ExportType;
 }
 
-const LINE_ENDING = '\r\n';
-
 function YtpcExport(props: YtpcExportProps) {
   const saveFile = () => {
     const exportType = props.exportType ?? ExportType.Json;
-    let data = '';
-
-    switch (exportType) {
-      case ExportType.Json:
-      default:
-        data = JSON.stringify(props.entries, null, 2);
-        break;
-      case ExportType.Text:
-        data = props.entries.map((e) => e.toString()).join(LINE_ENDING)
-          + LINE_ENDING;
-        break;
-    }
+    const data = entriesToFileData(exportType, props.entries);
 
     const blob = new Blob([data], { type: 'text/plain;charset=utf-8' });
-    saveAs(blob, props.filename);
+    YtpcExport.prototype.saveAs(blob, props.filename);
   };
 
   return (
@@ -45,5 +52,20 @@ function YtpcExport(props: YtpcExportProps) {
     </div>
   );
 }
+
+export interface YtpcExportInputs {
+  button: HTMLButtonElement;
+}
+
+export function getInputs(container: HTMLElement): YtpcExportInputs {
+  return {
+    button: container.querySelector('button')!,
+  };
+}
+
+// defined here to be able to mock in tests
+YtpcExport.prototype.saveAs = (blob: Blob, filename: string) => {
+  saveAs(blob, filename);
+};
 
 export default YtpcExport;

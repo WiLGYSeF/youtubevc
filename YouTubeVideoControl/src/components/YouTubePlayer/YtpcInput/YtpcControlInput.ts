@@ -1,6 +1,8 @@
 import { YtpcEntryState } from 'objects/YtpcEntry/YouTubePlayerControllerEntry';
 
 export interface YtpcControlInput {
-  state: YtpcEntryState;
+  defaultState: YtpcEntryState;
+  entryState: YtpcEntryState;
   setEntryState(state: YtpcEntryState): void;
+  playbackRates?: readonly number[],
 }

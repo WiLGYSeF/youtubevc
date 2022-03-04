@@ -5,7 +5,7 @@ import { YouTubePlayer } from 'youtube-player/dist/types';
 
 import YouTubePlayerController from 'components/YouTubePlayer/YouTubePlayerController';
 
-import './YouTubePlayerContainer.scss';
+import styles from './YouTubePlayerContainer.module.scss';
 
 function YouTubePlayerContainer() {
   const [ytPlayer, setYtPlayer] = useState<YouTubePlayer>();
@@ -23,12 +23,14 @@ function YouTubePlayerContainer() {
     },
   };
 
+  const defaultVideoId = '_BSSJi-sHh8';
+
   return (
     <div>
-      <div className="yt-player">
+      <div className={styles['yt-player']}>
         <YouTube
           opts={opts}
-          videoId={videoId ?? '_BSSJi-sHh8'}
+          videoId={videoId ?? defaultVideoId}
           onReady={(e: { target: YouTubePlayer }) => {
             setYtPlayer(e.target);
           }}

@@ -1,18 +1,13 @@
 import React, { ChangeEvent } from 'react';
 
 import EntryBuilder from 'objects/YtpcEntry/EntryBuilder';
-import YouTubePlayerControllerEntry, { ControlType, YtpcEntryState } from 'objects/YtpcEntry/YouTubePlayerControllerEntry';
+import YouTubePlayerControllerEntry, { YtpcEntryState } from 'objects/YtpcEntry/YouTubePlayerControllerEntry';
 import trimstr from 'utils/trimstr';
 
 interface ImportResult {
   entries: YouTubePlayerControllerEntry[];
   success: boolean;
   error: unknown;
-}
-
-interface YtpcImportProps {
-  addEntry(entries: YouTubePlayerControllerEntry[], entry: YouTubePlayerControllerEntry): void;
-  setEntries(entries: YouTubePlayerControllerEntry[]): void;
 }
 
 function tryImportJson(
@@ -22,10 +17,8 @@ function tryImportJson(
   const entries: YouTubePlayerControllerEntry[] = [];
 
   try {
-    const json = JSON.parse(data);
-    for (let i = 0; i < json.length; i += 1) {
-      const entry: YtpcEntryState = json[i];
-
+    const json = JSON.parse(data) as YtpcEntryState[];
+    for (const entry of json) {
       addEntry(entries, EntryBuilder.buildEntry(entry));
     }
 
@@ -74,6 +67,12 @@ function tryImportText(
   }
 }
 
+interface YtpcImportProps {
+  addEntry(entries: YouTubePlayerControllerEntry[], entry: YouTubePlayerControllerEntry): void;
+  setEntries(entries: YouTubePlayerControllerEntry[]): void;
+  onLoad?(success: boolean): void;
+}
+
 function YtpcImport(props: YtpcImportProps) {
   const loadFile = (e: ChangeEvent<HTMLInputElement>) => {
     if (!e.target.files) {
@@ -92,8 +91,10 @@ function YtpcImport(props: YtpcImportProps) {
 
       if (result.success) {
         props.setEntries(result.entries);
-      } else {
-        throw new Error('could not import file');
+      }
+
+      if (props.onLoad) {
+        props.onLoad(result.success);
       }
     };
     reader.onerror = () => {
@@ -119,6 +120,16 @@ function YtpcImport(props: YtpcImportProps) {
       </button>
     </div>
   );
+}
+
+export interface YtpcImportInputs {
+  input: HTMLInputElement;
+}
+
+export function getInputs(container: HTMLElement): YtpcImportInputs {
+  return {
+    input: container.querySelector('input')!,
+  };
 }
 
 export default YtpcImport;

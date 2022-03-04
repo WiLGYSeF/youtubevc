@@ -2,8 +2,8 @@ import { YouTubePlayer } from 'youtube-player/dist/types';
 
 import Coroutine, { MSEC_PER_SEC } from 'utils/coroutine';
 import lerp from 'utils/lerp';
-import { mget } from 'utils/regexp-match-group';
-import { timestampToSeconds } from 'utils/timestr';
+import round from 'utils/round';
+import { secondsToTimestring, timestampToSeconds } from 'utils/timestr';
 import YouTubePlayerControllerEntry, { ControlType, YtpcEntryState } from './YouTubePlayerControllerEntry';
 
 export interface SphericalProperties {
@@ -46,26 +46,30 @@ class Ytpc360Entry extends YouTubePlayerControllerEntry {
   public sphereProps: SphericalProperties;
   public lerpSeconds: number;
 
+  private routine: Coroutine | null;
+
   constructor(atTime: number, sphereProps: SphericalProperties, lerpSeconds?: number) {
     super(ControlType.ThreeSixty, atTime);
 
     this.sphereProps = sphereProps;
     this.lerpSeconds = lerpSeconds ?? -1;
+
+    this.routine = null;
   }
 
   public get actionStr(): string {
     return Ytpc360Entry.ACTION_STR;
   }
 
-  public performAction(ytPlayer: YouTubePlayer360, currentTime: number): void {
+  public performAction(ytPlayer: YouTubePlayer360): void {
     if (this.lerpSeconds > 0) {
       const props = ytPlayer.getSphericalProperties();
       if (Object.keys(props).length) {
         const p = props as SphericalProperties;
         const lerpMs = this.lerpSeconds * MSEC_PER_SEC;
 
-        const routine = new Coroutine((timestamp: number) => {
-          const t = (timestamp - routine.startTime) / lerpMs;
+        this.routine = new Coroutine((timestamp: number) => {
+          const t = (timestamp - this.routine!.startTimestamp) / lerpMs;
           ytPlayer.setSphericalProperties({
             yaw: lerp(p.yaw, this.sphereProps.yaw, t),
             pitch: lerp(p.pitch, this.sphereProps.pitch, t),
@@ -73,7 +77,10 @@ class Ytpc360Entry extends YouTubePlayerControllerEntry {
             fov: lerp(p.fov, this.sphereProps.fov, t),
           });
         }, lerpMs);
-        routine.start();
+        this.routine.stopEmitter.on(() => {
+          ytPlayer.setSphericalProperties(this.sphereProps);
+        });
+        this.routine.start();
       }
     } else {
       ytPlayer.setSphericalProperties(this.sphereProps);
@@ -88,14 +95,26 @@ class Ytpc360Entry extends YouTubePlayerControllerEntry {
     };
   }
 
-  public getControlStr(): string {
+  public restoreState(): void {
+    this.routine?.stop();
+  }
+
+  public getControlStr(stateless: boolean = false): string {
     let result = `yaw ${this.sphereProps.yaw}, pitch ${this.sphereProps.pitch}, roll ${this.sphereProps.roll}, fov ${this.sphereProps.fov}`;
 
     if (this.lerpSeconds > 0) {
       result += ` during the next ${this.lerpSeconds} seconds`;
     }
 
+    if (!stateless && this.lerpSeconds > 0 && this.routine?.running) {
+      result += ` (${secondsToTimestring(round(this.lerpSeconds - this.routine.runningTime / 1000, 1))} left)`;
+    }
+
     return result;
+  }
+
+  public static fromState(state: Ytpc360State): Ytpc360Entry {
+    return new Ytpc360Entry(state.atTime, state.sphereProps, state.lerpSeconds);
   }
 
   public static fromString(str: string): Ytpc360Entry | null {
@@ -103,29 +122,29 @@ class Ytpc360Entry extends YouTubePlayerControllerEntry {
     const regex = new RegExp([
       String.raw`^At (?<timestamp>${YouTubePlayerControllerEntry.REGEXSTR_TIMESTAMP}),`,
       String.raw` ${Ytpc360Entry.ACTION_STR}`,
-      String.raw` yaw (?<yaw>${rsNum})`,
-      String.raw`, pitch (?<pitch>${rsNum})`,
-      String.raw`, roll (?<roll>${rsNum})`,
-      String.raw`, fov (?<fov>${rsNum})`,
+      String.raw`(?: yaw (?<yaw>${rsNum}))?`,
+      String.raw`(?:,? pitch (?<pitch>${rsNum}))?`,
+      String.raw`(?:,? roll (?<roll>${rsNum}))?`,
+      String.raw`(?:,? fov (?<fov>${rsNum}))?`,
       String.raw`(?: during the next (?<lerp>${rsNum}) seconds)?`,
       String.raw`$`,
     ].join(''));
 
     const match = str.match(regex);
-    if (!match) {
+    if (!match || !match.groups) {
       return null;
     }
 
     try {
       return new Ytpc360Entry(
-        timestampToSeconds(mget(match, 'timestamp')),
+        timestampToSeconds(match.groups.timestamp),
         {
-          yaw: Number(mget(match, 'yaw')),
-          pitch: Number(mget(match, 'pitch')),
-          roll: Number(mget(match, 'roll')),
-          fov: Number(mget(match, 'fov')),
+          yaw: Number(match.groups.yaw ?? this.YAW_DEFAULT),
+          pitch: Number(match.groups.pitch ?? this.PITCH_DEFAULT),
+          roll: Number(match.groups.roll ?? this.ROLL_DEFAULT),
+          fov: Number(match.groups.fov ?? this.FOV_DEFAULT),
         },
-        Number(match.groups ? match.groups.lerp ?? -1 : -1),
+        Number(match.groups.lerp ?? -1),
       );
     } catch {
       return null;

@@ -1,10 +1,10 @@
 import React from 'react';
 
-import './Header.scss';
+import styles from './Header.module.scss';
 
 function Header() {
   return (
-    <div className="header" />
+    <div className={styles.header} />
   );
 }
 

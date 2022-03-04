@@ -4,11 +4,11 @@ import { Outlet } from 'react-router-dom';
 import Footer from './components/Footer';
 import Header from './components/Header';
 
-import './App.scss';
+import styles from './App.module.scss';
 
 function App() {
   return (
-    <div className="App">
+    <div className={styles.app}>
       <Header />
       <div className="app-contents">
         <Outlet />
