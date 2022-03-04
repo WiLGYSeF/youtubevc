@@ -1,0 +1,38 @@
+﻿{
+  "copyLink": {
+    "success": "Copied URL to clipboard"
+  },
+  "export": "Export",
+  "for": "for",
+  "forever": "forever",
+  "import": {
+    "failed": "File import failed!",
+    "import": "Import"
+  },
+  "seconds": "seconds",
+  "times": "times",
+  "youtubeController": {
+    "at": "At",
+    "clearEntries": "Clear Entries",
+    "fov": "fov",
+    "lerp": "lerp",
+    "nowTimeHover": "Click to use current time in video",
+    "options": {
+      "useLoopShuffle": "Loop controls are shuffle regions",
+      "useLoopCountWeights": "Use loop counts as shuffle weights"
+    },
+    "pitch": "pitch",
+    "roll": "roll",
+    "yaw": "yaw"
+  },
+  "ytpcEntry": {
+    "actions": {
+      "360": "set 360° view to",
+      "goto": "go to",
+      "loop": "loop back to",
+      "pause": "pause for",
+      "playback-rate": "set playback rate to",
+      "volume": "set volume to"
+    }
+  }
+}

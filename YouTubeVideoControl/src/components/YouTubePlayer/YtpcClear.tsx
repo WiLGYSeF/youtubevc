@@ -1,13 +1,16 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 
 interface YtpcClearProps {
   clearEntries(): void;
 }
 
 function YtpcClear(props: YtpcClearProps) {
+  const { t } = useTranslation();
+
   return (
     <button type="button" className="clear" onClick={props.clearEntries}>
-      Clear Entries
+      {t('youtubeController.clearEntries')}
     </button>
   );
 }

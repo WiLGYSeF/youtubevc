@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { YouTubePlayer } from 'youtube-player/dist/types';
+import { useTranslation } from 'react-i18next';
 import PlayerStates from 'youtube-player/dist/constants/PlayerStates';
+import { YouTubePlayer } from 'youtube-player/dist/types';
 
 import EntryBuilder from 'objects/YtpcEntry/EntryBuilder';
 import YouTubePlayerControllerEntry, { ControlType, ExpectedState, YtpcEntryState } from 'objects/YtpcEntry/YouTubePlayerControllerEntry';
@@ -130,6 +131,8 @@ interface YouTubePlayerControllerProps {
 }
 
 function YouTubePlayerController(props: YouTubePlayerControllerProps) {
+  const { t } = useTranslation();
+
   const [entries, setEntries] = useState<YouTubePlayerControllerEntry[]>([]);
   const [barIndex, setBarIndex] = useState(0);
   const [is360Video, setIs360Video] = useState(false);
@@ -253,7 +256,7 @@ function YouTubePlayerController(props: YouTubePlayerControllerProps) {
               onLoad={(success: boolean) => {
                 if (!success) {
                   console.error('file import failed');
-                  alert('File import failed!');
+                  alert(t('import.failed'));
                 }
               }}
             />
@@ -272,7 +275,7 @@ function YouTubePlayerController(props: YouTubePlayerControllerProps) {
               onCopy={() => {
                 // timeout used to show popup *after* link copied to clipboard
                 setTimeout(() => {
-                  alert('Copied URL to clipboard');
+                  alert(t('copyLink.success'));
                 }, 0);
                 return true;
               }}

@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 
 import Checkbox, { getInputs as checkboxGetInputs, CheckboxInputs } from 'components/common/Checkbox/Checkbox';
 import NumberInput, { getInputs as numberGetInputs, NumberInputInputs } from 'components/common/NumberInput/NumberInput';
@@ -12,6 +13,8 @@ import styles from './YtpcInput360.module.scss';
 export const LERP_TIME_DEFAULT = 3;
 
 function YtpcInput360(props: YtpcControlInput) {
+  const { t } = useTranslation();
+
   const pstate = props.defaultState as Ytpc360State;
   const dYaw = pstate?.sphereProps?.yaw ?? Ytpc360Entry.YAW_DEFAULT;
   const dPitch = pstate?.sphereProps?.pitch ?? Ytpc360Entry.PITCH_DEFAULT;
@@ -48,7 +51,7 @@ function YtpcInput360(props: YtpcControlInput) {
     <div className={styles['three-sixty']}>
       <span data-testid="yaw">
         <NumberInput
-          label="yaw: "
+          label={`${t('youtubeController.yaw')}: `}
           minValue={Ytpc360Entry.YAW_MIN} maxValue={Ytpc360Entry.YAW_MAX} step={null}
           defaultValue={dYaw}
           clamp={false}
@@ -58,7 +61,7 @@ function YtpcInput360(props: YtpcControlInput) {
       </span>
       <span data-testid="pitch">
         <NumberInput
-          label="pitch: "
+          label={`${t('youtubeController.pitch')}: `}
           minValue={Ytpc360Entry.PITCH_MIN} maxValue={Ytpc360Entry.PITCH_MAX} step={null}
           defaultValue={dPitch}
           clamp={false}
@@ -68,7 +71,7 @@ function YtpcInput360(props: YtpcControlInput) {
       </span>
       <span data-testid="roll">
         <NumberInput
-          label="roll: "
+          label={`${t('youtubeController.roll')}: `}
           minValue={Ytpc360Entry.ROLL_MIN} maxValue={Ytpc360Entry.ROLL_MAX} step={null}
           defaultValue={dRoll}
           clamp={false}
@@ -78,7 +81,7 @@ function YtpcInput360(props: YtpcControlInput) {
       </span>
       <span data-testid="fov">
         <NumberInput
-          label="fov: "
+          label={`${t('youtubeController.fov')}: `}
           minValue={Ytpc360Entry.FOV_MIN} maxValue={Ytpc360Entry.FOV_MAX} step={null}
           defaultValue={dFov}
           forceValue
@@ -87,7 +90,7 @@ function YtpcInput360(props: YtpcControlInput) {
       </span>
       <span data-testid="lerp">
         <Checkbox
-          label="lerp"
+          label={t('youtubeController.lerp')}
           defaultChecked={lerpSet}
           onChange={setLerp}
         />
@@ -97,9 +100,13 @@ function YtpcInput360(props: YtpcControlInput) {
           display: lerpSet ? '' : 'none',
         }}
       >
-        <span> for </span>
+        <span>
+          {' '}
+          {t('for')}
+          {' '}
+        </span>
         <NumberInput
-          label=" seconds"
+          label={` ${t('seconds')}`}
           labelRight
           minValue={0} step={null}
           defaultValue={dLerpSeconds >= 0 ? dLerpSeconds : LERP_TIME_DEFAULT}

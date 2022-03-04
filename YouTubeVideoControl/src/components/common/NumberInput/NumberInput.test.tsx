@@ -163,3 +163,9 @@ describe('NumberInput', () => {
     expect(input.value).toEqual(value.toString());
   });
 });
+
+describe('NumberInput getIdInternal', () => {
+  it('getIdInternal', () => {
+    expect(NumberInput.prototype.getIdInternal()).toMatch(/^number-[A-Za-z0-9]+$/);
+  });
+});

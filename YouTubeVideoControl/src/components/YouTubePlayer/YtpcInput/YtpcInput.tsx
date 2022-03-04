@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { YouTubePlayer } from 'youtube-player/dist/types';
 
 import TimestampInput, { getInputs as timestampGetInputs, TimestampInputsInput } from 'components/common/TimestampInput/TimestampInput';
@@ -29,6 +30,8 @@ interface YtpcInputProps {
 }
 
 function YtpcInput(props: YtpcInputProps) {
+  const { t } = useTranslation();
+
   const component = controlTypeToComponent(props.defaultState.controlType);
   const [controlInput, setControlInput] = useState(() => component);
 
@@ -41,10 +44,13 @@ function YtpcInput(props: YtpcInputProps) {
   return (
     <div className={styles.input}>
       <div className="entry-creation">
-        <span>At </span>
+        <span>
+          {t('youtubeController.at')}
+          {' '}
+        </span>
         <span
           className="now-time"
-          title="Click to use current time in video"
+          title={t('youtubeController.nowTimeHover')}
           onClick={() => {
             if (props.ytPlayer) {
               const state = { ...props.defaultState };

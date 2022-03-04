@@ -15,6 +15,7 @@ interface CheckboxProps {
 function Checkbox(props: CheckboxProps) {
   const labelLeft = props.labelLeft ?? false;
   const [checked, setChecked] = useStatePropBacked(props.defaultChecked ?? false);
+
   const [inputIdInternal] = useState<string>(Checkbox.prototype.getIdInternal());
 
   const eLabel = (
