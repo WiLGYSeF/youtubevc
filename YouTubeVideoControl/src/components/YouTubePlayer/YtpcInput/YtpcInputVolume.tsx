@@ -1,4 +1,5 @@
 import React, { ChangeEvent, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 
 import Checkbox, { getInputs as checkboxGetInputs, CheckboxInputs } from 'components/common/Checkbox/Checkbox';
 import NumberInput, { getInputs as numberGetInputs, NumberInputInputs } from 'components/common/NumberInput/NumberInput';
@@ -16,6 +17,8 @@ const VOLUME_DEFAULT = 100;
 export const LERP_TIME_DEFAULT = 3;
 
 function YtpcInputVolume(props: YtpcControlInput) {
+  const { t } = useTranslation();
+
   const pstate = props.defaultState as YtpcVolumeState;
   const dVolume = pstate?.volume ?? VOLUME_DEFAULT;
   const dLerpSeconds = pstate?.lerpSeconds ?? -1;
@@ -52,7 +55,7 @@ function YtpcInputVolume(props: YtpcControlInput) {
       <span>{volume}</span>
       <span data-testid="lerp">
         <Checkbox
-          label="lerp"
+          label={t('youtubeController.lerp')}
           defaultChecked={lerpSet}
           onChange={setLerp}
         />
@@ -62,9 +65,13 @@ function YtpcInputVolume(props: YtpcControlInput) {
           display: lerpSet ? '' : 'none',
         }}
       >
-        <span> for </span>
+        <span>
+          {' '}
+          {t('for')}
+          {' '}
+        </span>
         <NumberInput
-          label=" seconds"
+          label={` ${t('seconds')}`}
           labelRight
           minValue={0} step={null}
           defaultValue={dLerpSeconds >= 0 ? dLerpSeconds : LERP_TIME_DEFAULT}

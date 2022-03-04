@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 
 import Checkbox, { getInputs as checkboxGetInputs, CheckboxInputs } from 'components/common/Checkbox/Checkbox';
 import NumberInput, { getInputs as numberGetInputs, NumberInputInputs } from 'components/common/NumberInput/NumberInput';
@@ -13,6 +14,8 @@ import styles from './YtpcInputLoop.module.scss';
 const LOOP_COUNT_DEFAULT = 1;
 
 function YtpcInputLoop(props: YtpcControlInput) {
+  const { t } = useTranslation();
+
   const pstate = props.defaultState as YtpcLoopState;
   const dLoopBackTo = pstate?.loopBackTo ?? 0;
   const dLoopCount = Math.max(pstate?.loopCount ?? LOOP_COUNT_DEFAULT, 0);
@@ -41,7 +44,7 @@ function YtpcInputLoop(props: YtpcControlInput) {
       </span>
       <span data-testid="forever">
         <Checkbox
-          label={forever ? 'forever' : 'times'}
+          label={forever ? t('forever') : t('times')}
           defaultChecked={forever}
           onChange={(checked: boolean) => {
             if (!checked) {

@@ -1,4 +1,4 @@
-import React, { ChangeEvent, KeyboardEvent } from 'react';
+import React, { ChangeEvent, KeyboardEvent, useState } from 'react';
 
 import coerceNumber from 'utils/coerceNumber';
 import useStatePropBacked from 'utils/useStatePropBacked';
@@ -25,6 +25,8 @@ function NumberInput(props: NumberInputProps) {
   const [number, setNumber] = useStatePropBacked(props.defaultValue);
   const [value, setValue] = useStatePropBacked(props.defaultValue.toString());
 
+  const [inputIdInternal] = useState<string>(NumberInput.prototype.getIdInternal());
+
   const labelRight = props.labelRight ?? false;
   const doClamp = props.clamp ?? true;
   const forceValue = props.forceValue ?? false;
@@ -49,9 +51,10 @@ function NumberInput(props: NumberInputProps) {
   };
 
   return (
-    <label>
+    <label htmlFor={inputIdInternal}>
       {!labelRight && eLabel}
       <input
+        id={inputIdInternal}
         min={props.minValue} max={props.maxValue} step={step ?? 'any'}
         value={value}
         onChange={(e: ChangeEvent<HTMLInputElement>) => {
@@ -94,5 +97,8 @@ export function getInputs(container: HTMLElement): NumberInputInputs {
     input: container.querySelector('input')!,
   };
 }
+
+// defined here to be able to mock in tests
+NumberInput.prototype.getIdInternal = (): string => `number-${Math.random().toString(36).substring(2)}`;
 
 export default NumberInput;

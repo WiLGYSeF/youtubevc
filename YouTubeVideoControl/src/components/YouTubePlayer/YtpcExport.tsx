@@ -1,4 +1,5 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { saveAs } from 'file-saver';
 
 import YouTubePlayerControllerEntry from 'objects/YtpcEntry/YouTubePlayerControllerEntry';
@@ -36,6 +37,8 @@ interface YtpcExportProps {
 }
 
 function YtpcExport(props: YtpcExportProps) {
+  const { t } = useTranslation();
+
   const saveFile = () => {
     const exportType = props.exportType ?? ExportType.Json;
     const data = entriesToFileData(exportType, props.entries);
@@ -47,7 +50,7 @@ function YtpcExport(props: YtpcExportProps) {
   return (
     <div>
       <button type="button" onClick={saveFile}>
-        Export
+        {t('export')}
       </button>
     </div>
   );

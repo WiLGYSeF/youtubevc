@@ -1,4 +1,5 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 
 import Checkbox from 'components/common/Checkbox/Checkbox';
 
@@ -13,22 +14,26 @@ interface YtpcOptionsProps {
 }
 
 function YtpcOptions(props: YtpcOptionsProps) {
+  const { t } = useTranslation();
+
   return (
     <div className={styles['option-container']}>
       <Checkbox
-        label="Loop controls are shuffle regions"
+        label={t('youtubeController.options.useLoopShuffle')}
         defaultChecked={props.useLoopsForShuffling}
         onChange={props.setLoopsForShuffling}
       />
-      {props.useLoopsForShuffling && (
-        <div className="indent">
-          <Checkbox
-            label="Use loop counts as shuffle weights"
-            defaultChecked={props.useLoopCountForWeights}
-            onChange={props.setLoopCountForWeights}
-          />
-        </div>
-      )}
+      <div
+        className="indent" style={{
+          display: props.useLoopsForShuffling ? '' : 'none',
+        }}
+      >
+        <Checkbox
+          label={t('youtubeController.options.useLoopCountWeights')}
+          defaultChecked={props.useLoopCountForWeights}
+          onChange={props.setLoopCountForWeights}
+        />
+      </div>
     </div>
   );
 }

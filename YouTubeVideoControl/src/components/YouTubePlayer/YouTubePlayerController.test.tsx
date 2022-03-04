@@ -205,7 +205,9 @@ describe('YouTubePlayerController', () => {
 
       const doTest = (curTime: number, lastTime: number) => {
         (ytPlayer.seekTo as jest.Mock).mockClear();
-        ({ lastMatchingIndex } = performEntryActions(ytPlayer, entries, curTime, lastTime, true, false));
+        ({
+          lastMatchingIndex,
+        } = performEntryActions(ytPlayer, entries, curTime, lastTime, true, false));
       };
 
       for (let i = 0; i < entries[0].atTime; i += 0.1) {

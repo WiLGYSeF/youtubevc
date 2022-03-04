@@ -10,6 +10,8 @@ import YouTubePlayerContainer from './routes/YouTubePlayerContainer';
 
 import reportWebVitals from './reportWebVitals';
 
+import './i18n/config';
+
 import './css/style.min.css';
 
 ReactDOM.render(
