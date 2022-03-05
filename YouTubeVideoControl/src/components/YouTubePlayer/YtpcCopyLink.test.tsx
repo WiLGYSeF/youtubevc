@@ -2,6 +2,7 @@ import React from 'react';
 import { render } from '@testing-library/react';
 
 import YtpcGotoEntry from 'objects/YtpcEntry/YtpcGotoEntry';
+import YtpcLoopEntry from 'objects/YtpcEntry/YtpcLoopEntry';
 import mockI18n from 'utils/test/i18nMock';
 import YtpcCopyLink from './YtpcCopyLink';
 
@@ -106,6 +107,32 @@ describe('YtpcCopyLink', () => {
     button.click();
 
     expect(copyMock).toHaveBeenCalledTimes(0);
+
+    copyMock.mockRestore();
+  });
+
+  it('copies link to clipboard with loop shuffle', () => {
+    const copyMock = jest.spyOn(YtpcCopyLink.prototype, 'copy')
+      .mockImplementation();
+
+    const videoId = 'test-id';
+    const entries = [
+      new YtpcLoopEntry(5, 0),
+      new YtpcLoopEntry(15, 7),
+      new YtpcLoopEntry(50, 25),
+    ];
+
+    const { container } = render(<YtpcCopyLink
+      videoId={videoId}
+      entries={entries}
+      useLoopShuffle
+    />);
+
+    const button = container.getElementsByTagName('button')[0];
+    button.click();
+
+    const expected = `${process.env.REACT_APP_BASE_URL}/watch?v=${videoId}&loopShuffle=1&entries=${encodeURI(JSON.stringify(entries))}`;
+    expect(copyMock).toHaveBeenCalledWith(expected);
 
     copyMock.mockRestore();
   });

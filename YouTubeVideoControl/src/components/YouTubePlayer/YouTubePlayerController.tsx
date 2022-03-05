@@ -293,6 +293,8 @@ function YouTubePlayerController(props: YouTubePlayerControllerProps) {
               <YtpcCopyLink
                 videoId={getVideoIdByUrl(props.ytPlayer?.getVideoUrl() ?? '')}
                 entries={entries}
+                useLoopShuffle={useLoopShuffle}
+                useLoopCountForWeights={useLoopCountForWeights}
                 onCopy={() => {
                   // timeout used to show popup *after* link copied to clipboard
                   setTimeout(() => {

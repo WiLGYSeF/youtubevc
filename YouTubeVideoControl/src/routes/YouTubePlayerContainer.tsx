@@ -8,15 +8,20 @@ import YouTubePlayerController from 'components/YouTubePlayer/YouTubePlayerContr
 
 import styles from './YouTubePlayerContainer.module.scss';
 
+export const SEARCHPARAM_VIDEO_ID = 'v';
+export const SEARCHPARAM_ENTRIES = 'entries';
+export const SEARCHPARAM_LOOP_SHUFFLE = 'loopShuffle';
+export const SEARCHPARAM_SHUFFLE_WEIGHT = 'shuffleWeight';
+
 function YouTubePlayerContainer() {
   const [ytPlayer, setYtPlayer] = useState<YouTubePlayer>();
 
   const [searchParams] = useSearchParams();
 
-  const videoId = searchParams.get('v');
-  const entries = searchParams.get('entries');
-  const loopShuffle = searchParams.get('loopShuffle');
-  const shuffleWeight = searchParams.get('shuffleWeight');
+  const videoId = searchParams.get(SEARCHPARAM_VIDEO_ID);
+  const entries = searchParams.get(SEARCHPARAM_ENTRIES);
+  const loopShuffle = searchParams.get(SEARCHPARAM_LOOP_SHUFFLE);
+  const shuffleWeight = searchParams.get(SEARCHPARAM_SHUFFLE_WEIGHT);
 
   const opts: Options = {
     playerVars: {
