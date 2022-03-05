@@ -1,8 +1,6 @@
 @use 'css/_theme' as t;
 
 .option-container {
-  min-height: 80px;
-  min-width: 300px;
   padding: 5px;
 
   :global {

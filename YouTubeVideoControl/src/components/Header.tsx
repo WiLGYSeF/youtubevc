@@ -9,7 +9,8 @@ function Header() {
         <div className="left">
           <div className="logo">
             <div>
-              <span>YouTube</span><span className="extension">VC</span>
+              <span>YouTube</span>
+              <span className="extension">VC</span>
             </div>
           </div>
           <div className="subtitle">

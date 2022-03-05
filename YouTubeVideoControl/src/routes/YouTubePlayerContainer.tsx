@@ -29,7 +29,7 @@ function YouTubePlayerContainer() {
   return (
     <div>
       <div className={styles['yt-player']}>
-        <div>
+        <div className="video-container">
           <YouTube
             opts={opts}
             videoId={videoId ?? defaultVideoId}

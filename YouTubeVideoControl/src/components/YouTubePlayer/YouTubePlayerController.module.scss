@@ -8,8 +8,15 @@
 
   :global {
     .controls {
+      flex: 1;
       min-width: 450px;
       padding: 4px;
+
+      @media (max-width: 500px) {
+        & {
+          min-width: 100%;
+        }
+      }
 
       .action-buttons {
         display: flex;
@@ -24,13 +31,22 @@
 
     .options {
       border-left: 1px solid t.$color-font;
-      margin-left: 6px;
-      padding: 4px;
-    }
-
-    .padding {
       flex: 1;
+      margin-left: 6px;
+      min-height: 80px;
+      min-width: 300px;
       padding: 4px;
+
+      &.fill {
+        border: none;
+      }
+
+      @media (max-width: 500px) {
+        & {
+          min-width: 0;
+          width: 100%;
+        }
+      }
     }
   }
 }

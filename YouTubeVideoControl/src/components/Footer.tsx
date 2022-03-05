@@ -5,7 +5,7 @@ import styles from './Footer.module.scss';
 function Footer() {
   return (
     <div className={styles.footer}>
-      <div></div>
+      <div />
       <div className="right">
         <div className="github">
           <a

@@ -3,6 +3,10 @@
   flex-direction: column;
   font-family: Roboto;
 
+  @media (max-width: 650px) {
+    padding: 4px;
+  }
+
   :global {
     .title {
       font-size: 20px;

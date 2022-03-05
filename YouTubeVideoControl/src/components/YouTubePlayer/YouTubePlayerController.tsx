@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import PlayerStates from 'youtube-player/dist/constants/PlayerStates';
 import { YouTubePlayer } from 'youtube-player/dist/types';
@@ -9,6 +9,7 @@ import { YouTubePlayer360 } from 'objects/YtpcEntry/Ytpc360Entry';
 import YtpcLoopEntry from 'objects/YtpcEntry/YtpcLoopEntry';
 import Coroutine from 'utils/coroutine';
 import useStatePropBacked from 'utils/useStatePropBacked';
+import wrapDetect from 'utils/wrapDetect';
 import { getVideoIdByUrl, playerHas360Video } from 'utils/youtube';
 import YtpcClear, { getInputs as clearGetInputs, YtpcClearInputs } from './YtpcClear';
 import YtpcCopyLink, { getInputs as copyLinkGetInputs, YtpcCopyLinkInputs } from './YtpcCopyLink';
@@ -147,6 +148,9 @@ function YouTubePlayerController(props: YouTubePlayerControllerProps) {
     props.shuffleWeight,
   );
 
+  const containerRef = useRef<HTMLDivElement>(null);
+  const [controlsWrapped, setControlsWrapped] = useState(false);
+
   useEffect(() => {
     const onStateChange = (e: CustomEvent) => {
       const state: PlayerStates = (e as any).data;
@@ -211,9 +215,31 @@ function YouTubePlayerController(props: YouTubePlayerControllerProps) {
     };
   }, [props.ytPlayer, entries, useLoopShuffle, useLoopCountForWeights]);
 
+  useEffect(() => {
+    const onChange = (arrangement: HTMLElement[][]) => {
+      if (arrangement[0].length === 1) {
+        if (!controlsWrapped) {
+          setControlsWrapped(true);
+        }
+      } else {
+        if (controlsWrapped) {
+          setControlsWrapped(false);
+        }
+      }
+    };
+
+    const disconnect = containerRef.current
+      ? wrapDetect(containerRef.current, onChange)
+      : () => {};
+
+    return () => {
+      disconnect();
+    };
+  }, [containerRef.current, controlsWrapped]);
+
   return (
-    <div className={styles['yt-controller']}>
-      <div className="controls">
+    <div className={styles['yt-controller']} ref={containerRef}>
+      <div className={['controls', controlsWrapped ? 'fill' : ''].join(' ')}>
         <span data-testid="ytpc-input">
           <YtpcInput
             ytPlayer={props.ytPlayer}
@@ -290,7 +316,7 @@ function YouTubePlayerController(props: YouTubePlayerControllerProps) {
           </div>
         </div>
       </div>
-      <div className="options">
+      <div className={['options', controlsWrapped ? 'fill' : ''].join(' ')}>
         <YtpcOptions
           useLoopsForShuffling={useLoopShuffle}
           useLoopCountForWeights={useLoopCountForWeights}
@@ -298,7 +324,6 @@ function YouTubePlayerController(props: YouTubePlayerControllerProps) {
           setLoopCountForWeights={setUseLoopCountForWeights}
         />
       </div>
-      <div className="padding" />
     </div>
   );
 }
