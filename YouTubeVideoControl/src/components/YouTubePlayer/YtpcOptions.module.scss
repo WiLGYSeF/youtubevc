@@ -1,9 +1,17 @@
 .option-container {
-  border: 1px solid #aaa;
+  background-color: #444;
+  border: 1px solid #888;
   border-radius: 5px;
-  min-height: 45px;
+  min-height: 80px;
+  min-width: 300px;
+  padding: 5px;
 
   :global {
+    .header {
+      font-size: 14px;
+      margin: 4px 0 2px 0;
+    }
+
     .indent {
       margin-left: 15px;
     }

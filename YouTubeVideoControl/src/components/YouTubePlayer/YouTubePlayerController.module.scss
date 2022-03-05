@@ -1,15 +1,25 @@
 .yt-controller {
   display: flex;
+  font-size: 15px;
   padding: 10px;
 
   :global {
     .controls {
       min-width: 450px;
       padding: 4px;
+
+      .action-buttons {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 5px;
+
+        span {
+          margin: 0 2px 0 2px;
+        }
+      }
     }
 
     .options {
-      min-width: 100px;
       padding: 4px;
     }
 

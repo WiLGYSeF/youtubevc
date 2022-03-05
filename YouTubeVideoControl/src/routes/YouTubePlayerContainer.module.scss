@@ -1,4 +1,11 @@
 .yt-player {
-  text-align: center;
-  user-select: none;
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+
+  :global {
+    iframe {
+      user-select: none;
+    }
+  }
 }

@@ -109,19 +109,17 @@ function YtpcImport(props: YtpcImportProps) {
   const importIdInternal = `import-${Math.random().toString(36).substring(2)}`;
 
   return (
-    <div>
-      <button type="button" onClick={() => document.getElementById(importIdInternal)?.click()}>
-        <input
-          id={importIdInternal}
-          type="file"
-          style={{
-            display: 'none',
-          }}
-          onChange={loadFile}
-        />
-        {t('import.import')}
-      </button>
-    </div>
+    <button type="button" onClick={() => document.getElementById(importIdInternal)?.click()}>
+      <input
+        id={importIdInternal}
+        type="file"
+        style={{
+          display: 'none',
+        }}
+        onChange={loadFile}
+      />
+      {t('import.import')}
+    </button>
   );
 }
 

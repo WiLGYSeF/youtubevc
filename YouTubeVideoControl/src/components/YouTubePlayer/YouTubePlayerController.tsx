@@ -135,7 +135,8 @@ function YouTubePlayerController(props: YouTubePlayerControllerProps) {
 
   const [entries, setEntries] = useState<YouTubePlayerControllerEntry[]>([]);
   const [barIndex, setBarIndex] = useState(0);
-  const [is360Video, setIs360Video] = useState(false);
+  // video type is not known until it starts playing
+  const [is360Video, setIs360Video] = useState<boolean | undefined>(undefined);
   const [defaultState, setDefaultState] = useState<YtpcEntryState>({
     atTime: 0,
     controlType: ControlType.Goto,
@@ -161,7 +162,7 @@ function YouTubePlayerController(props: YouTubePlayerControllerProps) {
     return () => {
       props.ytPlayer?.removeEventListener(EVENT_ONSTATECHANGE, onStateChange);
     };
-  });
+  }, [props.ytPlayer]);
 
   useEffect(() => {
     if (!props.entries) {
@@ -233,6 +234,7 @@ function YouTubePlayerController(props: YouTubePlayerControllerProps) {
           <YtpcEntryList
             entries={entries}
             barIndex={barIndex}
+            is360Video={is360Video}
             deleteEntry={(entry: YouTubePlayerControllerEntry): void => {
               setEntries([...entries.filter((e) => e !== entry)]);
             }}
@@ -242,45 +244,50 @@ function YouTubePlayerController(props: YouTubePlayerControllerProps) {
           />
         </span>
 
-        <div>
-          <span data-testid="ytpc-clear">
-            <YtpcClear clearEntries={() => {
-              setEntries([]);
-            }}
-            />
-          </span>
-          <span data-testid="ytpc-import">
-            <YtpcImport
-              addEntry={addEntry}
-              setEntries={setEntries}
-              onLoad={(success: boolean) => {
-                if (!success) {
-                  console.error('file import failed');
-                  alert(t('import.failed'));
-                }
+        <div className="action-buttons">
+          <div>
+            <span data-testid="ytpc-import">
+              <YtpcImport
+                addEntry={addEntry}
+                setEntries={setEntries}
+                onLoad={(success: boolean) => {
+                  if (!success) {
+                    console.error('file import failed');
+                    alert(t('import.failed'));
+                  }
+                }}
+              />
+            </span>
+            <span data-testid="ytpc-export">
+              <YtpcExport
+                filename={`youtubevc-${getVideoIdByUrl(props.ytPlayer?.getVideoUrl() ?? '')}.txt`}
+                entries={entries}
+                exportType={EXPORT_TYPE}
+              />
+            </span>
+            <span data-testid="ytpc-copylink">
+              <YtpcCopyLink
+                videoId={getVideoIdByUrl(props.ytPlayer?.getVideoUrl() ?? '')}
+                entries={entries}
+                onCopy={() => {
+                  // timeout used to show popup *after* link copied to clipboard
+                  setTimeout(() => {
+                    alert(t('copyLink.success'));
+                  }, 0);
+                  return true;
+                }}
+              />
+            </span>
+          </div>
+
+          <div>
+            <span data-testid="ytpc-clear">
+              <YtpcClear clearEntries={() => {
+                setEntries([]);
               }}
-            />
-          </span>
-          <span data-testid="ytpc-export">
-            <YtpcExport
-              filename={`youtubevc-${getVideoIdByUrl(props.ytPlayer?.getVideoUrl() ?? '')}.txt`}
-              entries={entries}
-              exportType={EXPORT_TYPE}
-            />
-          </span>
-          <span data-testid="ytpc-copylink">
-            <YtpcCopyLink
-              videoId={getVideoIdByUrl(props.ytPlayer?.getVideoUrl() ?? '')}
-              entries={entries}
-              onCopy={() => {
-                // timeout used to show popup *after* link copied to clipboard
-                setTimeout(() => {
-                  alert(t('copyLink.success'));
-                }, 0);
-                return true;
-              }}
-            />
-          </span>
+              />
+            </span>
+          </div>
         </div>
       </div>
       <div className="options">

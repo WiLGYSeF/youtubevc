@@ -35,7 +35,7 @@ function YtpcInputLoop(props: YtpcControlInput) {
   }, [loopBackTo, forever, loopCount]);
 
   return (
-    <div className={styles.loop}>
+    <span className={styles.loop}>
       <span data-testid="loop-back-to">
         <TimestampInput
           defaultValue={dLoopBackTo}
@@ -66,7 +66,7 @@ function YtpcInputLoop(props: YtpcControlInput) {
           onChange={setLoopCount}
         />
       </span>
-    </div>
+    </span>
   );
 }
 

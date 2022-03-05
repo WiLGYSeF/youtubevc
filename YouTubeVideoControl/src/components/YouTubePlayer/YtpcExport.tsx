@@ -48,11 +48,9 @@ function YtpcExport(props: YtpcExportProps) {
   };
 
   return (
-    <div>
-      <button type="button" onClick={saveFile}>
-        {t('export')}
-      </button>
-    </div>
+    <button type="button" onClick={saveFile}>
+      {t('export')}
+    </button>
   );
 }
 

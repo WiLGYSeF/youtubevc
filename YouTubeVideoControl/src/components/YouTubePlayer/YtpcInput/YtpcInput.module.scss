@@ -1,24 +1,22 @@
 $color: #ddd;
 $background-color: #444;
-$border-color: #aaa;
-$border-radius: 6px;
+$border-color: #888;
+$border-radius: 8px;
 
 .input {
+  align-items: center;
   background-color: $background-color;
   border: 1px solid $border-color;
-  border-radius: 8px;
+  border-radius: $border-radius;
   color: $color;
   display: flex;
   justify-content: space-between;
   margin-bottom: 5px;
   min-height: 30px;
   padding: 5px;
+  user-select: none;
 
   :global {
-    div {
-      display: inline;
-    }
-
     input[type="range"] {
       position: relative;
       top: 3px;
@@ -29,9 +27,16 @@ $border-radius: 6px;
     }
 
     .entry-creation {
+      margin-right: 5px;
+
       .now-time {
         cursor: pointer;
+        font-weight: bold;
         padding: 0 2px;
+      }
+
+      .at-time {
+        margin: 0 4px 0 2px;
       }
     }
   }

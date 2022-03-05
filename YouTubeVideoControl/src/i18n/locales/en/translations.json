@@ -1,7 +1,11 @@
 ﻿{
+  "add": "Add",
   "copyLink": {
+    "copyLink": "Copy Link",
     "success": "Copied URL to clipboard"
   },
+  "delete": "Delete",
+  "edit": "Edit",
   "export": "Export",
   "for": "for",
   "forever": "forever",
@@ -18,6 +22,7 @@
     "lerp": "lerp",
     "nowTimeHover": "Click to use current time in video",
     "options": {
+      "options": "Options",
       "useLoopShuffle": "Loop controls are shuffle regions",
       "useLoopCountWeights": "Use loop counts as shuffle weights"
     },

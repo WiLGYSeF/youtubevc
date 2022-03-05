@@ -3,6 +3,7 @@ import { useSearchParams } from 'react-router-dom';
 import YouTube, { Options } from 'react-youtube';
 import { YouTubePlayer } from 'youtube-player/dist/types';
 
+import YouTubeInfo from 'components/YouTubePlayer/YouTubeInfo';
 import YouTubePlayerController from 'components/YouTubePlayer/YouTubePlayerController';
 
 import styles from './YouTubePlayerContainer.module.scss';
@@ -28,13 +29,16 @@ function YouTubePlayerContainer() {
   return (
     <div>
       <div className={styles['yt-player']}>
-        <YouTube
-          opts={opts}
-          videoId={videoId ?? defaultVideoId}
-          onReady={(e: { target: YouTubePlayer }) => {
-            setYtPlayer(e.target);
-          }}
-        />
+        <div>
+          <YouTube
+            opts={opts}
+            videoId={videoId ?? defaultVideoId}
+            onReady={(e: { target: YouTubePlayer }) => {
+              setYtPlayer(e.target);
+            }}
+          />
+          <YouTubeInfo ytPlayer={ytPlayer} />
+        </div>
       </div>
       <YouTubePlayerController
         ytPlayer={ytPlayer}
