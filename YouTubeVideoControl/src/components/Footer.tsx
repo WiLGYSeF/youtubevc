@@ -1,11 +1,14 @@
 import React from 'react';
 
+import config from 'objects/config';
 import styles from './Footer.module.scss';
 
 function Footer() {
   return (
     <div className={styles.footer}>
-      <div />
+      <div>
+        <div className="version">YouTubeVC v{config.version}</div>
+      </div>
       <div className="right">
         <div className="github">
           <a
