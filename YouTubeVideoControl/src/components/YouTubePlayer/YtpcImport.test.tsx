@@ -5,9 +5,12 @@ import userEvent from '@testing-library/user-event';
 import { ControlType } from 'objects/YtpcEntry/YouTubePlayerControllerEntry';
 import YtpcGotoEntry from 'objects/YtpcEntry/YtpcGotoEntry';
 import YtpcPauseEntry from 'objects/YtpcEntry/YtpcPauseEntry';
+import mockI18n from 'utils/test/i18nMock';
 import pollUntil from 'utils/test/pollUntil';
 import YtpcImport from './YtpcImport';
 import { addEntry } from './YouTubePlayerController';
+
+jest.mock('react-i18next', () => mockI18n());
 
 const IMPORT_POLL_TIMEOUT = 3000;
 const IMPORT_POLL_TICK = 10;

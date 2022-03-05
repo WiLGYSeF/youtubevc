@@ -221,10 +221,8 @@ function YouTubePlayerController(props: YouTubePlayerControllerProps) {
         if (!controlsWrapped) {
           setControlsWrapped(true);
         }
-      } else {
-        if (controlsWrapped) {
-          setControlsWrapped(false);
-        }
+      } else if (controlsWrapped) {
+        setControlsWrapped(false);
       }
     };
 

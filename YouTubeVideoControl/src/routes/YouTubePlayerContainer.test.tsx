@@ -4,7 +4,10 @@ import YouTube from 'react-youtube';
 import { createMemoryHistory } from 'history';
 import { render } from '@testing-library/react';
 
+import mockI18n from 'utils/test/i18nMock';
 import YouTubePlayerContainer from './YouTubePlayerContainer';
+
+jest.mock('react-i18next', () => mockI18n());
 
 jest.mock('react-youtube');
 

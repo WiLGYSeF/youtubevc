@@ -6,9 +6,12 @@ import { YouTubePlayer } from 'youtube-player/dist/types';
 import { ControlType } from 'objects/YtpcEntry/YouTubePlayerControllerEntry';
 import { YtpcGotoState } from 'objects/YtpcEntry/YtpcGotoEntry';
 import { getFiberNode, getNameFromFiberNode } from 'utils/test/fiberNode';
+import mockI18n from 'utils/test/i18nMock';
 import { getControlTypes } from './YtpcControlSelect';
 import YtpcInput, { getInputs } from './YtpcInput';
 import { getInputs as loopGetInputs } from './YtpcInputLoop';
+
+jest.mock('react-i18next', () => mockI18n());
 
 describe('YtpcInput', () => {
   it.each(

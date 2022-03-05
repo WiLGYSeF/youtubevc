@@ -3,7 +3,10 @@ import { render } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
 import { ControlType } from 'objects/YtpcEntry/YouTubePlayerControllerEntry';
+import mockI18n from 'utils/test/i18nMock';
 import YtpcControlSelect, { getControlTypes, getInputs, isControlDisabledIfNot360Video } from './YtpcControlSelect';
+
+jest.mock('react-i18next', () => mockI18n());
 
 describe('YtpcControlSelect', () => {
   it('shows all input options', () => {

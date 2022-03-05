@@ -2,7 +2,10 @@ import React from 'react';
 import { render } from '@testing-library/react';
 
 import YtpcGotoEntry from 'objects/YtpcEntry/YtpcGotoEntry';
+import mockI18n from 'utils/test/i18nMock';
 import YtpcExport, { ExportType, LINE_ENDING } from './YtpcExport';
+
+jest.mock('react-i18next', () => mockI18n());
 
 describe('YtpcExport', () => {
   it('exports entries to file as JSON', async () => {

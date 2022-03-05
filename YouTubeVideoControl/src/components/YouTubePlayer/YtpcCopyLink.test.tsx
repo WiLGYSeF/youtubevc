@@ -2,7 +2,10 @@ import React from 'react';
 import { render } from '@testing-library/react';
 
 import YtpcGotoEntry from 'objects/YtpcEntry/YtpcGotoEntry';
+import mockI18n from 'utils/test/i18nMock';
 import YtpcCopyLink from './YtpcCopyLink';
+
+jest.mock('react-i18next', () => mockI18n());
 
 describe('YtpcCopyLink', () => {
   it('copies link to clipboard', () => {

@@ -5,6 +5,7 @@ import userEvent from '@testing-library/user-event';
 import YouTubePlayerControllerEntry, { ControlType } from 'objects/YtpcEntry/YouTubePlayerControllerEntry';
 import YtpcGotoEntry from 'objects/YtpcEntry/YtpcGotoEntry';
 import YtpcLoopEntry from 'objects/YtpcEntry/YtpcLoopEntry';
+import mockI18n from 'utils/test/i18nMock';
 import pollUntil from 'utils/test/pollUntil';
 import { secondsToTimestamp } from 'utils/timestr';
 import { PLAYBACK_RATES } from 'utils/youtube';
@@ -20,6 +21,8 @@ import { getInputs as entryGetInputs } from './YtpcEntry';
 import { getEntries } from './YtpcEntryList';
 import YtpcExport, { entriesToFileData } from './YtpcExport';
 import YtpcCopyLink from './YtpcCopyLink';
+
+jest.mock('react-i18next', () => mockI18n());
 
 const IMPORT_POLL_TIMEOUT = 3000;
 const IMPORT_POLL_TICK = 10;

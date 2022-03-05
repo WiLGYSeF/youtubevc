@@ -4,7 +4,10 @@ import userEvent from '@testing-library/user-event';
 
 import { ControlType } from 'objects/YtpcEntry/YouTubePlayerControllerEntry';
 import YtpcGotoEntry from 'objects/YtpcEntry/YtpcGotoEntry';
+import mockI18n from 'utils/test/i18nMock';
 import YtpcEntry, { getInputs } from './YtpcEntry';
+
+jest.mock('react-i18next', () => mockI18n());
 
 describe('YtpcEntry', () => {
   it('edits the entry on click', () => {
