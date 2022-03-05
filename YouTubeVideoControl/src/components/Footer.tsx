@@ -7,7 +7,10 @@ function Footer() {
   return (
     <div className={styles.footer}>
       <div>
-        <div className="version">YouTubeVC v{config.version}</div>
+        <div className="version">
+          YouTubeVC v
+          {config.version}
+        </div>
       </div>
       <div className="right">
         <div className="github">

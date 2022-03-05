@@ -4,6 +4,7 @@
   background-color: t.$color-primary;
   border: t.$border;
   border-radius: t.$border-radius;
-  height: 200px;
+  max-height: 400px;
+  min-height: 200px;
   overflow: auto;
 }
