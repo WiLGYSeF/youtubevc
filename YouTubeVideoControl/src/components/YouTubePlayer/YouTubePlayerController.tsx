@@ -187,6 +187,7 @@ function YouTubePlayerController(props: YouTubePlayerControllerProps) {
       setEntries(parsedEntries);
     } catch (exc) {
       console.error(exc);
+      setTimeout(() => alert(exc), 0);
     }
   }, [props.entries]);
 
@@ -253,7 +254,12 @@ function YouTubePlayerController(props: YouTubePlayerControllerProps) {
             setEntryState={setEntryState}
             createEntry={(state: YtpcEntryState) => {
               const newEntries = [...entries];
-              addEntry(newEntries, EntryBuilder.buildEntry(state));
+              try {
+                addEntry(newEntries, EntryBuilder.buildEntry(state));
+              } catch (exc) {
+                console.error(exc);
+                setTimeout(() => alert(exc), 0);
+              }
               setEntries(newEntries);
             }}
           />
