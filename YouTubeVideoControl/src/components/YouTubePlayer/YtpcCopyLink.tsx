@@ -25,7 +25,7 @@ function getUrl(
     [SEARCHPARAM_VIDEO_ID, videoId],
     [SEARCHPARAM_LOOP_SHUFFLE, useLoopShuffle ? '1' : ''],
     [SEARCHPARAM_SHUFFLE_WEIGHT, useLoopCountForWeights ? '1' : ''],
-    [SEARCHPARAM_ENTRIES, JSON.stringify(entries)],
+    [SEARCHPARAM_ENTRIES, JSON.stringify(entries.map((e) => e.getState()))],
   ];
   const paramStr = params
     .filter(([, value]) => value.length)
