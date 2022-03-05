@@ -15,7 +15,6 @@ import styles from './Home.module.scss';
 
 interface VideoCardInfo {
   exampleName: string;
-  contents: string[];
   entries: YouTubePlayerControllerEntry[];
   params?: [string, string][],
   videoId: string;
@@ -38,13 +37,11 @@ function Home() {
   const videoCards: VideoCardInfo[] = [
     {
       exampleName: 'example',
-      contents: [''],
       entries: [],
       videoId: '???',
     },
     {
       exampleName: 'video360',
-      contents: [''],
       entries: [
         new YtpcPlaybackRateEntry(0, 2),
         new YtpcPlaybackRateEntry(7, 1),
@@ -65,7 +62,6 @@ function Home() {
     },
     {
       exampleName: 'loopShuffle',
-      contents: [''],
       entries: (
         [
           ['08:27', 9],
@@ -113,7 +109,9 @@ function Home() {
             key={c.exampleName}
             header={t(`home.examples.${c.exampleName}.header`)}
             contents={[
+              t(`home.examples.${c.exampleName}.description`),
               (<a
+                key="end-link"
                 href={`/watch?${cardToUrlParam(c)}`}
               >
                 {t(`home.examples.${c.exampleName}.goto`)}

@@ -501,7 +501,7 @@ describe('YouTubePlayerController', () => {
             controlType: ControlType.Goto,
             gotoTime: 4,
           },
-        ]
+        ],
       };
 
       // entries length is used in pollUntil
