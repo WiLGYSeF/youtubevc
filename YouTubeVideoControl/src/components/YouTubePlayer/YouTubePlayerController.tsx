@@ -25,6 +25,8 @@ export const EXPORT_TYPE = ExportType.Text;
 
 const EVENT_ONSTATECHANGE = 'onStateChange';
 
+const TIME_DIFF_MAX = 3; // 3 seconds
+
 export function addEntry(
   entries: YouTubePlayerControllerEntry[],
   entry: YouTubePlayerControllerEntry,
@@ -104,7 +106,10 @@ export function performEntryActions(
 
   for (const entry of entries) {
     if (entry.atTime <= curTime) {
-      if (entry.atTime >= lastTime) {
+      // manual seeking messes up lastTime
+      // if the time difference is greater than TIME_DIFF_MAX,
+      // assume a manual seek and do not perform entry actions
+      if (entry.atTime >= lastTime && curTime - lastTime < TIME_DIFF_MAX) {
         if (entry.controlType === ControlType.Loop && useLoopShuffle) {
           const loopEntry = getRandomLoopEntry(entries, useLoopCountForWeights);
           ytPlayer.seekTo(loopEntry.loopBackTo, true);
@@ -182,6 +187,7 @@ function YouTubePlayerController(props: YouTubePlayerControllerProps) {
       setEntries(parsedEntries);
     } catch (exc) {
       console.error(exc);
+      setTimeout(() => alert(exc), 0);
     }
   }, [props.entries]);
 
@@ -248,7 +254,12 @@ function YouTubePlayerController(props: YouTubePlayerControllerProps) {
             setEntryState={setEntryState}
             createEntry={(state: YtpcEntryState) => {
               const newEntries = [...entries];
-              addEntry(newEntries, EntryBuilder.buildEntry(state));
+              try {
+                addEntry(newEntries, EntryBuilder.buildEntry(state));
+              } catch (exc) {
+                console.error(exc);
+                setTimeout(() => alert(exc), 0);
+              }
               setEntries(newEntries);
             }}
           />
