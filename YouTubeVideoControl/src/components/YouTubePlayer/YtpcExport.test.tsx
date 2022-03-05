@@ -33,7 +33,9 @@ describe('YtpcExport', () => {
     const blob = saveAsMock.mock.calls[0][0] as Blob;
     const blobContent = await (new Response(blob)).text();
 
-    expect(blobContent).toEqual(JSON.stringify(entries, null, 2));
+    expect(blobContent).toEqual(JSON.stringify({
+      entries: entries.map((e) => e.getState()),
+    }, null, 2));
 
     saveAsMock.mockRestore();
   });

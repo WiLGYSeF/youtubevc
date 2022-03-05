@@ -34,23 +34,25 @@ describe('YtpcImport', () => {
 
     const input = container.getElementsByTagName('input')[0];
 
-    const file = new File([String.raw`[
-  {
-    "controlType": "goto",
-    "atTime": 0,
-    "gotoTime": 1
-  },
-  {
-    "controlType": "goto",
-    "atTime": 3,
-    "gotoTime": 6
-  },
-  {
-    "controlType": "pause",
-    "atTime": 30,
-    "pauseTime": 1
-  }
-]`], 'test.json', { type: 'text/plain' });
+    const file = new File([String.raw`{
+  "entries": [
+    {
+      "controlType": "goto",
+      "atTime": 0,
+      "gotoTime": 1
+    },
+    {
+      "controlType": "goto",
+      "atTime": 3,
+      "gotoTime": 6
+    },
+    {
+      "controlType": "pause",
+      "atTime": 30,
+      "pauseTime": 1
+    }
+  ]
+}`], 'test.json', { type: 'text/plain' });
     await userEvent.upload(input, file);
 
     await pollUntil(

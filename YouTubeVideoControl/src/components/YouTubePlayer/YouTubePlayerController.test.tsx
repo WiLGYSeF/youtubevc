@@ -484,26 +484,28 @@ describe('YouTubePlayerController', () => {
         },
       ];
 
-      const expected = [
-        {
-          atTime: 0,
-          controlType: ControlType.Goto,
-          gotoTime: 15,
-        },
-        {
-          atTime: 10,
-          controlType: ControlType.Goto,
-          gotoTime: 25,
-        },
-        {
-          atTime: 123,
-          controlType: ControlType.Goto,
-          gotoTime: 4,
-        },
-      ];
+      const expected = {
+        entries: [
+          {
+            atTime: 0,
+            controlType: ControlType.Goto,
+            gotoTime: 15,
+          },
+          {
+            atTime: 10,
+            controlType: ControlType.Goto,
+            gotoTime: 25,
+          },
+          {
+            atTime: 123,
+            controlType: ControlType.Goto,
+            gotoTime: 4,
+          },
+        ]
+      };
 
       // entries length is used in pollUntil
-      expect(expected.length).not.toEqual(startEntries.length);
+      expect(expected.entries.length).not.toEqual(startEntries.length);
 
       const { container } = render(<YouTubePlayerController
         ytPlayer={ytPlayer}
@@ -520,7 +522,7 @@ describe('YouTubePlayerController', () => {
         userEvent.upload(eImport.input, file);
 
         await pollUntil(
-          () => getEntries(entryList).length === expected.length,
+          () => getEntries(entryList).length === expected.entries.length,
           IMPORT_POLL_TIMEOUT,
           IMPORT_POLL_TICK,
         );
@@ -528,7 +530,7 @@ describe('YouTubePlayerController', () => {
 
       const entries = getEntries(entryList) as HTMLElement[];
 
-      expect(entries.map(getEntryObject)).toEqual(expected);
+      expect(entries.map(getEntryObject)).toEqual(expected.entries);
     });
 
     it('notifies on import fail', async () => {

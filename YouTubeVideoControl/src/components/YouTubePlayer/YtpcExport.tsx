@@ -2,7 +2,12 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { saveAs } from 'file-saver';
 
-import YouTubePlayerControllerEntry from 'objects/YtpcEntry/YouTubePlayerControllerEntry';
+import YouTubePlayerControllerEntry, { YtpcEntryState } from 'objects/YtpcEntry/YouTubePlayerControllerEntry';
+
+export interface JsonExportObject {
+  entries: YtpcEntryState[];
+  options?: { [key: string]: string },
+}
 
 export enum ExportType {
   Json = 'json',
@@ -23,7 +28,9 @@ export function entriesToFileData(
       break;
     case ExportType.Json:
     default:
-      data = JSON.stringify(entries, null, 2);
+      data = JSON.stringify({
+        entries: entries.map((e) => e.getState()),
+      } as JsonExportObject, null, 2);
       break;
   }
   return data;
