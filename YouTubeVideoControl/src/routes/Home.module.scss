@@ -1,0 +1,17 @@
+.home {
+  align-content: center;
+  display: flex;
+  flex-direction: column;
+
+  :global {
+    .container {
+      width: 900px;
+
+      @media (max-width: 1024px) {
+        & {
+          width: 720px;
+        }
+      }
+    }
+  }
+}

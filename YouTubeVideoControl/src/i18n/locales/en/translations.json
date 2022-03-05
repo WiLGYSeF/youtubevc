@@ -9,6 +9,23 @@
   "export": "Export",
   "for": "for",
   "forever": "forever",
+  "home": {
+    "examples": {
+      "loopShuffle": {
+        "goto": "See how to create a shuffled playlist from a video.",
+        "header": "Shuffle and Loop Parts of Video",
+        "title": "The Best of Paganini"
+      },
+      "video360": {
+        "description": "",
+        "goto": "Check out an example 360° video controller.",
+        "header": "Control 360° Videos",
+        "title": "360°, Angel Falls, Venezuela. Aerial 8K video"
+      },
+      "youtubeThumbnail": "YouTube thumbnail"
+    },
+    "intro": "A web application for automatically controlling YouTube videos."
+  },
   "import": {
     "failed": "File import failed!",
     "import": "Import"

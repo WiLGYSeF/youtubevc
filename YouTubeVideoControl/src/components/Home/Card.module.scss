@@ -1,0 +1,35 @@
+.card {
+  display: flex;
+  flex-wrap: wrap;
+  padding: 15px;
+
+  :global {
+    @media (max-width: 768px) {
+      & {
+        flex-direction: column;
+      }
+    }
+
+    .content {
+      padding: 15px;
+    }
+
+    .contents {
+      padding-left: 5px;
+    }
+
+    .header {
+      font-size: 32px;
+      font-weight: bold;
+      padding-bottom: 8px;
+    }
+
+    .image {
+    }
+
+    .left, .right {
+      flex: 1;
+      min-height: 120px;
+    }
+  }
+}
