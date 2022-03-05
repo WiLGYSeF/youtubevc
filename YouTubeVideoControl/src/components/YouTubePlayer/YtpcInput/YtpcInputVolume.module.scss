@@ -6,7 +6,9 @@
 
     input[type="range"] {
       margin-right: 4px;
+      position: relative;
       width: 75px;
+      top: 3px;
     }
   }
 }

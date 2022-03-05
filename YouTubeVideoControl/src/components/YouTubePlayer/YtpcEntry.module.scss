@@ -1,10 +1,13 @@
+@use 'css/_theme' as t;
+
 .entry {
   align-items: center;
-  border-bottom: 2px solid #888;
+  border-bottom: 2px solid t.$border-color;
+  cursor: default;
   display: flex;
   justify-content: space-between;
   min-height: 25px;
-  padding: 2px 6px;
+  padding: 4px 2px 4px 5px;
 
   &.disabled {
     background-color: #282828;

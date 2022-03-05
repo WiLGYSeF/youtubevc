@@ -1,5 +1,78 @@
+@use 'css/_theme' as t;
+
 .app {
+  background-color: t.$color-secondary;
+  color: t.$color-font;
   display: flex;
   flex-direction: column;
   font-family: Roboto;
+  font-size: 13px;
+  min-height: 100vh;
+
+  :global {
+    a {
+      color: t.$color-font;
+    }
+
+    button {
+      background-color: t.$color-primary;
+      border: t.$border;
+      border-radius: 8px;
+      color: t.$color-font;
+      cursor: pointer;
+      font-weight: bold;
+      padding: 6px 10px;
+
+      &:hover {
+        background-color: t.$color-primary-hover;
+      }
+    }
+
+    input:not([type]), input[type="text"] {
+      background-color: transparent;
+      border: none;
+      border-bottom: 1px solid t.$color-font;
+      color: t.$color-font;
+      font-size: 14px;
+      padding: 4px;
+    }
+
+    select {
+      background-color: transparent;
+      border: none;
+      border-bottom: 1px solid t.$color-font;
+      color: t.$color-font;
+      font-size: 14px;
+      padding: 5px;
+    }
+
+    option {
+      background-color: t.$color-primary;
+      border: none;
+      border-radius: 0;
+      padding: 5px;
+
+      &:hover {
+        color: t.$color-primary-hover;
+      }
+    }
+
+    .app-contents {
+      flex: 1;
+    }
+  }
+}
+
+:global {
+  body {
+    margin: 0;
+  }
+
+  iframe[id="webpack-dev-server-client-overlay"] {
+    display: none;
+  }
+
+  html, body, #root {
+    height: 100vh;
+  }
 }

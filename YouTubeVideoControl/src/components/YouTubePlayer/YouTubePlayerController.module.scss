@@ -1,3 +1,5 @@
+@use 'css/_theme' as t;
+
 .yt-controller {
   display: flex;
   font-size: 15px;
@@ -11,15 +13,17 @@
       .action-buttons {
         display: flex;
         justify-content: space-between;
-        margin-top: 5px;
+        margin-top: 10px;
 
         span {
-          margin: 0 2px 0 2px;
+          margin: 0 3px 0 3px;
         }
       }
     }
 
     .options {
+      border-left: 1px solid t.$color-font;
+      margin-left: 6px;
       padding: 4px;
     }
 
