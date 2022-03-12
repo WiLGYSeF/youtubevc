@@ -1,6 +1,11 @@
 import EventEmitter from './EventEmitter/EventEmitter';
 import EventEmitterHandlerSpecific from './EventEmitter/EventEmitterHandlerSpecific';
 
+export const WATCHDOG_INTERVAL = 100;
+export const WATCHDOG_TIMEOUT_LIMIT = 500;
+
+export const SUBSTITUTE_INTERVAL = 1000 / 60; // 60 times per second
+
 export const MSEC_PER_SEC = 1000;
 
 enum CoroutineState {
@@ -24,13 +29,32 @@ class Coroutine {
   private emitter: EventEmitter<void>;
   private _stopEmitter: EventEmitterHandlerSpecific<void>;
 
-  private _startTimestamp: number;
-  private _startTime: number;
-  private pauseStart: number;
-  private pauseTime: number;
+  // timestamp the first callback was done
+  private _startTimestamp: number = -1;
 
-  private _lastCallbackTimestamp: number;
-  private _callbackCount: number;
+  // time when start was called
+  private _startTime: number = -1;
+
+  // time when pause started
+  private pauseStart: number = -1;
+
+  // total time paused
+  private pauseTime: number = 0;
+
+  // timestamp of the last callback done
+  private _lastCallbackTimestamp: number = -1;
+
+  // total callback count
+  private _callbackCount: number = 0;
+
+  // last time callback was called
+  private lastCallbackTime: number = -1;
+
+  // watchdog that checks when requestAnimationFrame is paused
+  private watchdog: NodeJS.Timer | null = null;
+
+  // substitute that runs if requestAnimationFrame is paused
+  private substitute: NodeJS.Timer | null = null;
 
   constructor(
     callback: (timestamp: number) => void,
@@ -48,14 +72,6 @@ class Coroutine {
 
     this.emitter = new EventEmitter();
     this._stopEmitter = new EventEmitterHandlerSpecific(this.emitter, EVENT_STOP);
-
-    this._startTimestamp = -1;
-    this._startTime = -1;
-    this.pauseStart = -1;
-    this.pauseTime = 0;
-
-    this._lastCallbackTimestamp = -1;
-    this._callbackCount = 0;
   }
 
   get running() {
@@ -110,6 +126,7 @@ class Coroutine {
     }
 
     requestAnimationFrame(this.doCallback.bind(this));
+    this.startWatchdog();
     this.state = CoroutineState.Running;
   }
 
@@ -117,19 +134,19 @@ class Coroutine {
     if (!this.stopped) {
       this.state = CoroutineState.Stopped;
       this.emitter.emit(EVENT_STOP);
+      this.stopWatchdog();
+      this.stopSubstitute();
     }
   }
 
   pause(): void {
     this.state = CoroutineState.Paused;
     this.pauseStart = performance.now();
+    this.stopWatchdog();
+    this.stopSubstitute();
   }
 
-  private doCallback(timestamp: number): void {
-    if (this._startTimestamp < 0) {
-      this._startTimestamp = timestamp;
-    }
-
+  private tick(timestamp: number): boolean {
     if (
       (this.timeout >= 0 && timestamp - this.startTimestamp >= this.timeout)
       || (this.callbackLimit >= 0 && this._callbackCount >= this.callbackLimit)
@@ -137,21 +154,70 @@ class Coroutine {
       this.stop();
     }
 
-    if (
-      this.running
-      && (
+    if (this.running) {
+      if (
         this.interval < 0
         || this._lastCallbackTimestamp < 0
         || timestamp - this._lastCallbackTimestamp >= this.interval
-      )
-    ) {
-      this.callback(timestamp);
-      this._callbackCount += 1;
-      this._lastCallbackTimestamp = timestamp;
-
-      if (this.running) {
-        requestAnimationFrame(this.doCallback.bind(this));
+      ) {
+        this.callback(timestamp);
+        this._callbackCount += 1;
+        this._lastCallbackTimestamp = timestamp;
       }
+    }
+
+    return this.running;
+  }
+
+  private doCallback(timestamp: number): void {
+    if (this._startTimestamp < 0) {
+      this._startTimestamp = timestamp;
+    }
+
+    if (this.tick(timestamp)) {
+      this.lastCallbackTime = performance.now();
+      requestAnimationFrame(this.doCallback.bind(this));
+    }
+  }
+
+  private startSubstitute() {
+    if (!this.substitute) {
+      const lastTime = this.lastCallbackTime;
+      this.substitute = setInterval(() => {
+        if (lastTime !== this.lastCallbackTime) {
+          this.stopSubstitute();
+          return;
+        }
+
+        this.tick(performance.now());
+      }, SUBSTITUTE_INTERVAL);
+    }
+  }
+
+  private stopSubstitute() {
+    if (this.substitute) {
+      clearInterval(this.substitute);
+      this.substitute = null;
+    }
+  }
+
+  private startWatchdog() {
+    if (!this.watchdog) {
+      this.watchdog = setInterval(() => {
+        if (
+          !this.substitute
+          && performance.now() - this.lastCallbackTime >= WATCHDOG_TIMEOUT_LIMIT
+        ) {
+          this.startSubstitute();
+        }
+      }, WATCHDOG_INTERVAL);
+    }
+  }
+
+  private stopWatchdog() {
+    if (this.watchdog) {
+      clearInterval(this.watchdog);
+      this.watchdog = null;
     }
   }
 }

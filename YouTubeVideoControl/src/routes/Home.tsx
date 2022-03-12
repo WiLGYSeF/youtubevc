@@ -122,12 +122,14 @@ function Home() {
             header={t(`home.examples.${c.exampleName}.header`)}
             contents={[
               t(`home.examples.${c.exampleName}.description`),
-              (<a
-                key="end-link"
-                href={`/watch?${cardToUrlParam(c)}`}
-              >
-                {t(`home.examples.${c.exampleName}.goto`)}
-              </a>),
+              (
+                <a
+                  key="end-link"
+                  href={`/watch?${cardToUrlParam(c)}`}
+                >
+                  {t(`home.examples.${c.exampleName}.goto`)}
+                </a>
+              ),
             ]}
             imageSrc={`/img/${c.videoId}.jpg`}
             imageAlt={t('home.examples.youtubeThumbnail')}
