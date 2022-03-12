@@ -3,14 +3,25 @@ import ReactDOM from 'react-dom';
 import {
   BrowserRouter, Navigate, Route, Routes,
 } from 'react-router-dom';
+import { createBrowserHistory } from 'history';
 
 import App from './App';
 import Home from './routes/Home';
 import YouTubePlayerContainer from './routes/YouTubePlayerContainer';
 
-import reportWebVitals from './reportWebVitals';
-
 import './i18n/config';
+
+const history = createBrowserHistory();
+
+const app = document.getElementById('root');
+
+// used with static hosting
+if (app) {
+  const path = (/^#!(\/.*)$/.exec(location.hash) || [])[1];
+  if (path) {
+    history.replace(path);
+  }
+}
 
 ReactDOM.render(
   <React.StrictMode>
@@ -24,10 +35,5 @@ ReactDOM.render(
       </Routes>
     </BrowserRouter>
   </React.StrictMode>,
-  document.getElementById('root'),
+  app,
 );
-
-// If you want to start measuring performance in your app, pass a function
-// to log results (for example: reportWebVitals(console.log))
-// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
-reportWebVitals();
