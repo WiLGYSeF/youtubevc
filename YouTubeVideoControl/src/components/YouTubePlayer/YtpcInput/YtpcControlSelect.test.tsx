@@ -3,12 +3,15 @@ import { render } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
 import { ControlType } from 'objects/YtpcEntry/YouTubePlayerControllerEntry';
-import YtpcControlSelect, { getControlTypes, getInputs } from './YtpcControlSelect';
+import mockI18n from 'utils/test/i18nMock';
+import YtpcControlSelect, { getControlTypes, getInputs, isControlDisabledIfNot360Video } from './YtpcControlSelect';
+
+jest.mock('react-i18next', () => mockI18n());
 
 describe('YtpcControlSelect', () => {
   it('shows all input options', () => {
     const { container } = render(<YtpcControlSelect
-      is360Video={false}
+      is360Video
       defaultControlType={ControlType.Goto}
       setControlInput={() => {}}
     />);
@@ -29,7 +32,7 @@ describe('YtpcControlSelect', () => {
       const setControlInputMock = jest.fn();
 
       const { container } = render(<YtpcControlSelect
-        is360Video={false}
+        is360Video
         defaultControlType={ControlType.Goto}
         setControlInput={setControlInputMock}
       />);
@@ -46,12 +49,41 @@ describe('YtpcControlSelect', () => {
     },
   );
 
+  it.each(
+    getControlTypes(),
+  )(
+    'returns the %s input component when not 360 video',
+    (controlType: ControlType, expected: Function) => {
+      const setControlInputMock = jest.fn();
+
+      const { container } = render(<YtpcControlSelect
+        is360Video={false}
+        defaultControlType={ControlType.Goto}
+        setControlInput={setControlInputMock}
+      />);
+
+      const { select } = getInputs(container);
+
+      setControlInputMock.mockClear();
+      userEvent.selectOptions(select, controlType);
+
+      if (!isControlDisabledIfNot360Video(controlType)) {
+        expect(setControlInputMock.mock.calls[0][0]).toEqual(controlType);
+        expect(setControlInputMock.mock.calls[0][1]).toEqual(expected);
+
+        expect(select.value).toEqual(controlType);
+      } else {
+        expect(setControlInputMock).not.toHaveBeenCalled();
+      }
+    },
+  );
+
   it('updates value on props change', () => {
     let controlType = ControlType.Goto;
     const setControlInputMock = jest.fn();
 
     const { container, rerender } = render(<YtpcControlSelect
-      is360Video={false}
+      is360Video
       defaultControlType={controlType}
       setControlInput={setControlInputMock}
     />);
@@ -63,7 +95,7 @@ describe('YtpcControlSelect', () => {
     controlType = ControlType.Loop;
 
     rerender(<YtpcControlSelect
-      is360Video={false}
+      is360Video
       defaultControlType={controlType}
       setControlInput={setControlInputMock}
     />);

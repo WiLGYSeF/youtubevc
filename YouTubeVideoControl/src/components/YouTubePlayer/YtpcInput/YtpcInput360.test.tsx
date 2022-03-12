@@ -4,7 +4,10 @@ import userEvent from '@testing-library/user-event';
 
 import { ControlType } from 'objects/YtpcEntry/YouTubePlayerControllerEntry';
 import { Ytpc360State } from 'objects/YtpcEntry/Ytpc360Entry';
+import mockI18n from 'utils/test/i18nMock';
 import YtpcInput360, { getInputs, LERP_TIME_DEFAULT } from './YtpcInput360';
+
+jest.mock('react-i18next', () => mockI18n());
 
 describe('YtpcInput360', () => {
   it('updates entry state', () => {

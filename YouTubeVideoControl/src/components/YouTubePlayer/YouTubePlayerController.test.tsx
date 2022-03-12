@@ -5,6 +5,7 @@ import userEvent from '@testing-library/user-event';
 import YouTubePlayerControllerEntry, { ControlType } from 'objects/YtpcEntry/YouTubePlayerControllerEntry';
 import YtpcGotoEntry from 'objects/YtpcEntry/YtpcGotoEntry';
 import YtpcLoopEntry from 'objects/YtpcEntry/YtpcLoopEntry';
+import mockI18n from 'utils/test/i18nMock';
 import pollUntil from 'utils/test/pollUntil';
 import { secondsToTimestamp } from 'utils/timestr';
 import { PLAYBACK_RATES } from 'utils/youtube';
@@ -20,6 +21,8 @@ import { getInputs as entryGetInputs } from './YtpcEntry';
 import { getEntries } from './YtpcEntryList';
 import YtpcExport, { entriesToFileData } from './YtpcExport';
 import YtpcCopyLink from './YtpcCopyLink';
+
+jest.mock('react-i18next', () => mockI18n());
 
 const IMPORT_POLL_TIMEOUT = 3000;
 const IMPORT_POLL_TICK = 10;
@@ -481,26 +484,28 @@ describe('YouTubePlayerController', () => {
         },
       ];
 
-      const expected = [
-        {
-          atTime: 0,
-          controlType: ControlType.Goto,
-          gotoTime: 15,
-        },
-        {
-          atTime: 10,
-          controlType: ControlType.Goto,
-          gotoTime: 25,
-        },
-        {
-          atTime: 123,
-          controlType: ControlType.Goto,
-          gotoTime: 4,
-        },
-      ];
+      const expected = {
+        entries: [
+          {
+            atTime: 0,
+            controlType: ControlType.Goto,
+            gotoTime: 15,
+          },
+          {
+            atTime: 10,
+            controlType: ControlType.Goto,
+            gotoTime: 25,
+          },
+          {
+            atTime: 123,
+            controlType: ControlType.Goto,
+            gotoTime: 4,
+          },
+        ],
+      };
 
       // entries length is used in pollUntil
-      expect(expected.length).not.toEqual(startEntries.length);
+      expect(expected.entries.length).not.toEqual(startEntries.length);
 
       const { container } = render(<YouTubePlayerController
         ytPlayer={ytPlayer}
@@ -517,7 +522,7 @@ describe('YouTubePlayerController', () => {
         userEvent.upload(eImport.input, file);
 
         await pollUntil(
-          () => getEntries(entryList).length === expected.length,
+          () => getEntries(entryList).length === expected.entries.length,
           IMPORT_POLL_TIMEOUT,
           IMPORT_POLL_TICK,
         );
@@ -525,7 +530,7 @@ describe('YouTubePlayerController', () => {
 
       const entries = getEntries(entryList) as HTMLElement[];
 
-      expect(entries.map(getEntryObject)).toEqual(expected);
+      expect(entries.map(getEntryObject)).toEqual(expected.entries);
     });
 
     it('notifies on import fail', async () => {

@@ -1,5 +1,32 @@
+@use 'css/_theme' as t;
+
 .header {
-  background-color: #181818;
-  height: 60px;
-  margin-bottom: 4px;
+  background-color: t.$color-boundary;
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 15px;
+  padding: 8px 10px 15px 10px;
+
+  :global {
+    a {
+      text-decoration: none;
+    }
+
+    .left {
+      padding: 10px;
+
+      .logo {
+        font-size: 28px;
+        font-weight: bold;
+
+        .extension {
+          color: #d00;
+        }
+      }
+
+      .subtitle {
+        font-size: 12px;
+      }
+    }
+  }
 }

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import PlayerStates from 'youtube-player/dist/constants/PlayerStates';
 import { YouTubePlayer } from 'youtube-player/dist/types';
@@ -9,6 +9,7 @@ import { YouTubePlayer360 } from 'objects/YtpcEntry/Ytpc360Entry';
 import YtpcLoopEntry from 'objects/YtpcEntry/YtpcLoopEntry';
 import Coroutine from 'utils/coroutine';
 import useStatePropBacked from 'utils/useStatePropBacked';
+import wrapDetect from 'utils/wrapDetect';
 import { getVideoIdByUrl, playerHas360Video } from 'utils/youtube';
 import YtpcClear, { getInputs as clearGetInputs, YtpcClearInputs } from './YtpcClear';
 import YtpcCopyLink, { getInputs as copyLinkGetInputs, YtpcCopyLinkInputs } from './YtpcCopyLink';
@@ -23,6 +24,8 @@ import styles from './YouTubePlayerController.module.scss';
 export const EXPORT_TYPE = ExportType.Text;
 
 const EVENT_ONSTATECHANGE = 'onStateChange';
+
+const TIME_DIFF_MAX = 3; // 3 seconds
 
 export function addEntry(
   entries: YouTubePlayerControllerEntry[],
@@ -103,7 +106,10 @@ export function performEntryActions(
 
   for (const entry of entries) {
     if (entry.atTime <= curTime) {
-      if (entry.atTime >= lastTime) {
+      // manual seeking messes up lastTime
+      // if the time difference is greater than TIME_DIFF_MAX,
+      // assume a manual seek and do not perform entry actions
+      if (entry.atTime >= lastTime && curTime - lastTime < TIME_DIFF_MAX) {
         if (entry.controlType === ControlType.Loop && useLoopShuffle) {
           const loopEntry = getRandomLoopEntry(entries, useLoopCountForWeights);
           ytPlayer.seekTo(loopEntry.loopBackTo, true);
@@ -135,7 +141,8 @@ function YouTubePlayerController(props: YouTubePlayerControllerProps) {
 
   const [entries, setEntries] = useState<YouTubePlayerControllerEntry[]>([]);
   const [barIndex, setBarIndex] = useState(0);
-  const [is360Video, setIs360Video] = useState(false);
+  // video type is not known until it starts playing
+  const [is360Video, setIs360Video] = useState<boolean | undefined>(undefined);
   const [defaultState, setDefaultState] = useState<YtpcEntryState>({
     atTime: 0,
     controlType: ControlType.Goto,
@@ -145,6 +152,9 @@ function YouTubePlayerController(props: YouTubePlayerControllerProps) {
   const [useLoopCountForWeights, setUseLoopCountForWeights] = useStatePropBacked(
     props.shuffleWeight,
   );
+
+  const containerRef = useRef<HTMLDivElement>(null);
+  const [controlsWrapped, setControlsWrapped] = useState(false);
 
   useEffect(() => {
     const onStateChange = (e: CustomEvent) => {
@@ -161,7 +171,7 @@ function YouTubePlayerController(props: YouTubePlayerControllerProps) {
     return () => {
       props.ytPlayer?.removeEventListener(EVENT_ONSTATECHANGE, onStateChange);
     };
-  });
+  }, [props.ytPlayer]);
 
   useEffect(() => {
     if (!props.entries) {
@@ -177,6 +187,7 @@ function YouTubePlayerController(props: YouTubePlayerControllerProps) {
       setEntries(parsedEntries);
     } catch (exc) {
       console.error(exc);
+      setTimeout(() => alert(exc), 0);
     }
   }, [props.entries]);
 
@@ -210,9 +221,29 @@ function YouTubePlayerController(props: YouTubePlayerControllerProps) {
     };
   }, [props.ytPlayer, entries, useLoopShuffle, useLoopCountForWeights]);
 
+  useEffect(() => {
+    const onChange = (arrangement: HTMLElement[][]) => {
+      if (arrangement[0].length === 1) {
+        if (!controlsWrapped) {
+          setControlsWrapped(true);
+        }
+      } else if (controlsWrapped) {
+        setControlsWrapped(false);
+      }
+    };
+
+    const disconnect = containerRef.current
+      ? wrapDetect(containerRef.current, onChange)
+      : () => {};
+
+    return () => {
+      disconnect();
+    };
+  }, [containerRef.current, controlsWrapped]);
+
   return (
-    <div className={styles['yt-controller']}>
-      <div className="controls">
+    <div className={styles['yt-controller']} ref={containerRef}>
+      <div className={['controls', controlsWrapped ? 'fill' : ''].join(' ')}>
         <span data-testid="ytpc-input">
           <YtpcInput
             ytPlayer={props.ytPlayer}
@@ -223,7 +254,12 @@ function YouTubePlayerController(props: YouTubePlayerControllerProps) {
             setEntryState={setEntryState}
             createEntry={(state: YtpcEntryState) => {
               const newEntries = [...entries];
-              addEntry(newEntries, EntryBuilder.buildEntry(state));
+              try {
+                addEntry(newEntries, EntryBuilder.buildEntry(state));
+              } catch (exc) {
+                console.error(exc);
+                setTimeout(() => alert(exc), 0);
+              }
               setEntries(newEntries);
             }}
           />
@@ -233,6 +269,7 @@ function YouTubePlayerController(props: YouTubePlayerControllerProps) {
           <YtpcEntryList
             entries={entries}
             barIndex={barIndex}
+            is360Video={is360Video}
             deleteEntry={(entry: YouTubePlayerControllerEntry): void => {
               setEntries([...entries.filter((e) => e !== entry)]);
             }}
@@ -242,48 +279,55 @@ function YouTubePlayerController(props: YouTubePlayerControllerProps) {
           />
         </span>
 
-        <div>
-          <span data-testid="ytpc-clear">
-            <YtpcClear clearEntries={() => {
-              setEntries([]);
-            }}
-            />
-          </span>
-          <span data-testid="ytpc-import">
-            <YtpcImport
-              addEntry={addEntry}
-              setEntries={setEntries}
-              onLoad={(success: boolean) => {
-                if (!success) {
-                  console.error('file import failed');
-                  alert(t('import.failed'));
-                }
+        <div className="action-buttons">
+          <div>
+            <span data-testid="ytpc-import">
+              <YtpcImport
+                addEntry={addEntry}
+                setEntries={setEntries}
+                onLoad={(success: boolean) => {
+                  if (!success) {
+                    console.error('file import failed');
+                    alert(t('import.failed'));
+                  }
+                }}
+              />
+            </span>
+            <span data-testid="ytpc-export">
+              <YtpcExport
+                filename={`youtubevc-${getVideoIdByUrl(props.ytPlayer?.getVideoUrl() ?? '')}.txt`}
+                entries={entries}
+                exportType={EXPORT_TYPE}
+              />
+            </span>
+            <span data-testid="ytpc-copylink">
+              <YtpcCopyLink
+                videoId={getVideoIdByUrl(props.ytPlayer?.getVideoUrl() ?? '')}
+                entries={entries}
+                useLoopShuffle={useLoopShuffle}
+                useLoopCountForWeights={useLoopCountForWeights}
+                onCopy={() => {
+                  // timeout used to show popup *after* link copied to clipboard
+                  setTimeout(() => {
+                    alert(t('copyLink.success'));
+                  }, 0);
+                  return true;
+                }}
+              />
+            </span>
+          </div>
+
+          <div>
+            <span data-testid="ytpc-clear">
+              <YtpcClear clearEntries={() => {
+                setEntries([]);
               }}
-            />
-          </span>
-          <span data-testid="ytpc-export">
-            <YtpcExport
-              filename={`youtubevc-${getVideoIdByUrl(props.ytPlayer?.getVideoUrl() ?? '')}.txt`}
-              entries={entries}
-              exportType={EXPORT_TYPE}
-            />
-          </span>
-          <span data-testid="ytpc-copylink">
-            <YtpcCopyLink
-              videoId={getVideoIdByUrl(props.ytPlayer?.getVideoUrl() ?? '')}
-              entries={entries}
-              onCopy={() => {
-                // timeout used to show popup *after* link copied to clipboard
-                setTimeout(() => {
-                  alert(t('copyLink.success'));
-                }, 0);
-                return true;
-              }}
-            />
-          </span>
+              />
+            </span>
+          </div>
         </div>
       </div>
-      <div className="options">
+      <div className={['options', controlsWrapped ? 'fill' : ''].join(' ')}>
         <YtpcOptions
           useLoopsForShuffling={useLoopShuffle}
           useLoopCountForWeights={useLoopCountForWeights}
@@ -291,7 +335,6 @@ function YouTubePlayerController(props: YouTubePlayerControllerProps) {
           setLoopCountForWeights={setUseLoopCountForWeights}
         />
       </div>
-      <div className="padding" />
     </div>
   );
 }

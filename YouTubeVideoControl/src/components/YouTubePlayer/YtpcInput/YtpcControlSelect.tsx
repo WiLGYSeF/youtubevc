@@ -11,50 +11,30 @@ import YtpcInputPlaybackRate from './YtpcInputPlaybackRate';
 import YtpcInputVolume from './YtpcInputVolume';
 
 interface ControlSelectProps {
-  is360Video: boolean;
+  is360Video?: boolean;
   defaultControlType: ControlType;
   setControlInput(type: ControlType, component: (props: any) => JSX.Element): void;
 }
 
-type Control = {
-  enabled: boolean;
-  component: (props: any) => JSX.Element;
-};
-
-const CONTROLS = new Map<ControlType, Control>([
-  [ControlType.ThreeSixty, {
-    // enabled: props.is360Video, // only set after video start playing, keep enabled for now
-    enabled: true,
-    component: YtpcInput360,
-  }],
-  [ControlType.Goto, {
-    enabled: true,
-    component: YtpcInputGoto,
-  }],
-  [ControlType.Loop, {
-    enabled: true,
-    component: YtpcInputLoop,
-  }],
-  [ControlType.Pause, {
-    enabled: true,
-    component: YtpcInputPause,
-  }],
-  [ControlType.PlaybackRate, {
-    enabled: true,
-    component: YtpcInputPlaybackRate,
-  }],
-  [ControlType.Volume, {
-    enabled: true,
-    component: YtpcInputVolume,
-  }],
+const CONTROLS = new Map<ControlType, (props: any) => JSX.Element>([
+  [ControlType.ThreeSixty, YtpcInput360],
+  [ControlType.Goto, YtpcInputGoto],
+  [ControlType.Loop, YtpcInputLoop],
+  [ControlType.Pause, YtpcInputPause],
+  [ControlType.PlaybackRate, YtpcInputPlaybackRate],
+  [ControlType.Volume, YtpcInputVolume],
 ]);
 
-export function getControlTypes(): [ControlType, Function][] {
-  return Array.from(CONTROLS.entries()).map(([type, control]) => [type, control.component]);
+export function getControlTypes(): [ControlType, (props: any) => JSX.Element][] {
+  return Array.from(CONTROLS.entries());
 }
 
 export function controlTypeToComponent(type: ControlType) {
-  return CONTROLS.get(type)!.component;
+  return CONTROLS.get(type)!;
+}
+
+export function isControlDisabledIfNot360Video(type: ControlType): boolean {
+  return type === ControlType.ThreeSixty;
 }
 
 function YtpcControlSelect(props: ControlSelectProps) {
@@ -62,17 +42,30 @@ function YtpcControlSelect(props: ControlSelectProps) {
 
   const [controlType, setControlType] = useStatePropBacked(props.defaultControlType);
 
+  const is360Video: boolean = props.is360Video ?? true;
+
+  const controlList = Array.from(CONTROLS.keys());
+  const enabledControls = controlList.map(() => true);
+
+  if (!is360Video) {
+    controlList.forEach((type, i) => {
+      if (isControlDisabledIfNot360Video(type)) {
+        enabledControls[i] = false;
+      }
+    });
+  }
+
   return (
     <select
       value={controlType}
       onChange={(e: ChangeEvent<HTMLSelectElement>) => {
         const type = e.target.value as ControlType;
         setControlType(type);
-        props.setControlInput(type, CONTROLS.get(type)!.component);
+        props.setControlInput(type, controlTypeToComponent(type));
       }}
     >
-      {Array.from(CONTROLS.entries()).map(([type, entry]) => (
-        <option key={type} value={type} disabled={!entry.enabled}>
+      {controlList.map((type, i) => (
+        <option key={type} value={type} disabled={!enabledControls[i]}>
           {t(`ytpcEntry.actions.${type}`)}
         </option>
       ))}

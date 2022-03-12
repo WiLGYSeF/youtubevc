@@ -1,21 +1,52 @@
+@use 'css/_theme' as t;
+
 .yt-controller {
   display: flex;
+  flex-wrap: wrap;
+  font-size: 15px;
   padding: 10px;
 
   :global {
     .controls {
+      flex: 1;
       min-width: 450px;
       padding: 4px;
+
+      @media (max-width: 500px) {
+        & {
+          min-width: 100%;
+        }
+      }
+
+      .action-buttons {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 10px;
+
+        span {
+          margin: 0 3px 0 3px;
+        }
+      }
     }
 
     .options {
-      min-width: 100px;
-      padding: 4px;
-    }
-
-    .padding {
+      border-left: 1px solid t.$color-font;
       flex: 1;
+      margin-left: 6px;
+      min-height: 80px;
+      min-width: 300px;
       padding: 4px;
+
+      &.fill {
+        border: none;
+      }
+
+      @media (max-width: 500px) {
+        & {
+          min-width: 0;
+          width: 100%;
+        }
+      }
     }
   }
 }

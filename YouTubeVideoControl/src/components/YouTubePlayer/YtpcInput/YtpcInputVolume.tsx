@@ -41,12 +41,12 @@ function YtpcInputVolume(props: YtpcControlInput) {
   }, [volume, lerpSet, lerpSeconds]);
 
   return (
-    <div className={styles.volume}>
+    <span className={styles.volume}>
       <span data-testid="volume">
         <input
           type="range"
           min={VOLUME_MIN} max={VOLUME_MAX}
-          value={dVolume}
+          value={volume}
           onChange={(e: ChangeEvent<HTMLInputElement>) => {
             setVolume(Number(e.target.value));
           }}
@@ -79,7 +79,7 @@ function YtpcInputVolume(props: YtpcControlInput) {
           onChange={setLerpSeconds}
         />
       </span>
-    </div>
+    </span>
   );
 }
 

@@ -25,12 +25,12 @@ function YtpcInputPause(props: YtpcControlInput) {
   }, [pauseFor]);
 
   return (
-    <div className={styles.pause}>
+    <span className={styles.pause}>
       <TimestampInput
         defaultValue={dPauseTime}
         onChange={setPauseFor}
       />
-    </div>
+    </span>
   );
 }
 

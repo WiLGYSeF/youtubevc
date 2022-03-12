@@ -1,0 +1,28 @@
+.home {
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+
+  :global {
+    .container {
+      width: 1024px;
+
+      @media (max-width: 1024px) {
+        & {
+          width: 720px;
+        }
+      }
+
+      @media (max-width: 720px) {
+        & {
+          width: 100%;
+        }
+      }
+
+      .intro {
+        font-size: 18px;
+        margin-bottom: 50px;
+      }
+    }
+  }
+}

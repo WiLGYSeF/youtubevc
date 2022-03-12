@@ -3,7 +3,10 @@ import { render } from '@testing-library/react';
 
 import YtpcGotoEntry from 'objects/YtpcEntry/YtpcGotoEntry';
 import { getFiberNodeName } from 'utils/test/fiberNode';
+import mockI18n from 'utils/test/i18nMock';
 import YtpcEntryList from './YtpcEntryList';
+
+jest.mock('react-i18next', () => mockI18n());
 
 describe('YtpcEntryList', () => {
   it.each([

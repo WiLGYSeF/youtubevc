@@ -4,8 +4,11 @@ import userEvent from '@testing-library/user-event';
 
 import { ControlType } from 'objects/YtpcEntry/YouTubePlayerControllerEntry';
 import { YtpcLoopState } from 'objects/YtpcEntry/YtpcLoopEntry';
+import mockI18n from 'utils/test/i18nMock';
 import { secondsToTimestamp } from 'utils/timestr';
 import YtpcInputLoop, { getInputs } from './YtpcInputLoop';
+
+jest.mock('react-i18next', () => mockI18n());
 
 describe('YtpcInputLoop', () => {
   it('updates entry state', () => {

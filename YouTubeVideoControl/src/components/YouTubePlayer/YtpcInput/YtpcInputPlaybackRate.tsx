@@ -28,16 +28,14 @@ function YtpcInputPlaybackRate(props: YtpcInputPlaybackRateProps) {
   }, [playbackRate]);
 
   return (
-    <div data-testid="playback-rate">
-      <select
-        value={playbackRate}
-        onChange={(e: ChangeEvent<HTMLSelectElement>) => {
-          setPlaybackRate(Number(e.target.value));
-        }}
-      >
-        {playbackRates.map((r) => <option key={r} value={r}>{r}</option>)}
-      </select>
-    </div>
+    <select
+      value={playbackRate}
+      onChange={(e: ChangeEvent<HTMLSelectElement>) => {
+        setPlaybackRate(Number(e.target.value));
+      }}
+    >
+      {playbackRates.map((r) => <option key={r} value={r}>{r}</option>)}
+    </select>
   );
 }
 
@@ -47,7 +45,7 @@ export interface YtpcInputPlaybackRateInputs {
 
 export function getInputs(container: HTMLElement): YtpcInputPlaybackRateInputs {
   return {
-    playbackRate: container.querySelector('[data-testid="playback-rate"] select')!,
+    playbackRate: container.querySelector('select')!,
   };
 }
 

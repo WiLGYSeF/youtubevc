@@ -5,9 +5,12 @@ import userEvent from '@testing-library/user-event';
 import { ControlType } from 'objects/YtpcEntry/YouTubePlayerControllerEntry';
 import YtpcGotoEntry from 'objects/YtpcEntry/YtpcGotoEntry';
 import YtpcPauseEntry from 'objects/YtpcEntry/YtpcPauseEntry';
+import mockI18n from 'utils/test/i18nMock';
 import pollUntil from 'utils/test/pollUntil';
 import YtpcImport from './YtpcImport';
 import { addEntry } from './YouTubePlayerController';
+
+jest.mock('react-i18next', () => mockI18n());
 
 const IMPORT_POLL_TIMEOUT = 3000;
 const IMPORT_POLL_TICK = 10;
@@ -31,23 +34,25 @@ describe('YtpcImport', () => {
 
     const input = container.getElementsByTagName('input')[0];
 
-    const file = new File([String.raw`[
-  {
-    "controlType": "goto",
-    "atTime": 0,
-    "gotoTime": 1
-  },
-  {
-    "controlType": "goto",
-    "atTime": 3,
-    "gotoTime": 6
-  },
-  {
-    "controlType": "pause",
-    "atTime": 30,
-    "pauseTime": 1
-  }
-]`], 'test.json', { type: 'text/plain' });
+    const file = new File([String.raw`{
+  "entries": [
+    {
+      "controlType": "goto",
+      "atTime": 0,
+      "gotoTime": 1
+    },
+    {
+      "controlType": "goto",
+      "atTime": 3,
+      "gotoTime": 6
+    },
+    {
+      "controlType": "pause",
+      "atTime": 30,
+      "pauseTime": 1
+    }
+  ]
+}`], 'test.json', { type: 'text/plain' });
     await userEvent.upload(input, file);
 
     await pollUntil(

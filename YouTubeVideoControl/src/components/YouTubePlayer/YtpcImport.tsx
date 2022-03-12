@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next';
 import EntryBuilder from 'objects/YtpcEntry/EntryBuilder';
 import YouTubePlayerControllerEntry, { YtpcEntryState } from 'objects/YtpcEntry/YouTubePlayerControllerEntry';
 import trimstr from 'utils/trimstr';
+import { JsonExportObject } from './YtpcExport';
 
 interface ImportResult {
   entries: YouTubePlayerControllerEntry[];
@@ -18,8 +19,8 @@ function tryImportJson(
   const entries: YouTubePlayerControllerEntry[] = [];
 
   try {
-    const json = JSON.parse(data) as YtpcEntryState[];
-    for (const entry of json) {
+    const json: JsonExportObject = JSON.parse(data);
+    for (const entry of json.entries) {
       addEntry(entries, EntryBuilder.buildEntry(entry));
     }
 
@@ -87,7 +88,7 @@ function YtpcImport(props: YtpcImportProps) {
     reader.onload = (ev: ProgressEvent<FileReader>) => {
       const data = ev.target?.result?.toString();
 
-      let result = tryImportJson(data ?? '[]', props.addEntry);
+      let result = tryImportJson(data ?? '{}', props.addEntry);
       if (!result.success) {
         result = tryImportText(data ?? '', props.addEntry);
       }
@@ -109,19 +110,17 @@ function YtpcImport(props: YtpcImportProps) {
   const importIdInternal = `import-${Math.random().toString(36).substring(2)}`;
 
   return (
-    <div>
-      <button type="button" onClick={() => document.getElementById(importIdInternal)?.click()}>
-        <input
-          id={importIdInternal}
-          type="file"
-          style={{
-            display: 'none',
-          }}
-          onChange={loadFile}
-        />
-        {t('import.import')}
-      </button>
-    </div>
+    <button type="button" onClick={() => document.getElementById(importIdInternal)?.click()}>
+      <input
+        id={importIdInternal}
+        type="file"
+        style={{
+          display: 'none',
+        }}
+        onChange={loadFile}
+      />
+      {t('import.import')}
+    </button>
   );
 }
 

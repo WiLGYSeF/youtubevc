@@ -11,6 +11,11 @@
     <Script Include="**" Exclude="*.esproj;**\node_modules\**;" />
   </ItemGroup>
   <ItemGroup>
+    <Script Remove="public\img\logo\**" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="public\img\icon\" />
+    <Folder Include="src\components\Home\" />
     <Folder Include="src\i18n\locales\en\" />
     <Folder Include="src\utils\test\" />
   </ItemGroup>

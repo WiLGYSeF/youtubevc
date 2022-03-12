@@ -1,37 +1,33 @@
-$color: #ddd;
-$background-color: #444;
-$border-color: #aaa;
-$border-radius: 6px;
+@use 'css/_theme' as t;
 
 .input {
-  background-color: $background-color;
-  border: 1px solid $border-color;
-  border-radius: 8px;
-  color: $color;
+  align-items: center;
+  background-color: t.$color-primary;
+  border: t.$border;
+  border-radius: t.$border-radius;
   display: flex;
   justify-content: space-between;
   margin-bottom: 5px;
   min-height: 30px;
-  padding: 5px;
+  padding: 6px 5px 6px 8px;
+  user-select: none;
 
   :global {
-    div {
-      display: inline;
-    }
-
-    input[type="range"] {
-      position: relative;
-      top: 3px;
-    }
-
     select {
-      margin-right: 4px;
+      margin: 0 8px 0 4px;
     }
 
     .entry-creation {
+      margin-right: 5px;
+
       .now-time {
         cursor: pointer;
+        font-weight: bold;
         padding: 0 2px;
+      }
+
+      .at-time {
+        margin: 0 4px 0 2px;
       }
     }
   }

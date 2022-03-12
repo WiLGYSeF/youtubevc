@@ -1,10 +1,41 @@
 ﻿{
+  "add": "Add",
   "copyLink": {
+    "copyLink": "Copy Link",
     "success": "Copied URL to clipboard"
   },
+  "delete": "Delete",
+  "edit": "Edit",
   "export": "Export",
   "for": "for",
   "forever": "forever",
+  "home": {
+    "examples": {
+      "example": {
+        "description": "Automatically control videos based on timestamps.",
+        "goto": "Click to see example video controls.",
+        "header": "Automate Control",
+        "title": "Rick Astley - Never Gonna Give You Up (Official Music Video)"
+      },
+      "loopShuffle": {
+        "description": "Turn a long video with multiple sections into a shuffled playlist.",
+        "goto": "See how to create a shuffled playlist from a video.",
+        "header": "Shuffle and Loop Parts of Video",
+        "title": "The Best of Paganini"
+      },
+      "video360": {
+        "description": "Operate spherical video views, moving the view to focus on specific areas.",
+        "goto": "Check out an example 360° video controller.",
+        "header": "Control 360° Videos",
+        "title": "360°, Angel Falls, Venezuela. Aerial 8K video"
+      },
+      "youtubeThumbnail": "YouTube thumbnail"
+    },
+    "intro": {
+      "1": "A web application for automatically controlling YouTube videos.",
+      "2": "Just change <1>youtube.com</1> to <3>youtubevc.com</3> in the URL bar."
+    }
+  },
   "import": {
     "failed": "File import failed!",
     "import": "Import"
@@ -18,6 +49,7 @@
     "lerp": "lerp",
     "nowTimeHover": "Click to use current time in video",
     "options": {
+      "options": "Options",
       "useLoopShuffle": "Loop controls are shuffle regions",
       "useLoopCountWeights": "Use loop counts as shuffle weights"
     },

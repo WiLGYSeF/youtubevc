@@ -1,6 +1,7 @@
 .three-sixty {
   :global {
     input:not([type]), input[type="text"] {
+      margin-right: 4px;
       width: 40px;
     }
   }

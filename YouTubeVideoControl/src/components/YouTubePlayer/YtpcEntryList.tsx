@@ -9,6 +9,7 @@ import styles from './YtpcEntryList.module.scss';
 interface YtpcEntryListProps {
   entries: YouTubePlayerControllerEntry[];
   barIndex?: number;
+  is360Video?: boolean;
   deleteEntry(entry: YouTubePlayerControllerEntry): void;
   editEntry(entry: YouTubePlayerControllerEntry): void;
 }
@@ -18,6 +19,7 @@ function YtpcEntryList(props: YtpcEntryListProps) {
     <YtpcEntry
       key={e.getKey()}
       entry={e}
+      is360Video={props.is360Video}
       deleteEntry={props.deleteEntry}
       editEntry={props.editEntry}
     />

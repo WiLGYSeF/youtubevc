@@ -1,8 +1,10 @@
+@use 'css/_theme' as t;
+
 .entry-list {
-  background-color: #444;
-  border: 1px solid #aaa;
-  border-radius: 6px;
-  color: #ddd;
-  height: 200px;
+  background-color: t.$color-primary;
+  border: t.$border;
+  border-radius: t.$border-radius;
+  max-height: 400px;
+  min-height: 200px;
   overflow: auto;
 }

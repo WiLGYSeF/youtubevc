@@ -93,22 +93,20 @@ function TimestampInput(props: TimestampInputProps) {
   };
 
   return (
-    <span className="timestamp">
-      <input
-        style={{
-          width: getWidth(input),
-        }}
-        value={input}
-        placeholder={TIME_PLACEHOLDER}
-        onChange={onInputChange}
-        onBlur={updateInput}
-        onKeyUp={(e: KeyboardEvent<HTMLInputElement>) => {
-          if (e.key === 'Enter') {
-            updateInput();
-          }
-        }}
-      />
-    </span>
+    <input
+      style={{
+        width: getWidth(input),
+      }}
+      value={input}
+      placeholder={TIME_PLACEHOLDER}
+      onChange={onInputChange}
+      onBlur={updateInput}
+      onKeyUp={(e: KeyboardEvent<HTMLInputElement>) => {
+        if (e.key === 'Enter') {
+          updateInput();
+        }
+      }}
+    />
   );
 }
 

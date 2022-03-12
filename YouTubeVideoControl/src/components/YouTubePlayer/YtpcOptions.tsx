@@ -18,6 +18,10 @@ function YtpcOptions(props: YtpcOptionsProps) {
 
   return (
     <div className={styles['option-container']}>
+      <div className="header">
+        {t('youtubeController.options.options')}
+        {': '}
+      </div>
       <Checkbox
         label={t('youtubeController.options.useLoopShuffle')}
         defaultChecked={props.useLoopsForShuffling}

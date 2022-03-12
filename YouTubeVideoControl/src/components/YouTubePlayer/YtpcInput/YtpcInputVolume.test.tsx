@@ -4,7 +4,10 @@ import userEvent from '@testing-library/user-event';
 
 import { ControlType } from 'objects/YtpcEntry/YouTubePlayerControllerEntry';
 import { YtpcVolumeState } from 'objects/YtpcEntry/YtpcVolumeEntry';
+import mockI18n from 'utils/test/i18nMock';
 import YtpcInputVolume, { getInputs, LERP_TIME_DEFAULT } from './YtpcInputVolume';
+
+jest.mock('react-i18next', () => mockI18n());
 
 describe('YtpcInputVolume', () => {
   it('updates entry state', () => {

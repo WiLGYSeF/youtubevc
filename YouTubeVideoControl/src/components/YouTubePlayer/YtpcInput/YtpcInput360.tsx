@@ -48,7 +48,7 @@ function YtpcInput360(props: YtpcControlInput) {
   }, [yaw, pitch, roll, fov, lerpSet, lerpSeconds]);
 
   return (
-    <div className={styles['three-sixty']}>
+    <span className={styles['three-sixty']}>
       <span data-testid="yaw">
         <NumberInput
           label={`${t('youtubeController.yaw')}: `}
@@ -114,7 +114,7 @@ function YtpcInput360(props: YtpcControlInput) {
           onChange={setLerpSeconds}
         />
       </span>
-    </div>
+    </span>
   );
 }
 

@@ -19,7 +19,7 @@ import styles from './YtpcInput.module.scss';
 
 interface YtpcInputProps {
   ytPlayer?: YouTubePlayer;
-  is360Video: boolean;
+  is360Video?: boolean;
 
   defaultState: YtpcEntryState;
   setDefaultState(state: YtpcEntryState): void;
@@ -62,7 +62,7 @@ function YtpcInput(props: YtpcInputProps) {
         >
           *
         </span>
-        <span data-testid="at-time">
+        <span data-testid="at-time" className="at-time">
           <TimestampInput
             defaultValue={props.defaultState.atTime}
             onChange={(seconds: number) => {
@@ -72,7 +72,6 @@ function YtpcInput(props: YtpcInputProps) {
             }}
           />
         </span>
-        <span>, </span>
         <span data-testid="control-select">
           <YtpcControlSelect
             is360Video={props.is360Video}
