@@ -1,0 +1,21 @@
+.info {
+  display: flex;
+  flex-direction: column;
+  font-family: Roboto;
+
+  @media (max-width: 650px) {
+    padding: 4px;
+  }
+
+  :global {
+    .title {
+      font-size: 20px;
+      font-weight: normal;
+      margin: 0 0 4px 0;
+    }
+
+    .author {
+      min-height: 21px;
+    }
+  }
+}

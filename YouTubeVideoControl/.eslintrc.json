@@ -6,10 +6,12 @@
   },
   "extends": [
     "plugin:react/recommended",
-    "airbnb"
+    "airbnb",
+    "airbnb-typescript"
   ],
   "parser": "@typescript-eslint/parser",
   "parserOptions": {
+    "project": [ "tsconfig.json" ],
     "ecmaFeatures": {
       "jsx": true
     },
@@ -20,6 +22,40 @@
     "react",
     "@typescript-eslint"
   ],
+  "settings": {
+    "import/resolver": {
+      "node": {
+        "extensions": [ ".js", ".jsx", ".ts", ".tsx" ]
+      }
+    }
+  },
   "rules": {
+    "react/destructuring-assignment": [ "off" ],
+    "react/require-default-props": [ "off" ],
+    "react/jsx-filename-extension": [
+      "error",
+      { "extensions": [ ".tsx", ".ts" ] }
+    ],
+    "react/jsx-max-props-per-line": [
+      "error",
+      {
+        "maximum": 3,
+        "when": "multiline"
+      }
+    ],
+    "@typescript-eslint/lines-between-class-members": [
+      "error",
+      "always",
+      { "exceptAfterSingleLine": true }
+    ],
+    "lines-between-class-members": [
+      "error",
+      "always",
+      { "exceptAfterSingleLine": true }
+    ],
+    "no-underscore-dangle": [
+      "error",
+      { "allowAfterThis": true }
+    ]
   }
 }

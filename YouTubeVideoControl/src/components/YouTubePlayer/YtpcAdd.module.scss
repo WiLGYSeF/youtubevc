@@ -1,0 +1,12 @@
+.add {
+  cursor: pointer;
+
+  img {
+    filter: invert(100%) saturate(4858%) hue-rotate(296deg) brightness(134%) contrast(99%);
+    width: 20px;
+
+    &:hover {
+      filter: invert(90%) sepia(13%) saturate(0%) hue-rotate(179deg) brightness(90%) contrast(91%);
+    }
+  }
+}

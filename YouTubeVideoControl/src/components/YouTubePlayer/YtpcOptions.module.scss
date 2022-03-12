@@ -1,0 +1,16 @@
+@use 'css/_theme' as t;
+
+.option-container {
+  padding: 5px;
+
+  :global {
+    .header {
+      font-size: 16px;
+      margin: 4px 0 4px 0;
+    }
+
+    .indent {
+      margin-left: 15px;
+    }
+  }
+}

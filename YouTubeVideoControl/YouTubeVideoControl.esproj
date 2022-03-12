@@ -8,7 +8,16 @@
     <JavaScriptTestFramework>Jest</JavaScriptTestFramework>
   </PropertyGroup>
   <ItemGroup>
-    <Script Include="**" Exclude="*.esproj;**\node_modules\**" />
+    <Script Include="**" Exclude="*.esproj;**\node_modules\**;" />
+  </ItemGroup>
+  <ItemGroup>
+    <Script Remove="public\img\logo\**" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="public\img\icon\" />
+    <Folder Include="src\components\Home\" />
+    <Folder Include="src\i18n\locales\en\" />
+    <Folder Include="src\utils\test\" />
   </ItemGroup>
   <!-- This target is copied from the ASP.NET SPA template in order to ensure node_modules are in place. -->
   <Target Name="DebugEnsureNodeEnv" BeforeTargets="Build" Condition=" '$(Configuration)' == 'Debug' And !Exists('$(SpaRoot)node_modules') ">
