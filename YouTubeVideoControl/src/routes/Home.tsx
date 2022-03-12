@@ -110,8 +110,12 @@ function Home() {
           <h1>YouTubeVC</h1>
           <p>{t('home.intro.1')}</p>
           <p>
-            <Trans i18nKey="home.intro.2" >
-              Just change <code></code> to <code></code> in the URL bar.
+            <Trans i18nKey="home.intro.2">
+              Just change
+              <code></code>
+              to
+              <code></code>
+              in the URL bar.
             </Trans>
           </p>
         </div>

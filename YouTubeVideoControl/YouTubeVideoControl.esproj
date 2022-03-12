@@ -14,6 +14,7 @@
     <Script Remove="public\img\logo\**" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include=".aws\" />
     <Folder Include="public\img\icon\" />
     <Folder Include="src\components\Home\" />
     <Folder Include="src\i18n\locales\en\" />
