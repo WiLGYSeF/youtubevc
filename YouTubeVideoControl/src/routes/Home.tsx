@@ -1,11 +1,12 @@
 import React from 'react';
-import { useTranslation } from 'react-i18next';
+import { Trans, useTranslation } from 'react-i18next';
 
 import Card from 'components/Home/Card';
 import YouTubePlayerControllerEntry from 'objects/YtpcEntry/YouTubePlayerControllerEntry';
 import Ytpc360Entry from 'objects/YtpcEntry/Ytpc360Entry';
 import YtpcLoopEntry from 'objects/YtpcEntry/YtpcLoopEntry';
 import YtpcPlaybackRateEntry from 'objects/YtpcEntry/YtpcPlaybackRateEntry';
+import YtpcVolumeEntry from 'objects/YtpcEntry/YtpcVolumeEntry';
 import { timestampToSeconds } from 'utils/timestr';
 import {
   SEARCHPARAM_ENTRIES, SEARCHPARAM_LOOP_SHUFFLE, SEARCHPARAM_SHUFFLE_WEIGHT, SEARCHPARAM_VIDEO_ID,
@@ -36,11 +37,6 @@ function Home() {
 
   const videoCards: VideoCardInfo[] = [
     {
-      exampleName: 'example',
-      entries: [],
-      videoId: '???',
-    },
-    {
       exampleName: 'video360',
       entries: [
         new YtpcPlaybackRateEntry(0, 2),
@@ -59,6 +55,17 @@ function Home() {
         }, 2),
       ],
       videoId: 'L_tqK4eqelA',
+    },
+    {
+      exampleName: 'example',
+      entries: [
+        new YtpcVolumeEntry(0, 20),
+        new YtpcVolumeEntry(0.5, 100, 4),
+        new YtpcVolumeEntry(3 * 60 + 17, 20, 5),
+        new YtpcLoopEntry(3 * 60 + 22, 15),
+        new YtpcVolumeEntry(15, 100, 3),
+      ],
+      videoId: 'dQw4w9WgXcQ',
     },
     {
       exampleName: 'loopShuffle',
@@ -99,9 +106,14 @@ function Home() {
   return (
     <div className={styles.home}>
       <div className="container">
-        <div>
+        <div className="intro">
           <h1>YouTubeVC</h1>
-          <p>{t('home.intro')}</p>
+          <p>{t('home.intro.1')}</p>
+          <p>
+            <Trans i18nKey="home.intro.2" >
+              Just change <code></code> to <code></code> in the URL bar.
+            </Trans>
+          </p>
         </div>
 
         {videoCards.map((c, i) => (

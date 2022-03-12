@@ -8,6 +8,7 @@
   font-family: Roboto;
   font-size: 13px;
   min-height: 100vh;
+  overflow: hidden;
 
   :global {
     a {
@@ -28,8 +29,12 @@
       }
     }
 
+    code {
+      padding: 0 5px;
+    }
+
     h1 {
-      font-size: 48px;
+      font-size: 52px;
     }
 
     img {

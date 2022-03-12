@@ -1,4 +1,4 @@
-import React, { ReactElement } from 'react';
+import React, { useEffect, useState, ReactElement } from 'react';
 
 import styles from './Card.module.scss';
 
@@ -12,7 +12,17 @@ interface CardProps {
 }
 
 function Card(props: CardProps) {
-  const contentOnLeft = props.contentOnLeft ?? true;
+  const [isVertical, setIsVertical] = useState(false);
+
+  useEffect(() => {
+    const mql = window.matchMedia('(max-width: 768px)');
+    mql.addEventListener('change', (e) => setIsVertical(e.matches));
+  }, []);
+
+  // always put content first if using flex-direction column
+  const contentOnLeft = isVertical
+    ? true
+    : props.contentOnLeft ?? true;
 
   const eContent = (
     <div>

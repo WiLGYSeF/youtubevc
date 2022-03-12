@@ -1,7 +1,9 @@
 .card {
+  border-top: 1px solid #ddd4;
   display: flex;
   flex-wrap: wrap;
-  padding: 15px;
+  margin-bottom: 40px;
+  padding: 25px 15px;
 
   :global {
     @media (max-width: 768px) {
@@ -11,7 +13,13 @@
     }
 
     .content {
-      padding: 15px;
+      align-items: center;
+      display: flex;
+      font-size: 16px;
+
+      &.right {
+        justify-content: flex-end;
+      }
     }
 
     .contents {
@@ -19,7 +27,7 @@
     }
 
     .header {
-      font-size: 32px;
+      font-size: 36px;
       font-weight: bold;
       padding-bottom: 8px;
     }
@@ -30,6 +38,7 @@
     .left, .right {
       flex: 1;
       min-height: 120px;
+      padding: 20px;
     }
   }
 }
