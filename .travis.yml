@@ -4,6 +4,8 @@ node_js:
 cache:
   directories:
     - node_modules
+install:
+  - npm install
 script:
   - npm --prefix YouTubeVideoControl run test:coverage
 after_success:
