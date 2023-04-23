@@ -32,8 +32,7 @@
   "scripts": {
     "start": "react-scripts start",
     "lint": "npx eslint src --ext ts --ext tsx --fix",
-    "build": "DISABLE_ESLINT_PLUGIN='true' react-scripts build",
-    "deploy": "AWS_SHARED_CREDENTIALS_FILE='.aws/credentials' aws s3 sync build/ s3://youtubevc.com",
+    "build": "react-scripts build",
     "test": "react-scripts test",
     "test:coverage": "react-scripts test --coverage",
     "eject": "react-scripts eject"

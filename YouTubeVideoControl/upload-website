@@ -1,0 +1,37 @@
+#!/bin/bash
+
+WEBFILES="build/"
+
+AWS_PROFILE="wilgysef"
+S3_BUCKET="s3://youtubevc.com/"
+
+dryrun="n"
+
+aws_cmd="aws"
+
+if command -v pycolor >/dev/null; then
+    aws_cmd="pycolor aws"
+fi
+
+POSITIONAL=()
+while [[ $# -gt 0 ]]; do
+    arg="$1"
+
+    case $arg in
+        -n|--dryrun)
+            dryrun="y"
+            shift
+        ;;
+        *)
+            POSITIONAL+=("$1")
+            shift
+        ;;
+    esac
+done
+set -- "${POSITIONAL[@]}" #restore positional parameters
+
+do_dryrun=""
+[ "$dryrun" = "y" ] && do_dryrun="--dryrun"
+
+# --delete
+AWS_PROFILE="$AWS_PROFILE" $aws_cmd s3 sync $do_dryrun "$WEBFILES" "$S3_BUCKET"
